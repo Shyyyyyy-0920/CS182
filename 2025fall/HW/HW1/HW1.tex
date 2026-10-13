@@ -1,0 +1,211 @@
+\documentclass[10pt]{article}
+\usepackage[latin9]{inputenc}
+\usepackage[a4paper]{geometry}
+\geometry{verbose,tmargin=2cm,bmargin=2cm,lmargin=2cm,rmargin=2cm}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{calc}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\PassOptionsToPackage{normalem}{ulem}
+\usepackage{ulem}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+%!TEX program = xelatex
+\usepackage{mathrsfs}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{enumerate}
+\usepackage{bm}
+\usepackage{tikz}
+\usepackage{listings}
+\usetikzlibrary{arrows}
+\usepackage{subfigure}
+\usepackage{graphicx}
+\usepackage{booktabs}\usepackage{multirow}\usepackage{upquote}
+\usepackage{float}
+\usepackage{pdfpages}
+
+
+
+
+\lstset{language=Matlab}
+\lstset{breaklines}
+
+\input defs.tex
+\newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition}\newtheorem{remark}{Remark}
+\newcommand{\vectdot}[1]{\dot{\mathbf{#1}}}
+\titleformat*{\section}{\centering\LARGE\scshape}
+\renewcommand{\thesection}{\Roman{section}}
+\lstset{language=Matlab,tabsize=4,frame=shadowbox,basicstyle=\footnotesize,
+keywordstyle=\color{blue!90}\bfseries,breaklines=true,commentstyle=\color[RGB]{50,50,50},stringstyle=\ttfamily,numbers=left,numberstyle=\tiny,
+  numberstyle={\color[RGB]{192,92,92}\tiny},backgroundcolor=\color[RGB]{245,245,244},inputpath=code}
+
+\makeatother
+
+\begin{document}
+\title{CS182: Introduction to Machine Learning, Fall 2025\\
+ Homework 1}
+\author{{\small (Due on Sunday, Oct. 19 at 11:59pm (CST))}}
+\date{\date{}}
+
+\maketitle
+{\small{}%
+\noindent\fcolorbox{black}{white}{\begin{minipage}[t]{1\columnwidth - 2\fboxsep - 2\fboxrule}%
+Notice:
+\begin{itemize}
+\item Please submit your assignments via Gradescope. The entry code is \uline{428YBY}.
+\item Please make sure you select your answer to the corresponding question
+when submitting your assignments.
+\item Each person has a total of five days to be late without penalty for
+all the assignments. Each late delivery less than one day will be
+counted as one day.
+\end{itemize}
+%
+\end{minipage}}}{\small\par}
+\begin{enumerate}
+\item \defpoints{20} {[}\textit{Linear Algebra}{]} In robotics, the Jacobian Matrix, $\mathbf{J}$, is a fundamental tool that creates a linear mapping between the robot's joint velocities, $\vectdot{q}$, and its end-effector velocity, $\mathbf{v}$, through the relationship: $\mathbf{v} = \mathbf{J}\vectdot{q}$. By analyzing the properties of the Jacobian, we can evaluate a robot's dexterity and motion capability in a given configuration, an analysis known as manipulability.
+
+
+\begin{itemize}
+\item[(a)]  For a robot in a specific configuration, its Jacobian is given by the matrix $\mathbf{J} = \begin{pmatrix} 1 & 0 \\ 0 & 1 \\ 1 & 1 \end{pmatrix}$. In manipulability analysis, the symmetric matrix $\mathbf{S} = \mathbf{J}^T \mathbf{J}$ is of critical importance, as its eigenvalues and eigenvectors reveal the intrinsic relationship between joint motions and end-effector motions.
+
+\begin{enumerate}
+    \item Calculate the symmetric matrix $\mathbf{S} = \mathbf{J}^T \mathbf{J}$ for this robot.\defpoints{3}
+    \item Find all eigenvalues and their corresponding orthonormal eigenvectors for the matrix $\mathbf{S}$.\defpoints{3}
+\end{enumerate}
+
+\item[(b)]  The Singular Value Decomposition (SVD) of the Jacobian is given by $\mathbf{J} = \mathbf{U}\boldsymbol{\Sigma} \mathbf{V}^T$. The singular values, $\sigma_i$, on the diagonal of $\boldsymbol{\Sigma}$ are a direct measure of the robot's ability to move in different directions.
+Prove that the squared singular values of the Jacobian $\mathbf{J}$ are the eigenvalues of the manipulability matrix $\mathbf{J}^T \mathbf{J}$. \defpoints{6}
+
+\item[(c)] The squared magnitude of the end-effector velocity is given by $\|\mathbf{v}\|^2 = \mathbf{v}^T \mathbf{v} = (\mathbf{J}\vectdot{q})^T(\mathbf{J}\vectdot{q}) = \vectdot{q}^T \mathbf{J}^T \mathbf{J} \vectdot{q}$. To plan the most efficient movements, engineers need to determine the maximum possible end-effector speed when the joints move with a unit norm speed (i.e., $\|\vectdot{q}\|^2 = \vectdot{q}^T\vectdot{q} = 1$).
+Prove that for any unit-norm joint velocity vector $\vectdot{q}$, the maximum value of the squared end-effector velocity, $\|\mathbf{v}\|^2$, is equal to the largest eigenvalue of the matrix $\mathbf{J}^T \mathbf{J}$.\defpoints{8}
+\end{itemize}
+
+\newpage
+
+% \begin{enumerate}
+\item \defpoints{20} {[}\textit{Linear Algebra}{]} 
+Let $f(\mathbf{x}) = \frac{1}{2}\mathbf{x}^T\mathbf{A}\mathbf{x} - \boldsymbol{b}^T\mathbf{x} + c$, where $\mathbf{A} \in \mathbb{R}^{n\times n}$ is symmetric, $\boldsymbol{b} \in \mathbb{R}^n$, and $c \in \mathbb{R}$.
+\begin{itemize}
+	\item[(a)] Derive the Gradient and Hessian of $f(\mathbf{x})$. \defpoints{8}
+    
+	\item[(b)] Under what condition on $\mathbf{A}$ does $f(\mathbf{x})$ correspond to a minimum, and find the point $\mathbf{x}^\ast$ that makes $f(\mathbf{x})$ smallest. \defpoints{6} %Show that the critical point $\mathbf{x}^\ast = \mathbf{A}^{-1}\boldsymbol{b}$ minimizes $f(\mathbf{x})$ if and only if $A$ is positive definite. \defpoints{6}
+    
+	\item[(c)] Suppose $\mathbf{A}$ has eigenvalues $\lambda_1, \lambda_2$. Describe the general shape of $f(\mathbf{x})=\frac{1}{2} \mathbf{x}^T\mathbf{A}\mathbf{x}$ in 2D for the following cases. 
+    \begin{itemize}
+        \item[(1)] $\lambda_1, \lambda_2 \textgreater 0.$ \defpoints{2}
+        \item[(2)] $\lambda_1, \lambda_2 \textless 0.$ \defpoints{2}
+        \item[(3)] $\lambda_1\textgreater 0, \lambda_2 \textless 0.$ \defpoints{2}
+    \end{itemize} %Using the eigendecomposition $A = Q\Lambda Q^T$, interpret geometrically how the curvature (Hessian) scales along each eigenvector direction. \defpoints{6}
+\end{itemize}
+
+
+\newpage{}
+
+
+
+
+\item\defpoints{20} {[}\textit{Probability and Statistics}{]}
+\begin{itemize}
+\item[(a)] For any non-negative random variable $X$ with finite variance, prove that
+     \[\Pr[X>0]\geq \frac{(\textrm{E}[X])^2}{\textrm{E}[X^2]}.\]
+Hint: Just use the fact that the expectation \(\mathrm{E}[UV]\) is a valid inner product of random variables \(U\) and \(V\) and you can therefore use the Cauchy-Schwarz inequality.
+\defpoints{4}
+\item[(b)] For a random variable X with finite variance and E[X] = 0, prove that
+     \[\Pr[X\geq t]\leq \frac{\textrm{E}[X^2]}{\textrm{E}[X^2]+t^2}\text{ for any }t\geq 0\]
+     Hint: You can try the same logic as in the previous question.\defpoints{6}
+\item[(c)] Prove that the following definition of Gaussian random vector is equivalent to the definition via the density function:
+\begin{definition}\label{gaussian-as-affine-map}
+    Gaussian random vectors are affine transformations of IID gaussian random variables. In other words, if X has nonsingular $\mathbf{\Sigma_X}$, then we can write
+\[\mathbf{X = \mu_x +AW}\]for some full rank \(\mathbf A\in\mathbb{R}^{n\times n}\) and \(\mathbf W = (W_1,..., W_n)^T\), where \(W_i\sim_{\mathrm{IID}}\mathcal{N} (0, 1)\) 
+\end{definition}
+Hint: For strictly monotone and differentiable function $g(x)$ such that $Y=g(X)$, and let \(g^{-1}\) be the inverse function of \(g\)\[f_Y(y)=f_X(g^{-1}(y))\frac{1}{|g'(g^{-1}(y)|}\]
+\defpoints{10}
+\end{itemize}
+\newpage{}
+
+
+
+\item \defpoints{20} {[}\textit{Bayesian Decision Theory}{]} A major technology
+company is hiring for a Machine Learning Engineer position and uses
+a two-stage screening process: 
+\begin{itemize}
+\item 1. Resume screening: (binary outcome: $\textit{Pass}$ or $\textit{Fail}$)
+\item 2. Technical interview (binary outcome: $\textit{Hire}$ or $\textit{Reject}$)
+\end{itemize}
+Historical hiring data reveals the following:
+\begin{itemize}
+\item 20\% of all applicants are ultimately qualified for the role. (i.e.,
+$P\left(\omega_{Q}\right)=0.2,$ where $\omega_{Q}=\mathrm{qualified}$,
+$\omega_{U}=\mathrm{unqualified}$).
+\item Among qualified candidates, 90\% pass the resume screen: $P\left(\mathrm{Pass}\mid\omega_{Q}\right)=0.9$.
+\item Among unqualified candidates, 30\% pass the resume screen: $P\left(\mathrm{Pass}\mid\omega_{U}\right)=0.3$.
+\item The company incurs different costs for hiring decisions:
+\begin{itemize}
+\item Correctly hiring a qualified candidate yields a benefit of +10 (i.e.,
+cost = --10).
+\item Rejecting a qualified candidate has a cost of 5 (missed opportunity)
+\item Hiring an unqualified candidate has a cost of 15 (training, turnover,
+etc.).
+\item Correctly rejecting an unqualified candidate has zero cost.
+\end{itemize}
+\item[(a)]  Compute the posterior probability that an applicant who passed the
+resume screen is actually qualified, i.e. $P\left(\omega_{Q}\mid\mathrm{Pass}\right)$.\defpoints{4}
+\item[(b)]  Using Bayesian decision theory, determine whether the company should
+automatically hire every applicant who passes the resume screen, or
+reject them, based on minimizing expected risk. Justify your answer
+by computing the conditional risk for both actions.\defpoints{4}
+\item[(c)]  Suppose the company introduces a new AI-powered resume screener
+that improves the true positive rate to 95\% while reducing the false
+positive rate to 10\%. Recalculate the posterior $P\left(\omega_{Q}\mid\mathrm{Pass}\right)$
+and the optimal decision in question (b).
+\defpoints{8}
+\item[(d)] Discuss how advancements in screening technology affect hiring decisions
+from a Bayesian perspective.\defpoints{4}
+\end{itemize}
+
+\newpage
+
+
+\item \defpoints{20} {[}\textit{Bayesian Decision Theory}{]}
+		Given a training dataset $T = \{(\mathbf{x}_1, y_1), (\mathbf{x}_2, y_2), \ldots, (\mathbf{x}_N, y_N)\}$, where $\mathbf{x}_i = (x_i^{(1)}, x_i^{(2)}, \ldots, x_i^{(n)})$ is a feature vector and $y_i \in \{c_1, c_2, \ldots, c_K\}$ is a class label. Bayesian estimation often add a small constant $\lambda$ to each count, i.e., 
+		\[
+		P_{\lambda}(Y = c_k) = \frac{\sum_{i=1}^N I(y_i = c_k) + \lambda}{N + K \lambda},\quad P_{\lambda}(X^{(j)} = a_{jl} | Y = c_k) = \frac{\sum_{i=1}^N I(x_i^{(j)} = a_{jl}, y_i = c_k) + \lambda}{\sum_{i=1}^N I(y_i = c_k) + S_j \lambda}.
+		\]
+		where $S_j$ is the number of possible values for feature $j$.
+		
+		\begin{table}[h]
+			\centering
+			\caption{Dataset for playing game}
+			\label{tab:dataset}
+			\begin{tabular}{ccc}
+				\toprule
+				Outlook & Temperature & Play \\
+				\midrule
+				Sunny & Hot & No \\
+				Sunny & Mild & No \\
+				Rainy & Hot & Yes \\
+				Rainy & Mild & Yes \\
+				\bottomrule
+			\end{tabular}
+		\end{table}
+		
+		Consider the dataset \( T \) in Table~\ref{tab:dataset} which records whether a game is played based on the outlook and temperature. The features are: Outlook: Sunny (S) or Rainy (R), Temperature (Temp): Hot (H) or Mild (M). The class label Play include: Yes (Y) or No (N). 
+		
+		\begin{itemize}
+			\item[(a)] Estimate the prior probabilities \( P(\text{Play}) \) and the conditional probabilities \( P(\text{Outlook} | \text{Play}) \) and \( P(\text{Temp} | \text{Play}) \) using maximum likelihood estimation. Then, for a new instance with \text{Outlook}=\text{R}ainy and \text{Temp}=\text{H}, compute the posterior probabilities \( P(\text{Play}=\text{Y} | \text{Outlook}=\text{R}, \text{Temp}=\text{H}) \) and \( P(\text{Play}=\text{N} | \text{Outlook}=\text{R}, \text{Temp}=\text{H}) \) using the naive Bayes classifier. \defpoints{10}
+			\item[(b)] Use Bayesian estimation with Laplacian smoothing (with smoothing parameter \( \lambda = 1 \)). Recompute the prior probabilities (with smoothing) and the conditional probabilities. Then, compute the posterior probabilities for the same new instance. \defpoints{5}
+			\item[(c)] Based on the results of the above calculations, discuss why Laplacian smoothing is used. \defpoints{5}
+		\end{itemize}
+\end{enumerate}
+
+
+
+
+
+\end{document}

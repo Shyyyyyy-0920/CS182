@@ -1,0 +1,254 @@
+\documentclass[10pt]{article}
+\usepackage[latin9]{inputenc}
+\usepackage[a4paper]{geometry}
+\geometry{verbose,tmargin=2cm,bmargin=2cm,lmargin=2cm,rmargin=2cm}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{calc}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\PassOptionsToPackage{normalem}{ulem}
+\usepackage{ulem}
+\usepackage{amsthm}
+\usepackage{url}  % 或 hyperref，它也包含 url 功能
+\usepackage{hyperref}
+\usepackage{ulem}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+%!TEX program = xelatex
+\usepackage{mathrsfs}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{enumerate}
+\usepackage{bm}
+\usepackage{tikz}
+\usepackage{listings}
+\usetikzlibrary{arrows}
+\usepackage{subfigure}
+\usepackage{graphicx}
+\usepackage{booktabs}\usepackage{multirow}\usepackage{upquote}
+\usepackage{float}
+\usepackage{pdfpages}
+
+% additional commands
+\newcommand{\mbf}[1]{\mathbf{#1}}
+\newcommand{\gauss}{\mathcal{N}}
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\mat}[1]{\mathbf{#1}}
+
+
+% ----- Python style -----
+\definecolor{codebg}{RGB}{245,245,245}
+\definecolor{keywordcolor}{RGB}{0,0,180}
+\definecolor{stringcolor}{RGB}{163,21,21}
+\definecolor{commentcolor}{RGB}{0,128,0}
+
+\lstdefinestyle{pythonstyle}{
+    language=Python,
+    backgroundcolor=\color{codebg},
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{keywordcolor}\bfseries,
+    stringstyle=\color{stringcolor},
+    commentstyle=\color{commentcolor}\itshape,
+    numberstyle=\tiny\color{gray},
+    numbers=left,
+    frame=single,
+    rulecolor=\color{black!30},
+    tabsize=4,
+    breaklines=true,
+    showstringspaces=false,
+    xleftmargin=1.5em,
+    framexleftmargin=1.2em
+}
+
+\lstset{language=Matlab}
+\lstset{breaklines}
+
+\input defs.tex
+\newtheorem{proposition}{Proposition}\newtheorem{remark}{Remark}
+\newcommand{\vectdot}[1]{\dot{\mathbf{#1}}}
+\titleformat*{\section}{\centering\LARGE\scshape}
+\renewcommand{\thesection}{\Roman{section}}
+\lstset{language=Matlab,tabsize=4,frame=shadowbox,basicstyle=\footnotesize,
+keywordstyle=\color{blue!90}\bfseries,breaklines=true,commentstyle=\color[RGB]{50,50,50},stringstyle=\ttfamily,numbers=left,numberstyle=\tiny,
+  numberstyle={\color[RGB]{192,92,92}\tiny},backgroundcolor=\color[RGB]{245,245,244},inputpath=code}
+
+\makeatother
+
+\begin{document}
+\title{CS182: Introduction to Machine Learning, Fall 2025\\
+ Homework 3}
+\author{\small{(Due on Wednesday, Dec. 10 at 11:59 pm (CST))}}
+\date{\date{}}
+
+\maketitle
+{\small{}%
+\noindent\fcolorbox{black}{white}{\begin{minipage}[t]{1\columnwidth - 2\fboxsep - 2\fboxrule}%
+Notice:
+\begin{itemize}
+\item Please submit your assignments via Gradescope. The entry code is \uline{428YBY}.
+\item Please make sure you select your answer to the corresponding question
+when submitting your assignments.
+\item Each person has a total of five days to be late without penalty for
+all the assignments. Each late delivery less than one day will be
+counted as one day.
+\end{itemize}
+%
+\end{minipage}}}{\small\par}
+\begin{enumerate}
+\item \defpoints{20} [\textit{Multilayer Perceptrons}]You are designing a decoupled controller for a 2-DOF (Degree of Freedom) robotic arm. The network takes the joint angles ($\theta_1, \theta_2$) as input and simultaneously outputs the required torques ($\tau_1, \tau_2$) for both joints.
+
+\vspace{10pt}
+\textit{Architecture:}
+\begin{itemize}
+    \item Input Layer: 2 neurons ($\bvec{x} \in \R^2$).
+    \item Hidden Layer: 2 neurons with \textit{ReLU} activation: $\bvec{h} = \text{ReLU}(\bmat{W}^{(1)}\bvec{x} + \bvec{b}^{(1)})$.
+    \item Output Layer: 2 neurons with \textit{Linear} activation: $\hat{\bvec{y}} = \bmat{W}^{(2)}\bvec{h} + \bvec{b}^{(2)}$.
+\end{itemize}
+
+\textit{Parameters:}
+The weights and biases are initialized as follows:
+\[
+\bmat{W}^{(1)} = \begin{bmatrix} 1 & 1 \\ 1 & -1 \end{bmatrix}, \quad 
+\bvec{b}^{(1)} = \begin{bmatrix} 0 \\ 1 \end{bmatrix}
+\]
+\[
+\bmat{W}^{(2)} = \begin{bmatrix} 2 & 1 \\ 1 & 2 \end{bmatrix}, \quad 
+\bvec{b}^{(2)} = \begin{bmatrix} 1 \\ 0 \end{bmatrix}
+\]
+
+\begin{enumerate}
+    \item Given the joint configuration input $\bvec{x} = \begin{bmatrix} 1 \\ -2 \end{bmatrix}$, compute the predicted torque vector $\hat{\bvec{y}}$. \defpoints{5}
+
+    \item The optimal torque provided by the physics engine (ground truth) is $\bvec{y} = \begin{bmatrix} 3 \\ 7 \end{bmatrix}$. \\
+    We define the loss as the Mean Squared Error (scaled):
+    \[
+    L = \frac{1}{2} \| \bvec{y} - \hat{\bvec{y}} \|^2 = \frac{1}{2} \sum_{i} (y_i - \hat{y}_i)^2
+    \]
+    Using the prediction $\hat{\bvec{y}}$, compute the gradients of the loss with respect to the first-layer weights $\bmat{W}^{(1)}$.\defpoints{10}
+
+    \item Another engineer proposes changing the output activation to a Sigmoid function ($f(z) = \frac{1}{1+e^{-z}}$) to make the output ``smoother''. Is using a Sigmoid output appropriate for this regression task? Explain why or why not.\defpoints{5}
+\end{enumerate}
+
+
+
+\newpage
+
+% \begin{enumerate}
+\item \defpoints{20} {[}\textit{Support Vector Machines}{]} 
+\begin{itemize}
+	\item[(a)] Given the positive class points
+$x_1 = (1, 2)^T,\quad x_2 = (2, 3)^T,\quad x_3 = (3, 3)^T,$ and the negative class points $x_4 = (2, 1)^T,\quad x_5 = (3, 2)^T,$ find the maximum--margin separating hyperplane and the classification decision function. Then, plot the separating hyperplane, the margin boundaries, and the support vectors on a 2D plane. (using sklearn, and provide both the code and the generated results.) \defpoints{10}
+    
+	\item[(b)] A linear support vector machine can also be defined as follows:
+$$\min_{w,b,\zeta} \frac{1}{2}\|w\|^2 + C\sum_{i=1}^N \zeta_i^2$$
+subject to
+$$y_i (w \cdot x_i + b) \ge 1 - \zeta_i, \quad \forall i = 1,2,\ldots,N$$
+$$\zeta_i \ge 0, \quad \forall i = 1,2,\ldots,N$$
+Find its dual formulation, and please provide detailed derivations. \defpoints{10}
+    
+\end{itemize}
+
+
+\newpage{}
+
+
+
+
+\item\defpoints{20} {[}\textit{Kernel Extension}{]}
+\begin{itemize}
+In this part, let us try to get a better intuition about kernels themselves.
+\begin{definition}[Positive definite kernel]
+A function \(k : \mathcal{X \times X} \to \mathbb{R}\) is called a positive definite kernel iff it is symmetric, that is, $k(\vec{x}, \vec{x'}) = k(\vec{x'}, \vec{x})$ for any two objects $\vec x, \vec x' \in\mathcal{X}$, and positive  definite definite, that is,
+\[\sum_{i = 1}^n\sum_{j = 1}^nc_ic_jk(\vec{x}_i,\vec{x}_j)\geq 0\]
+for any $n \geq 0$, any choice of $n$ objects $x_1\cdots, x_n \in\mathcal{X}$, and any choice of real numbers $c_1,\cdots, c_n \in\mathbb R$.
+\end{definition}
+From now on, we only focus on positive definite kernels, and simply call them \textit{kernels}.
+
+\paragraph{Kernels as Inner Product}For general objects \(\vec x\in\mathcal{X}\), we first represent each object \(\vec x\in\mathcal{X}\) as a vector $\phi(\vec{x})\in \mathbb{R}^p$, and then defining a kernel for any $\vec x, \vec x' \in\mathcal{X}$ by
+\[k(\vec{x},\vec{x}') = \langle \phi(\vec{x}),\phi(\vec{x}') \rangle\]
+
+\paragraph{Kernels as Measures of Similarity}Kernels are often presented as measures of similarity, in the sense that $k(\vec{x},\vec{x}')$ is "large" when $\vec x$ and $\vec x'$
+are "similar".
+\item[(a)] Consider the following kernel and give a relevant interpretations as a measure of similarity. You can just describe it in natural language.
+\[k(\vec{x},\vec{x}') = \exp\{-\frac{d(\vec{x,\vec{x'}}^2)}{2\sigma^2}\}\]
+where $\sigma$ is a parameter and $d$ is the Euclidean distance.\defpoints{4}
+
+\paragraph{Kernels as Measures of Function Regularity} Now we associate kernel with some functional space and norms associated with it. Let $k$ be a kernel on a space $\mathcal{X}$. The set $\mathcal{H}_k$ is defined as the set of function $f:\mathcal{X}\to \mathbb{ R}$ of the form
+\begin{align*}
+    f(\vec x) = \sum_{i = 1}^n \alpha_i k(\vec{x}_i,\vec x) 
+\end{align*}
+for $n > 0$, a finite number of points $\vec x_1,\cdots, \vec x_n \in\mathcal{X}$, and a finite number of weights $\alpha_1,\cdots,\alpha_n\in \mathbb{ R}$, together with
+\begin{align*}
+    ||f ||^2_{\mathcal{H}_k} :=  \sum_{i = 1}^n\sum_{j = 1}^n \alpha_i\alpha_jk (\vec x_i,\vec x_j) 
+\end{align*}
+The dot product defined for two elements $f(\vec x) = \sum_{i = 1}^n \alpha_i k(\vec{x}_i,\vec x) $ and $g(\vec x) = \sum_{j = 1}^m \alpha_j' k(\vec{x}'_j,\vec x)$ is
+\begin{align*}
+    \langle f,g \rangle = \sum_{i = 1}^n\sum_{j = 1}^m\alpha_i\alpha'_jk(\vec{x}_i,\vec{x}'_j)
+\end{align*}
+
+\item[(b)] Express the value $f(\vec x)$ of a function $f\in\mathcal{H}_k$ at a point $\vec x\in\mathcal{X}$ as a dot product in $\mathcal{H}_k$.\defpoints{3}
+\item[(c)] Write down the corresponding $f,g$ when $\langle f,g\rangle = k(\vec x,\vec x')$.\defpoints{3}\\
+
+Most kernel methods (including SVMs) have an interpretation in terms of functional analysis and can be defined as algorithms that, given a set of objects $\mathcal{S}$, return a function that solves the equation
+\begin{align*}
+    \min_{f\in\mathcal{H}_k} E(f,\mathcal{S})+g(\Vert f\Vert_{\mathcal{H}_k})
+\end{align*}
+
+\item[(d)](The Representer Theorem) Consider a positive-definite real-valued kernel $k:\mathcal{X}\times \mathcal{X}\to \mathbb{R}$ on a non-empty set $\mathcal{X}$ with a corresponding reproducing kernel space $\mathcal{H}_k$. Let there be given
+\begin{itemize}
+    \item a training sample $(x_{1},y_{1}),\dotsc ,(x_{n},y_{n})\in \mathcal {X}\times \mathbb {R}$
+    \item a strictly increasing real-valued function $g\colon [0,\infty )\to \mathbb {R}$
+    \item an arbitrary error function 
+$ E\colon ({\mathcal {X}}\times \mathbb {R} ^{2})^{n}\to \mathbb {R} \cup \lbrace \infty \rbrace $
+\end{itemize}
+which together define the following regularized empirical risk functional on $\mathcal{H}_k$
+$$f\mapsto E\left((x_{1},y_{1},f(x_{1})),\ldots ,(x_{n},y_{n},f(x_{n}))\right)+g\left(\lVert f\rVert_{\mathcal{H}_k} \right)$$
+Show that any minimizer of the empirical risk 
+$$f^{*}={\underset {f\in H_{k}}{\operatorname {argmin} }}\left\lbrace E\left((x_{1},y_{1},f(x_{1})),\ldots ,(x_{n},y_{n},f(x_{n}))\right)+g\left(\lVert f\rVert_{\mathcal{H}_k} \right)\right\rbrace, \quad (*)$$
+admits a representation of the form
+$$f^{*}(\cdot )=\sum _{i=1}^{n}\alpha _{i}k(\cdot ,x_{i})$$\defpoints{10}
+\end{itemize}
+
+
+
+\newpage
+
+
+
+
+
+
+\item \defpoints{20} {[}\textit{Coding}{]} Complete the `Problem4.ipynb'. Please include the code you need to write and the output results (which may include values and images) in the PDF file for submission.
+
+\newpage
+
+\item \defpoints{20} [\textit{Principal Component Analysis (PCA)}]
+As discussed in class, Principal Component Analysis (PCA) can be derived from a reconstruction error perspective. Consider the following formulation:
+
+Given a dataset $\{\mathbf{x}^t\}_{t=1}^N$ where $\mathbf{x}^t \in \mathbb{R}^d$, we aim to represent each data point in a lower-dimensional space and then reconstruct it with minimal error. The reconstruction model is:
+\[
+\hat{\mathbf{x}}^t = \mathbf{m} + \mathbf{W} \mathbf{z}^t
+\]
+where $\mathbf{m} \in \mathbb{R}^d$ is a common bias vector, $\mathbf{W} \in \mathbb{R}^{d \times k}$ is the projection matrix, and $\mathbf{z}^t \in \mathbb{R}^k$ is the low-dimensional representation of $\mathbf{x}^t$. The optimization problem is to minimize the total reconstruction error:
+\begin{align*}
+	\text{(P-RE)} \quad & \underset{\mathbf{m}, \mathbf{W}, \{\mathbf{z}^t\}}{\operatorname{minimize}} \quad \frac{1}{2} \sum_{t=1}^{N} \left\| \mathbf{x}^t - (\mathbf{m} + \mathbf{W} \mathbf{z}^t) \right\|_2^2 \\
+	& \text{subject to} \quad \mathbf{W}^T \mathbf{W} = \mathbf{I}_k
+\end{align*}
+Assume we center the data by setting $\mathbf{m}$ to be the sample mean, i.e., $\mathbf{m} = \frac{1}{N}\sum_{t=1}^N \mathbf{x}^t$, and define the centered data points as $\tilde{\mathbf{x}}^t = \mathbf{x}^t - \mathbf{m}$.
+\begin{enumerate}
+	\item \defpoints{4} Show that for a fixed $\mathbf{W}$, the optimal low-dimensional representation $\mathbf{z}^t$ for each data point is given by the projection $\mathbf{z}^t = \mathbf{W}^T \tilde{\mathbf{x}}^t$.
+	\item \defpoints{8} Substitute this optimal $\mathbf{z}^t$ back into the objective function of (P-RE). Show that the problem of finding the optimal $\mathbf{W}$ reduces to:
+	\[
+	\underset{\mathbf{W}}{\operatorname{maximize}} \quad \sum_{t=1}^{N} \tilde{\mathbf{x}}^t{}^T \mathbf{W} \mathbf{W}^T \tilde{\mathbf{x}}^t \quad \text{subject to} \quad \mathbf{W}^T \mathbf{W} = \mathbf{I}_k
+	\]
+	\item \defpoints{8} Further show that this maximization problem is equivalent to finding the $k$ eigenvectors of the sample covariance matrix $\boldsymbol{\Sigma} = \frac{1}{N} \sum_{t=1}^N \tilde{\mathbf{x}}^t \tilde{\mathbf{x}}^t{}^T$ corresponding to its $k$ largest eigenvalues. (\textbf{Hint:} Use the property of the cyclic property of the trace $\mathrm{tr}\left(\mathbf{AB}\right)=\mathrm{tr}\left(\mathbf{BA}\right)$.)
+\end{enumerate}
+
+
+
+\end{enumerate}
+\end{document}

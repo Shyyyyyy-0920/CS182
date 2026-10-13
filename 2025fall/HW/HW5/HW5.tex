@@ -1,0 +1,309 @@
+\documentclass[10pt]{article}
+\usepackage[latin9]{inputenc}
+\usepackage[a4paper]{geometry}
+\geometry{verbose,tmargin=2cm,bmargin=2cm,lmargin=2cm,rmargin=2cm}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{calc}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\PassOptionsToPackage{normalem}{ulem}
+\usepackage{ulem}
+\usepackage{amsthm}
+\usepackage{url}  % 或 hyperref，它也包含 url 功能
+\usepackage{hyperref}
+\usepackage{ulem}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+%!TEX program = xelatex
+\usepackage{mathrsfs}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{enumerate}
+\usepackage{bm}
+\usepackage{tikz}
+\usepackage{listings}
+\usetikzlibrary{arrows}
+\usepackage{subfigure}
+\usepackage{graphicx}
+\usepackage{booktabs}\usepackage{multirow}\usepackage{upquote}
+\usepackage{float}
+\usepackage{pdfpages}
+
+% additional commands
+\newcommand{\mbf}[1]{\mathbf{#1}}
+\newcommand{\gauss}{\mathcal{N}}
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\mat}[1]{\mathbf{#1}}
+
+
+% ----- Python style -----
+\definecolor{codebg}{RGB}{245,245,245}
+\definecolor{keywordcolor}{RGB}{0,0,180}
+\definecolor{stringcolor}{RGB}{163,21,21}
+\definecolor{commentcolor}{RGB}{0,128,0}
+
+\lstdefinestyle{pythonstyle}{
+    language=Python,
+    backgroundcolor=\color{codebg},
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{keywordcolor}\bfseries,
+    stringstyle=\color{stringcolor},
+    commentstyle=\color{commentcolor}\itshape,
+    numberstyle=\tiny\color{gray},
+    numbers=left,
+    frame=single,
+    rulecolor=\color{black!30},
+    tabsize=4,
+    breaklines=true,
+    showstringspaces=false,
+    xleftmargin=1.5em,
+    framexleftmargin=1.2em
+}
+
+\lstset{language=Matlab}
+\lstset{breaklines}
+
+\input defs.tex
+\newtheorem{proposition}{Proposition}\newtheorem{remark}{Remark}
+\newcommand{\vectdot}[1]{\dot{\mathbf{#1}}}
+\titleformat*{\section}{\centering\LARGE\scshape}
+\renewcommand{\thesection}{\Roman{section}}
+\lstset{language=Matlab,tabsize=4,frame=shadowbox,basicstyle=\footnotesize,
+keywordstyle=\color{blue!90}\bfseries,breaklines=true,commentstyle=\color[RGB]{50,50,50},stringstyle=\ttfamily,numbers=left,numberstyle=\tiny,
+  numberstyle={\color[RGB]{192,92,92}\tiny},backgroundcolor=\color[RGB]{245,245,244},inputpath=code}
+
+\makeatother
+
+\begin{document}
+\title{CS182: Introduction to Machine Learning, Fall 2025\\
+ Homework 5}
+\author{\small{(Due on Monday, Dec. 29 at 11:59 pm (CST))}}
+\date{\date{}}
+
+\maketitle
+{\small{}%
+\noindent\fcolorbox{black}{white}{\begin{minipage}[t]{1\columnwidth - 2\fboxsep - 2\fboxrule}%
+Notice:
+\begin{itemize}
+\item Please submit your assignments via Gradescope. The entry code is \uline{428YBY}.
+\item Please make sure you select your answer to the corresponding question
+when submitting your assignments.
+\item Each person has a total of five days to be late without penalty for
+all the assignments. Each late delivery less than one day will be
+counted as one day.
+\end{itemize}
+%
+\end{minipage}}}{\small\par}
+\begin{enumerate}
+\item \defpoints{20} [\textit{Ensemble Learning}]You are refining the terrain friction prediction module for a Mars rover. To improve generalization and prevent overfitting on noisy sensor data, you decide to add regularization to the standard gradient boosting algorithm.
+
+At iteration $T$, the algorithm minimizes a regularized squared error objective function.
+Let $r_i = y_i - M_{T-1}(x_i)$ be the current residual. We seek the optimal weight $\beta_T$ for the current weak learner $G_T(x)$ to minimize:
+$$
+J(\beta_T) = \sum_{i=1}^n \frac{1}{2} (r_i - \beta_T G_T(x_i))^2 + \frac{\lambda}{2} \beta_T^2
+$$
+Here, $\lambda > 0$ is the regularization parameter.
+
+You are given a mini-batch of 3 training samples.
+The regularization parameter is set to $\mathbf{\lambda = 1.0}$.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Sample ID} ($i$) & \textbf{Residual} ($r_i$) & \textbf{Weak Learner Output} ($G_T(x_i)$) \\
+\hline
+1 & $2.0$  & $1$ \\
+\hline
+2 & $-1.5$ & $-1$ \\
+\hline
+3 & $0.5$  & $1$ \\
+\hline
+\end{tabular}
+\end{table}
+\begin{enumerate}
+    \item Derive the closed-form expression for the optimal coefficient $\beta_T^*$ that minimizes $J(\beta_T)$. Your expression must include the regularization term $\lambda$. Using the data in the table, calculate the exact numerical value of $\beta_T^*$. \defpoints{10}
+    
+    \item The robot faces specific environmental constraints. Apply ensemble learning theory to justify the best architecture for each case.\defpoints{10}
+
+\begin{enumerate}
+    \item 
+    Mechanical vibrations introduce random noise into sensor readings, causing individual Decision Trees to exhibit High Variance (instability).
+    \begin{itemize}
+        \item Between Bagging and Boosting, which method effectively mitigates this issue?
+        \item Explain your choice based on the mechanism of "Model Averaging" and Bias-Variance decomposition.
+    \end{itemize}
+
+    \item 
+    The robot must switch reliance between a Camera (Day-optimized) and Lidar (Night-optimized).
+    \begin{itemize}
+        \item Explain why a Mixture of Experts (MoE) is superior to standard Voting in this scenario.
+        \item Specifically, describe how the Gating Network calculates the dynamic weights $w_j(x)$ to achieve "Localization" based on environmental light intensity.
+    \end{itemize}
+\end{enumerate}
+\end{enumerate}
+
+\newpage
+
+
+
+% \begin{enumerate}
+\item \defpoints{20} {[}\textit{Ensemble Learning: Gradient Boosting}{]} Gradient Boosting is a general ensemble learning method that constructs a strong learner by sequentially adding weak learners. Unlike ensemble methods that train weak learners independently, Gradient Boosting builds the model iteratively: at each iteration, a new weak learner is added to improve the current model's performance.
+
+The key idea of Gradient Boosting is to formulate learning as an optimization problem. Given a loss function, the algorithm seeks a prediction function that minimizes the empirical risk on the training data. This is achieved by performing gradient descent in function space: at each iteration, a weak learner is trained to approximate the negative gradient of the loss function with respect to the current model's predictions, and is then added to the ensemble with an appropriate coefficient.
+
+Formally, at iteration $t$, the metalearner has the additive form 
+$$M_t(x) = \sum_{k=1}^{t} \beta_k h_k(x),  $$
+where $h_k(\cdot)$  is the $k$-th weak learner and $\beta_k \in \mathbb{R}$ is its corresponding coefficient.
+We consider a binary classification problem with training data  
+$${(x_i, y_i)}_{i=1}^n,\quad x_i \in \mathbb{R}^d, \quad y_i \in \{+1, -1\},  $$
+ which minimizes the logistic loss:
+$$L(y, \rho) = \log\big(1 + \exp(-y\rho)\big), $$
+where $\rho = M_t(x)$.
+\begin{itemize}
+	\item[(a)] Write down the empirical risk minimized by the Gradient Boosting metalearner after $T$ iterations. Your answer should be expressed explicitly in terms of $\beta_1, \dots, \beta_T$ , $h_1, \dots, h_T$ , and the training data.   \defpoints{7}
+    
+	\item[(b)] Assume that at iteration $T$, the weak learner $h_T$ has already been trained and all previous coefficients $\beta_1, \dots, \beta_{T-1}$ are fixed constants. Derive the expression for the gradient of the empirical risk with respect to $\beta_T$ . Your answer should be written in terms of $M_{T-1}(x_i), h_T(x_i)$, and $y_i$.  \defpoints{13}
+
+\end{itemize}
+
+% \end{enumerate}
+
+
+
+\newpage
+\item\defpoints{20} {[}\textit{Hypothesis Testing}{]}
+Consider the (binary) hypothesis testing, where there are only two hypotheses to discriminate between given our observation \(y\):
+\begin{center}
+     \(H_0: Y\sim P_{Y|X=0}\) (the null hypothesis)\\
+     \(H_1: Y\sim P_{Y|X=1}\) (the alternate hypothesis)
+\end{center}
+Define a decision rule/test \( \phi : \mathcal Y\mapsto  \{0,1\}\). Recall that
+\begin{itemize}
+    \item Type I Error (False Positive) Probability: \(\Pr[\phi(Y)=1|X = 0]\)
+    \item Type II Error (False Negative) Probability: \(\Pr[\phi(Y)=0|X = 1]\)
+\end{itemize}
+The goal to choose a test that minimizes the type II error probability subject to a constraint on the type I error probability. That is, for some \(\alpha \geq 0\), find
+\begin{align}\label{power}
+    \phi^*_\alpha = \operatorname*{arg\,min}_{\phi:\Pr[\phi(Y)=1|X = 0]\leq \alpha}\Pr[\phi(Y)=0|X=1] = \operatorname*{arg\,max}_{\phi:\Pr[\phi(Y)=1|X = 0]\leq \alpha}\Pr[\phi(Y)=1|X = 1]
+\end{align}
+\begin{definition}[(randomized) threshold test]
+    A \textbf{(randomized) threshold test} is a test of the following form:
+    \begin{align*}
+        \phi(y) = 
+        \begin{cases}
+            0 & L(y)<\lambda\\
+            \text{Bernoulli}(\gamma) & L(y)=\lambda\\
+            1 & L(y)>\lambda
+        \end{cases}
+    \end{align*}
+    where $L(y) = \frac{P_{Y|X}(y|1)}{P_{Y|X}(y|0)}$ is the \textbf{likelihood ratio} and $\lambda,\gamma$ are some constants.
+\end{definition}
+\begin{itemize}
+    \item [(a)] Show that there exists a (randomized) threshold test $\phi$ such that \begin{align}\label{size}
+        \Pr[\phi(Y)=1|X = 0] = \E[\phi(Y)|X = 0] = \alpha
+    \end{align} 
+    for any $\alpha\in[0,1]$.\defpoints{5}
+    \item [(b)] Show that if a test is a threshold test with (\ref{size}) holds, then, it is an optimal solution of (\ref{power}) \defpoints{10}
+    % \item [(c)] Show that optimal solution $\phi^*_\alpha$ of (\ref{power}) is a threshold test. It also satisfies (\ref{size}) almost everywhere $\mu$ unless there exists a test with $\Pr[\phi(Y)=1|X = 0]< \alpha$ and $\Pr[\phi(Y)=1|X = 1] = 1$\defpoints{5}
+    % \item [(d)] 
+    \item [(c)]Consider the Gaussian example with 
+    \begin{align*}
+    P_{Y|X = 0}\sim \mathcal{N}(0,\sigma^2)\\
+    P_{Y|X = 1}\sim \mathcal{N}(1,\sigma^2)
+    \end{align*}
+    Let $\Phi$ denote the CDF of the standard normal distribution. Find an optimal solution of (\ref{power}) and the relationship between $\gamma,\lambda$ and $\alpha$. \defpoints{5}
+\end{itemize}
+
+
+\newpage
+
+
+
+
+
+
+
+\item \defpoints{20} {[}\textit{Hypothesis Testing}{]}
+In a binary classification task (e.g., click-through rate prediction or fraud detection),
+two classifiers, Model A and Model B, are evaluated using
+$5$-fold cross-validation.
+The validation error rates obtained on each fold are reported below:
+
+\begin{center}
+\begin{tabular}{c|cc}
+\hline
+Fold $i$ & Model A error $p_i^{(A)}$ & Model B error $p_i^{(B)}$ \\
+\hline
+1 & 0.18 & 0.15 \\
+2 & 0.20 & 0.17 \\
+3 & 0.16 & 0.18 \\
+4 & 0.19 & 0.16 \\
+5 & 0.17 & 0.14 \\
+\hline
+\end{tabular}
+\end{center}
+
+Assume that the validation sets are sufficiently large so that the error
+rates can be approximated as normally distributed.
+
+\begin{itemize}
+\item[(a)]
+Compute the sample mean and sample standard deviation of the
+$5$-fold cross-validation error rates for Model A.
+Then construct a $95\%$ two-sided confidence interval for its
+true mean error rate.
+
+\defpoints{6}
+
+\item[(b)]
+Define the per-fold difference
+\[
+d_i = p_i^{(A)} - p_i^{(B)}, \quad i=1,\dots,5.
+\]
+Using a paired $t$-test, test at significance level $\alpha=0.05$
+whether the two models have the same expected error rate.
+Clearly state the null hypothesis, test statistic, and conclusion.
+\defpoints{8}
+
+\item[(c)]
+In practice, suppose you only care whether Model B is better than Model A
+(i.e., has a lower error rate).
+\begin{itemize}
+\item 1. Formulate an appropriate one-sided hypothesis test.
+\item 2. Explain why a one-sided test is more suitable than a two-sided test
+in this scenario.
+\item 3. Compared with a two-sided test at the same significance level,
+does the rejection region become larger or smaller?
+\end{itemize}
+\defpoints{6}
+\end{itemize}
+
+
+
+
+
+
+
+\newpage
+
+\item \defpoints{20} [\textit{Interval Estimation}]
+Let \( X_1, X_2, \dots, X_n \) be a random sample from the uniform distribution \( R(0, \theta) \), where \( \theta > 0 \) is an unknown parameter. Denote \( M_n = \max\{X_1, X_2, \dots, X_n\} \).
+
+\begin{itemize}
+\item[(a)] \defpoints{8} Find the probability density function \( f_{M_n}(t) \) and the cumulative distribution function \( F_{M_n}(t) \) of \( M_n \).
+\item[(b)] \defpoints{6} For a given confidence level \( 1-\alpha \; (0 < \alpha < 1) \), find a constant \( c_n > 1 \) such that the interval \([M_n,c_n M_n]\) is a confidence interval for \( \theta \) with confidence coefficient \( 1-\alpha \). Express \( c_n \) explicitly in terms of \( \alpha \) and \( n \).
+\item[(c)] \defpoints{6} Suppose a sample of size \( n = 10 \) is drawn from \( R(0, \theta) \), yielding the following observed values:
+\[
+0.2,\; 0.5,\; 0.8,\; 1.2,\; 0.3,\; 0.6,\; 0.9,\; 1.1,\; 0.4,\; 0.7.
+\]
+Taking the confidence coefficient \( 1-\alpha = 0.95 \) and using the formula derived in part (b), compute the numerical lower and upper bounds of this confidence interval (round your results to three decimal places).
+\end{itemize}
+
+
+\end{enumerate}
+\end{document}

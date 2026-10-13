@@ -1,0 +1,283 @@
+\documentclass[10pt]{article}
+\usepackage[latin9]{inputenc}
+\usepackage[a4paper]{geometry}
+\geometry{verbose,tmargin=2cm,bmargin=2cm,lmargin=2cm,rmargin=2cm}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{calc}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\PassOptionsToPackage{normalem}{ulem}
+\usepackage{ulem}
+\usepackage{amsthm}
+\usepackage{url}  % 或 hyperref，它也包含 url 功能
+\usepackage{hyperref}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+%!TEX program = xelatex
+\usepackage{mathrsfs}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{enumerate}
+\usepackage{bm}
+\usepackage{tikz}
+\usepackage{listings}
+\usetikzlibrary{arrows}
+\usepackage{subfigure}
+\usepackage{graphicx}
+\usepackage{booktabs}\usepackage{multirow}\usepackage{upquote}
+\usepackage{float}
+\usepackage{pdfpages}
+
+% additional commands
+\newcommand{\mbf}[1]{\mathbf{#1}}
+\newcommand{\gauss}{\mathcal{N}}
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\mat}[1]{\mathbf{#1}}
+
+\lstset{language=Matlab}
+\lstset{breaklines}
+
+\input defs.tex
+\newtheorem{proposition}{Proposition}\newtheorem{remark}{Remark}
+\newcommand{\vectdot}[1]{\dot{\mathbf{#1}}}
+\titleformat*{\section}{\centering\LARGE\scshape}
+\renewcommand{\thesection}{\Roman{section}}
+\lstset{language=Matlab,tabsize=4,frame=shadowbox,basicstyle=\footnotesize,
+keywordstyle=\color{blue!90}\bfseries,breaklines=true,commentstyle=\color[RGB]{50,50,50},stringstyle=\ttfamily,numbers=left,numberstyle=\tiny,
+  numberstyle={\color[RGB]{192,92,92}\tiny},backgroundcolor=\color[RGB]{245,245,244},inputpath=code}
+
+\makeatother
+
+\begin{document}
+\title{CS182: Introduction to Machine Learning, Fall 2025\\
+ Homework 2}
+% \author{{\small (Due on Sunday, Nov. 9 at 11:59 pm (CST))}}
+\author{\small{(Due on Friday, Nov. 14 at 11:59 pm (CST))}}
+\date{\date{}}
+
+\maketitle
+{\small{}%
+\noindent\fcolorbox{black}{white}{\begin{minipage}[t]{1\columnwidth - 2\fboxsep - 2\fboxrule}%
+Notice:
+\begin{itemize}
+\item Please submit your assignments via Gradescope. The entry code is \uline{428YBY}.
+\item Please make sure you select your answer to the corresponding question
+when submitting your assignments.
+\item Each person has a total of five days to be late without penalty for
+all the assignments. Each late delivery less than one day will be
+counted as one day.
+\end{itemize}
+%
+\end{minipage}}}{\small\par}
+\begin{enumerate}
+\item \defpoints{20} {[}\textit{Parameter Estimation}{]} A 2-axis force sensor, mounted on a robot fingertip, measures an applied force $\mbf{F} = (F_x, F_y)$. Due to manufacturing tolerances and mechanical crosstalk, the sensor's voltage output $V_x$ is linearly dependent on both $F_x$ and $F_y$.
+
+We use a Multivariate Linear Regression Model to calibrate the $V_x$ channel. This model includes a bias term $b$ and two gain terms, $m_{11}$ and $m_{12}$:
+$$V_x = m_{11} F_x + m_{12} F_y + b$$
+
+We assume the sensor's measurement noise $\epsilon$ is Gaussian, $\epsilon \sim \gauss(0, \sigma^2)$. Therefore, for the $i$-th measurement, the observation model is:
+$$V_x^i = (m_{11} F_x^i + m_{12} F_y^i + b) + \epsilon_i$$
+
+The parameter vector we want to estimate is $\mbf{w} = \begin{bmatrix} m_{11} \\ m_{12} \\ b \end{bmatrix}$.
+
+
+
+\begin{enumerate}
+    \item Given a set of $N$ i.i.d. calibration data points $\set{X} = \{ (F_x^i, F_y^i), V_x^i \}_{i=1}^N$. Write the Log-Likelihood Function $\mathcal{L}(\mbf{w} | \set{X})$ for the parameters $\mbf{w}$. \defpoints{4}
+
+    \item We know that maximizing $\mathcal{L}(\mbf{w} | \set{X})$ is equivalent to minimizing the Sum of Squared Errors (SSE) $E(\mbf{w}) = \sum_{i=1}^{N} (V_x^i - (m_{11} F_x^i + m_{12} F_y^i + b))^2$.\defpoints{8}
+    
+    \begin{itemize}
+        \item Write the SSE $E(\mbf{w})$ in matrix-vector form: $E(\mbf{w}) = \|\mbf{r} - \mat{X}\mbf{w}\|^2$. Clearly define the design matrix $\mat{X}$, the parameter vector $\mbf{w}$, and the observation vector $\mbf{r}$ based on the model.
+        
+        \item By computing the gradient of $E(\mbf{w})$ with respect to the vector $\mbf{w}$ (i.e., $\nabla_{\mbf{w}} E(\mbf{w})$) and setting it to zero, derive the Normal Equations:
+        $(\mat{X}^T \mat{X}) \hat{\mbf{w}} = \mat{X}^T \mbf{r}$,
+        
+        % (\textbf{Hint:} You may use the matrix calculus identity $\nabla_{\mbf{x}} \|\mbf{y} - \mat{A}\mbf{x}\|^2 = -2\mat{A}^T(\mbf{y} - \mat{A}\mbf{x})$ or derive it from the expanded form $E(\mbf{w}) = (\mbf{r} - \mat{X}\mbf{w})^T(\mbf{r} - \mat{X}\mbf{w})$.)
+    \end{itemize}
+    
+    \item During an experiment, $N=4$ known forces were applied, and the corresponding $V_x$ voltages were measured.\defpoints{8}
+
+\begin{center}
+\begin{tabular}{c c c}
+\toprule
+Measurement $i$ & Applied Force $(F_x, F_y)$ (N) & Measured Voltage $V_x$ (V) \\
+\midrule
+1 & (1, 0) & 2.1 \\
+2 & (0, 1) & 0.9 \\
+3 & (1, 1) & 3.0 \\
+4 & (2, 0) & 4.1 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\begin{itemize}
+    \item Using the data provided in the table, first compute the numerical values for $\mat{X}^T \mat{X}$ and $\mat{X}^T \mbf{r}$. Then, solve the system to find the optimal parameter estimates $\hat{\mbf{w}} = (\hat{m}_{11}, \hat{m}_{12}, \hat{b})^T$. 
+    \item A unique least-squares solution $\hat{\mbf{w}}$ only exists if the applied calibration forces satisfy a specific condition. From an experimental design perspective, what \textbf{physical requirement} must the set of $N=4$ applied forces $\{ (F_x^i, F_y^i) \}$ meet to ensure that the parameters $(m_{11}, m_{12}, b)$ can be uniquely determined? Briefly explain why. 
+\end{itemize}
+\end{enumerate}
+
+\newpage
+
+% \begin{enumerate}
+\item \defpoints{20} {[}\textit{Parameter Estimation}{]} 
+Assume that the prior distribution of $\theta$ follows a Gaussian distribution:
+$$p(\theta) = \mathcal{N}(0, \sigma^2),$$
+where $\theta$ is an unknown parameter and $\sigma$  is known. The conditional distribution of $x$ given $\theta$ is
+$$p(x \mid \theta) = \mathcal{N}(\theta, 1).$$
+Please provide detailed derivations for the following:
+\begin{itemize}
+	\item[(a)] Derive the marginal distribution $p(x)$. (Hint: $\int_{-\infty}^{\infty} e^{-a x^2 + b x + c} dx = \sqrt{\frac{\pi}{a}}e^{\frac{b^2}{4a} + c}$.) \defpoints{6}
+    
+	\item[(b)] Compute the posterior expectation $\mathbb{E}(\theta \mid x)$. \defpoints{6}
+    
+	\item[(c)] Suppose the prior $p(\theta)$ is unknown, and we only know that $p(x \mid \theta) = \mathcal{N}(\theta, \sigma^2).$ Find the posterior expectation $\mathbb{E}(\theta \mid x)$. \defpoints{8}
+\end{itemize}
+
+
+\newpage{}
+
+
+
+
+\item\defpoints{20} {[}\textit{Parameter Estimation}{]}
+\begin{itemize}
+In class, we have learned that the MMSE is achieved when using the conditional expectation \(\E[X | \mathbf{Y}]\), i.e., \(\arg\min_{\hat{X}}\E[|X-\hat{X}(\mathbf{Y})|^2] = E[X|\mathbf{Y}]\), where \(X\) is some unknown random variable and \(\mathbf{Y}\) is the observation. However, \(\E[X|\mathbf{Y}]\) can be intractable to compute. Now, let's focus on linear estimation and minimize MSE over all linear estimators.
+\begin{definition}[LLSE]
+    \[\mathbb{L}[X|\mathbf{Y}] = \arg\min_{\text{linear }\hat{X}}\E[|X-\hat{X}(\mathbf{Y})|^2]\]
+\end{definition}
+where linear estimators \(\hat{X}(\mathbf{Y})\) are of the form 
+\[\hat{X}(\mathbf{Y}) = a+\sum_{i = 1}^nb_iY_i\] for \(a,b_i\in \mathbb{R}\) where \(\mathbf{Y} = (Y_1, \cdots , Y_n)\) is a vector of observations.
+
+\item[(a)] 
+Define
+\begin{align*}
+    \Sigma_{\mathbf{XY}} &= \E[(X-\mu_x)(\mathbf{Y}-\mu_\mathbf{Y})^T]&\text{(cross-covariance matrix)}\\
+    \Sigma_{\mathbf{Y}} &= \E[(\mathbf{Y}-\mu_\mathbf{Y})(\mathbf{Y}-\mu_\mathbf{Y})^T]&\text{(covariance matrix)}
+\end{align*}
+where \(\mu_X=\E(X),\mu_Y= \E[Y] = [\E[Y_1],\cdots,\E[Y_n]]\)\\
+Show that 
+\begin{align}
+    \mathbb{L}[X|\mathbf{Y}] = \mu_X+\Sigma_{\mathbf{XY}}\Sigma_{\mathbf{Y}}^{-1}(\mathbf{Y}-\mu_\mathbf{Y})
+\end{align}\defpoints{5}
+
+\item[(b)] Show that a linear estimator \(\hat{X}(\mathbf{Y})\) achieves minimum mean square error(over all linear estimators) if and only if 
+\begin{align}
+    &\E[\hat{X}(\mathbf{Y})-X] = 0\\
+    &\E[(\hat{X}(\mathbf{Y})-X)Y_i] = 0
+\end{align}
+This is called the \textbf{orthogonality principle} since it uniquely characterizes \(\mathbb{L}[X|\mathbf{Y}]\).\\
+\defpoints{10}
+\item[(c)] In the real world, data is observed sequentially. How do we efficiently update our LLS estimate on the arrival of new observations? For motivation, start with a simple setting. w.l.o.g., assume \(\E[X] = 0\), Suppose observations \(Y_1,Y_2,\cdots \) are orthogonal and uncorrelated, i.e., \(\langle Y_i,Y_j\rangle=\E[Y_iY_j]=\Cov(Y_i,Y_j) = 0\) for \(i\neq j\) to each other.\\
+For convenience, define
+\begin{align*}
+    \mathbf{Y}^n&=(Y_1,\cdots,Y_n)\\
+    \mu_i  &= \E[Y_i]
+\end{align*}
+Show that
+\begin{align}
+     \mathbb{L}[X|\mathbf{Y}^{n+1}]&=  \mathbb{L}[X|\mathbf{Y}^n]+ \mathbb{L}[X|Y_{n+1}]\\
+     &= \mathbb{L}[X|\mathbf{Y}^n]+ \frac{\Cov(X,Y_{n+1})}{\Var(Y_{n+1})}(Y_{n+1}-\mu_{n+1})
+\end{align}
+\defpoints{5}\\
+(Hint: Just check the orthogonality principle!)
+\end{itemize}
+
+\newpage
+
+
+\newpage
+
+
+
+
+
+
+\item \defpoints{20} {[}\textit{Linear Discriminant Analysis}{]} We have
+a two-class dataset with label $\mathcal{Y}=\left\{ -1,+1\right\} $
+and the feature vector $\bm{x}\in\mathbb{R}^{2}$. We find the means
+of these two classes are $\hat{\mathbf{\bm{\mu}}}_{-1}=\left(-1,-1\right)^{\top}$
+and $\hat{\mathbf{\bm{\mu}}}_{+1}=\left(1,1\right)^{\top}$, respectively.
+And the estimated prior probabilities for these two class are equal
+(i.e., $\hat{\pi}_{+1}=\hat{\pi}_{-1}=\frac{1}{2}$).\\
+ Some additional explanations on question 4. The Fisher's linear discriminant is a supervised dimensionality
+reduction method. The terms Fisher's linear discriminant and LDA are
+often interchangeably. The  Fisher's linear discriminant maximizes the ratio between $\bm{S}_{B}$
+and $\bm{S}_{W}$, where $\bm{S}_{B}$ denotes the between-class scatter
+matrix and $\bm{S}_{W}$ denotes the within-class scatter matrix, and this
+method is based on the so-called Fisher's linear discriminant rule.
+However, there is another type of LDA, which is based on Bayes discriminant
+rule, is presented to you in this question. By assuming $p\left(\bm{x}\left|C_{i}\right.\right)\sim\mathcal{N}\left(\bm{\mu}_{i},\bm{\Sigma}\right)$
+(i.e., homoscedasticity), this type of LDA assigns $\bm{x}$ to the
+group that maximizes $\pi_{i}p\left(\bm{x}\left|C_{i}\right.\right)$,
+where $\pi_{i}$ represents the prior probability of each classification
+$C_{i}$, and $p\left(\bm{x}\left|C_{i}\right.\right)$ represent
+the $i$-th density. In question 4(a), we want you to use this type
+of LDA based on Bayes discriminant rule. In question 4(b), without
+homoscedasticity, the problem converts to quadratic discriminant analysis
+(QDA). You can get more detailed information through:  \url{https://harvard-iacs.github.io/2018-CS109A/a-sections/a-section-6/presentation/a_section6.pdf}\\
+
+\begin{itemize}
+\item[(a)]  Assuming the covariance martix can be estimated as
+\[
+\hat{\mathbf{\Sigma}}=\begin{pmatrix}1 & \rho\\
+\rho & 1
+\end{pmatrix}
+\]
+with $0\leq\rho<1$ when applying LDA. Find the decision boundary
+as a function of $\rho$. \defpoints{7}
+\item[(b)]  Now suppose that we model each class with its own covariance matrix.
+The covariance matrix of class $+1$ is
+\[
+\hat{\mathbf{\Sigma}}_{+1}=\begin{pmatrix}1/5 & 0\\
+0 & 5
+\end{pmatrix}.
+\]
+And the covariance matrix of class $-1$ is
+\[
+\hat{\mathbf{\Sigma}}_{-1}=\begin{pmatrix}5 & 0\\
+0 & 1/5
+\end{pmatrix}.
+\]
+Describe the decision rule. \defpoints{8}
+\item[(c)]  When $p\left(\bm{x}\left|C_{i}\right.\right)\sim\mathcal{N}\left(\bm{\mu}_{i},\hat{\bm{\Sigma}}\right)$
+(i.e., homoscedasticity), using Fisher's linear discriminant, prove that the vector $\mathbf{w}$ on which the data $\bm{x}$
+are projected is $\mathbf{w}=\hat{\bm{\Sigma}}^{-1}\left(\bm{\mu}_{+1}-\bm{\mu}_{-1}\right)$.
+\defpoints{5}
+\end{itemize}
+
+% \end{itemize}
+\newpage
+
+\item \defpoints{20} [\textit{Logistic Discrimination}]
+Use a quadratic discriminant classifier to classify the $K$ classes $C_{1},\dots,C_{K}$. Assume that the class-conditional distributions are multivariate normal:
+\[
+p\left(\mathbf{x} \mid C_i\right) = \mathcal{N}\left(\mathbf{x} \mid \boldsymbol{\mu}_i, \boldsymbol{\Sigma}_i\right)
+\]
+where $\boldsymbol{\mu}_i$ is the mean vector and $\boldsymbol{\Sigma}_i$ is the covariance matrix for class $C_i$.
+
+The quadratic discriminant function is given by:
+\begin{equation}
+	\label{eq:quad-discriminant}
+	\log\frac{p\left(\mathbf{x}\mid C_{i}\right)}{p\left(\mathbf{x}\mid C_{K}\right)}=\mathbf{x}^{\top}\mathbf{W}_{i}\mathbf{x}+\mathbf{w}_{i}^{\top}\mathbf{x}+w_{i0}
+\end{equation}
+where $\mathbf{W}_{i} \in \mathbb{R}^{d\times d}$ is a symmetric matrix related to the covariance matrices, $\mathbf{w}_{i} \in \mathbb{R}^{d}$ is a vector, and $w_{i0} \in \mathbb{R}$ is a scalar.
+
+\begin{itemize}
+	\item[(a)] Show the relationship between the parameters $\left(\mathbf{W}_i, \mathbf{w}_i, w_{i0}\right)$ and the Gaussian parameters $\left(\boldsymbol{\mu}_i, \boldsymbol{\Sigma}_i\right)$. \defpoints{5}
+	
+	\item[(b)] Using the quadratic discriminants in equation \eqref{eq:quad-discriminant}, derive the expression for the posterior probability $P\left(C_i \mid \mathbf{x}\right)$ for each class $i=1,\dots,K$. Your answer should involve a softmax function. \defpoints{5}
+	
+	\item[(c)] Show that if all classes share the same covariance matrix, i.e., $\boldsymbol{\Sigma}_i = \boldsymbol{\Sigma}$ for all $i$, then the decision boundaries become linear. Also, find the expressions for the parameters $\mathbf{W}_{i}$, $\mathbf{w}_{i}$, and $w_{i0}$. \defpoints{5}
+	
+	\item[(d)] Discuss the advantages and disadvantages of quadratic discriminant compared to linear discriminant. Consider aspects such as model flexibility, number of parameters, and risk of overfitting. \defpoints{5}
+\end{itemize}
+
+
+
+
+\end{enumerate}
+\end{document}

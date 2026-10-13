@@ -1,0 +1,287 @@
+\documentclass[10pt]{article}
+\usepackage[latin9]{inputenc}
+\usepackage[a4paper]{geometry}
+\geometry{verbose,tmargin=2cm,bmargin=2cm,lmargin=2cm,rmargin=2cm}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{calc}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\PassOptionsToPackage{normalem}{ulem}
+\usepackage{ulem}
+\usepackage{amsthm}
+\usepackage{url}  % 或 hyperref，它也包含 url 功能
+\usepackage{hyperref}
+\usepackage{ulem}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+%!TEX program = xelatex
+\usepackage{mathrsfs}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{enumerate}
+\usepackage{bm}
+\usepackage{tikz}
+\usepackage{listings}
+\usetikzlibrary{arrows}
+\usepackage{subfigure}
+\usepackage{graphicx}
+\usepackage{booktabs}\usepackage{multirow}\usepackage{upquote}
+\usepackage{float}
+\usepackage{pdfpages}
+
+% additional commands
+\newcommand{\mbf}[1]{\mathbf{#1}}
+\newcommand{\gauss}{\mathcal{N}}
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\mat}[1]{\mathbf{#1}}
+
+
+% ----- Python style -----
+\definecolor{codebg}{RGB}{245,245,245}
+\definecolor{keywordcolor}{RGB}{0,0,180}
+\definecolor{stringcolor}{RGB}{163,21,21}
+\definecolor{commentcolor}{RGB}{0,128,0}
+
+\lstdefinestyle{pythonstyle}{
+    language=Python,
+    backgroundcolor=\color{codebg},
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{keywordcolor}\bfseries,
+    stringstyle=\color{stringcolor},
+    commentstyle=\color{commentcolor}\itshape,
+    numberstyle=\tiny\color{gray},
+    numbers=left,
+    frame=single,
+    rulecolor=\color{black!30},
+    tabsize=4,
+    breaklines=true,
+    showstringspaces=false,
+    xleftmargin=1.5em,
+    framexleftmargin=1.2em
+}
+
+\lstset{language=Matlab}
+\lstset{breaklines}
+
+\input defs.tex
+\newtheorem{proposition}{Proposition}\newtheorem{remark}{Remark}
+\newcommand{\vectdot}[1]{\dot{\mathbf{#1}}}
+\titleformat*{\section}{\centering\LARGE\scshape}
+\renewcommand{\thesection}{\Roman{section}}
+\lstset{language=Matlab,tabsize=4,frame=shadowbox,basicstyle=\footnotesize,
+keywordstyle=\color{blue!90}\bfseries,breaklines=true,commentstyle=\color[RGB]{50,50,50},stringstyle=\ttfamily,numbers=left,numberstyle=\tiny,
+  numberstyle={\color[RGB]{192,92,92}\tiny},backgroundcolor=\color[RGB]{245,245,244},inputpath=code}
+
+\makeatother
+
+\begin{document}
+\title{CS182: Introduction to Machine Learning, Fall 2025\\
+ Homework 4}
+\author{\small{(Due on Saturday, Dec. 20 at 11:59 pm (CST))}}
+\date{\date{}}
+
+\maketitle
+{\small{}%
+\noindent\fcolorbox{black}{white}{\begin{minipage}[t]{1\columnwidth - 2\fboxsep - 2\fboxrule}%
+Notice:
+\begin{itemize}
+\item Please submit your assignments via Gradescope. The entry code is \uline{428YBY}.
+\item Please make sure you select your answer to the corresponding question
+when submitting your assignments.
+\item Each person has a total of five days to be late without penalty for
+all the assignments. Each late delivery less than one day will be
+counted as one day.
+\end{itemize}
+%
+\end{minipage}}}{\small\par}
+\begin{enumerate}
+\item \defpoints{20} [\textit{K-means}]Given a 2D dataset $\mathcal{X}$ consisting of 5 data points:
+$$
+x_1=(1, 1), \quad x_2=(2, 1), \quad x_3=(4, 3), \quad x_4=(5, 4), \quad x_5=(8, 5), \quad x_6=(3,3)
+$$
+
+Perform the k-Means clustering algorithm on this dataset with $k=2$ clusters. The initial cluster centers (prototypes) are set as:
+$$
+m_1^{(0)}=(1, 1), \quad \\
+m_2^{(0)}=(5, 4)
+$$
+
+\begin{enumerate}
+    \item Calculate the Euclidean distance between each data point and the two initial centers, and assign each point to the nearest cluster. List the distance calculations for all points and the resulting cluster assignments $C_1$ and $C_2$. \defpoints{4}
+    
+    \item Based on the cluster assignments, calculate and update the two new cluster centers $m_1^{(1)}$ and $m_2^{(1)}$. List the calculation process and the final coordinates of the new cluster centers.\defpoints{6}
+
+    \item The k-Means algorithm optimizes the minimization of the Total Reconstruction Error. Write down the mathematical expression for this objective function $E(\{m_i\}_{i=1}^{k} | \mathcal{X})$ and explain the meaning of the term $b_i^t$ within the formula.\defpoints{4}
+
+    \item The Expectation-Maximization algorithm can be viewed as a probabilistic extension of k-Means. Briefly state the specific condition under which k-Means clustering is a special case of the EM algorithm applied to Gaussian Mixture Models.\defpoints{6}
+
+\end{enumerate}
+
+\newpage
+
+
+\newpage
+
+% \begin{enumerate}
+\item \defpoints{20} {[}\textit{K-Means}{]} \textit{K-Means} is a classic unsupervised clustering algorithm whose goal is to partition data into $k$ clusters such that each sample is assigned to the cluster with the nearest center.  In 'problem2.py', a KMeans class mimicking the sklearn interface is provided.  You are required to complete the `fit` method, implement the full clustering functionality, and apply it to the Iris dataset.
+\begin{itemize}
+	\item[(a)] Complete the `fit()` method in the given 'KMeans' class and implement a full K-Means clustering algorithm. Your answer should include: a comment on your code and a visual screenshot. (Implement the algorithm by hand and don't use the sklearn implementation.) \defpoints{10}
+    
+	\item[(b)] After applying your 'KMeans' implementation to the Iris dataset (after reducing the data to two dimensions using PCA), you should output the resulting cluster centers (`cluster\_centers\_`) along with the clustering visualization figure generated by your program. \defpoints{5}
+
+    \item[(c)] Given two new 2D samples:
+    $$ 
+    x_1 = [1.0,\ -0.5], \quad x_2 = [2.2,\ 1.1]  
+    $$
+    Use the `predict()` method to determine whether they are assigned to the same cluster. \defpoints{5}
+\end{itemize}
+
+% \end{enumerate}
+
+
+
+\newpage
+
+
+\item\defpoints{20} {[}\textit{EM}{]}
+\begin{itemize}
+Let \(Z\) represent the unobserved assignment of a given observation to one of the \(k\) clusters:
+\[
+Z\sim \text{Categorical}(\pi_1,\cdots,\pi_k)
+\]
+where \(\pi_k\) is the probability that a randomly selected observation is assigned to cluster \(k\).\\
+Let \((X_1, Z_1),\cdots, (X_n, Z_n)\) denote the set of observations and their corresponding cluster assignments, under i.i.d. assumptions.
+Consider the marginalized log-likelihood function
+\[
+l_{\text{margin}}(\theta) = \sum_{i = 1}^n\log p(X_i;\theta) = \sum_{i = 1}^n\log \sum_{j = 1}^kp(X_i,Z_i = j;\theta)
+\]
+where \(\theta\) is some parameter we want to estimate.
+Instead of maximizing the marginalized log-likelihood function, now the EM algorithm aims to maximize a lower bound \(\mathcal F (q,\theta)\) on the marginalized log-likelihood function, such that
+\begin{align}\label{in1}
+    l_{\text{margin}}(\theta)\geq \mathcal F (q,\theta) = \sum_{i = 1}^n\mathcal{F}_i (q_i,\theta)
+\end{align}
+where \(\mathcal{F}_i (q_i,\theta) :=\sum_{z = 1}^kq_i(z)\log\frac{p(X_i,Z_i=z;\theta)}{q_i(z)} \). Here \(q_i\) can be seen as an arbitrary distribution over the $k$ clusters for the $i$-th observation.
+\item[(a)] Show the above inequality holds for any \(q =(q_1,\cdots, q_n)\), i.e. 
+\[    l_{\text{margin}}(\theta)\geq \sum_{i = 1}^n\sum_{z=1}^kq_i(z)\log\frac{p(X_i,Z_i=z;\theta)}{q_i(z)}\]\defpoints{6}
+\item[(b)] For a fixed \(\theta\), the EM algorithm aims to optimize over the distributions $q_1,\cdots, q_n$ , in order to make $\mathcal F (q,\theta)$ as close as
+possible to $l_{\text{margin}}(\theta)$. The following is the iterative update at iteration $t$ of the algorithm:
+\begin{align*}
+    \begin{cases}
+        q_i^{(t+1)} = \arg \max_{q_i}\mathcal F (q_i^{(t)},\theta^{(t)}) &\text{(E-step)}\\
+        \theta^{(t+1)} = \arg \max_{\theta}\mathcal F (q^{(t+1)},\theta^{(t)}) &\text{(M-step)}
+    \end{cases}
+\end{align*}
+Show that for any fixed \(\theta\) and \(i\leq n,z\leq k\) when $q_i(z) = p(Z_i = z | X_i;\theta)$, 
+\[
+l_{\text{margin}}(\theta) = \sum_{i = 1}^n\mathcal{F}_i (q_i,\theta)
+\]
+i.e. the bound is sharp and $p(Z_i|X_i;\theta)$ is an optimal choice for $q_i$. \defpoints{7}
+\item[(c)] Show this algorithm converge, you can show this by showing \(l_{\text{margin}}(\theta^{(t)})\leq l_{\text{margin}}(\theta^{(t+1)})\) when choosing \(q^{(t+1)}_i(z) = p(Z_i = z | X_i;\theta^{(t)})\). \defpoints{7}
+\end{itemize}
+
+
+\newpage
+
+
+
+
+
+\item \defpoints{20} {[}\textit{Nonparametric Density Estimation}{]}
+Let us consider kernel density estimation with a boxcar kernel. Given
+data $X_{1},\dots,X_{n}$, the empirical pdf is defined as follows
+\[
+\hat{p}_{h}\left(x\right)=\frac{1}{n}\frac{\sum_{i=1}^{n}I\left(\left|x-X_{i}\right|\leq h\right)}{2h}.
+\]
+Here, $\left|y\right|$ indicates absolute value and $I\left(y\right)$
+is an indicator function that is $1$ if the boolean argument evaluates
+to true and $0$ otherwise.
+\begin{itemize}
+\item[(a)]  Draw $\hat{p}_{h}\left(x\right)$ for all $x\in\left[-7,7\right]$
+where our data consists of the following observations $\left\{ X_{i}\right\} =\left\{ -7,-4,-3,-2,1,5\right\} $
+and $h=3$. \defpoints{6}
+\item[(b)]  Let $F\left(x\right)=P\left(X\leq x\right)$ represent the true
+cdf over a random variable $X$. Show that
+\[
+E\left(\hat{p}_{h}\left(x\right)\right)=\frac{F\left(x+h\right)-F\left(x-h\right)}{2h}.
+\]
+ \defpoints{8}
+\item[(c)]  Determine if the kernel density estimator in this question will
+be an unbiased estimator in the following scenarios (and you need
+to give an explanation):
+\begin{itemize}
+\item 1. $\text{pdf}\left(x\right)$ is uniform between $0$ and $1$. $\hat{p}_{h}\left(\frac{1}{2}\right)$
+is estimated using $h=\frac{1}{3}$.
+\item 2. $\text{pdf}\left(x\right)=2x$ for $0\leq x\leq1$. $\hat{p}_{h}\left(\frac{1}{4}\right)$
+is estimated using $h=\frac{1}{5}$.
+\item 3. $\text{pdf}\left(x\right)=\frac{3}{2}x^{2}$ for $-1\leq x\leq1$.
+$\hat{p}_{h}\left(0\right)$ is estimated using $h=\frac{1}{5}$.\defpoints{6}
+\end{itemize}
+\end{itemize}
+
+
+
+
+
+
+
+
+\newpage
+
+\item \defpoints{20} [\textit{Nonparametric Regression}]
+We observe an i.i.d.\ univariate data set
+\[
+\{(x_i,y_i)\}_{i=1}^{n},\qquad x_i\in[0,1],\; y_i\in\mathbb{R},
+\]
+generated from the non-parametric regression model
+\[
+y_i = g(x_i)+\varepsilon_i,\qquad \varepsilon_i\sim\mathcal{N}(0,\sigma^{2}),
+\]
+where the unknown regression function $g\colon[0,1]\to\mathbb{R}$ is twice continuously differentiable.
+No parametric form for $g$ is assumed.
+We estimate $g$ with the kernel smoother
+\[
+\hat{g}_{h}(x)=\frac{\sum_{j=1}^{n}K \left(\dfrac{x-x_j}{h}\right)y_j}{\sum_{j=1}^{n}K \left(\dfrac{x-x_j}{h}\right)},
+\qquad
+K(u)=\frac{1}{\sqrt{2\pi}}\exp \left(-\frac{u^{2}}{2}\right).
+\]
+\begin{itemize}
+	\item[(a)] \defpoints{4} Show that $\hat{g}_{h}(x)$ is the minimiser of the \emph{local} weighted least-squares criterion
+	\[
+	\min_{\beta\in\mathbb{R}}\sum_{j=1}^{n}K \left(\frac{x-x_j}{h}\right) (y_j-\beta)^{2}.
+	\]
+	
+	\item[(b)] \defpoints{8} Derive the conditional bias
+	\[
+	\operatorname{Bias}\bigl[\hat{g}_{h}(x)\mid x_{1},\dots,x_{n}\bigr]
+	=\mathbb{E} \bigl[\hat{g}_{h}(x)\mid\{x_{j}\}\bigr]-g(x)
+	\]
+	up to order $O(h^{2})$. 
+	
+	\textbf{Hints:} Use the fact: the term $\sum_j w_j(x)(x_j - x)$ is approximately zero because the kernel $K$ is symmetric and, for small $h$, the weights are concentrated around $x$. And refer to the following process for derivation. 
+	\begin{itemize}
+		\item[1.] Start from the definition of $\mathbb{E}[\hat{g}_{h}(x) \mid \{x_{j}\}]$, use the model $y_j = g(x_j) + \varepsilon_j$ and properties of $\varepsilon_j$ to simplify.
+		\item[2.] For $g(x_j)$, use a second-order Taylor expansion around $x$: $g(x_j) = g(x) + g'(x)(x_j - x) + \frac{1}{2}g''(x)(x_j - x)^2 + o((x_j-x)^2)$. Substitute and simplify.
+		\item[3.] You need the following regularity conditions: $g$ is twice continuously differentiable in a neighborhood of $x$, and its derivatives $g'(x)$ and $g''(x)$ are bounded.
+		\item[4.] Your final result should be of the form $\operatorname{Bias}[\hat{g}_{h}(x)\mid \{x_j\}] = C(x) \cdot h^2 + o(h^2)$. Explicitly give the coefficient $C(x)$ and explain its meaning (e.g., how does it relate to the properties of $g$?).
+	\end{itemize}
+	
+	\item[(c)] \defpoints{8} Programming task: Visualising the effect of $h$ on kernel regression. In this task, you will implement a kernel regression smoother in Python and observe how the $h$ affects the estimate. Please follow the steps below to complete.
+	\begin{itemize}
+		\item[1.] Generate $n=200$ data points as follows: Let $x_i$ be uniformly distributed on $[0,1]$. Define the true function $g(x) = \sin(4\pi x)$. Generate $y_i = g(x_i) + \varepsilon_i$, where $\varepsilon_i \sim \mathcal{N}(0, 0.1^{2})$.
+		
+		\item[2.] Implement the kernel smoother $\hat{g}_{h}(x)$ with the Gaussian kernel $K(u)=\frac{1}{\sqrt{2\pi}}\exp(-u^2/2)$. Write a function that takes as input the data $\{(x_i,y_i)\}$, a $h$, and a set of query points (e.g., 100 equally spaced points in $[0,1]$), and returns the kernel regression estimates at the query points.
+		
+		\item[3.] For each of the following $h$: $h = 0.01, 0.05, 0.1, 0.3, 0.5, 1.0$, compute the kernel regression estimate on 100 equally spaced points in $[0,1]$. Plot the resulting estimates on the same figure, along with the true function $g(x)=\sin(4\pi x)$ and the generated data points. Use a different color for each $h$ and include a legend. 
+	\end{itemize}
+	Describe what happens as $h$ increases. Which $h$ seems to give the best fit? (\textbf{Notes:} You don't have to submit the code on the assignment, but you must present the drawn results in the assignment.)
+
+
+
+\end{itemize}
+
+\end{enumerate}
+\end{document}
