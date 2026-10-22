@@ -1,0 +1,383 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,array,amsmath,amssymb,booktabs,enumitem,fancyhdr,lastpage,needspace,microtype}
+\usepackage[margin=19mm,headheight=14pt,footskip=11mm]{geometry}
+\usepackage[hidelinks]{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\setlength{\emergencystretch}{2em}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small CS182 --- Lecture 01}
+\fancyhead[R]{\small Solutions}
+\fancyfoot[L]{\small Independent practice quiz}
+\fancyfoot[R]{\small Page \thepage\ of \pageref{LastPage}}
+\newcommand{\SetAnswer}[2]{\expandafter\gdef\csname QuizAnswer#1\endcsname{#2}}
+\newcommand{\GetAnswer}[1]{\csname QuizAnswer#1\endcsname}
+\newlength{\BlankAnswerHeight}\setlength{\BlankAnswerHeight}{16mm}
+\newcommand{\AnswerBlank}{\leavevmode\par\vspace{\BlankAnswerHeight}}
+
+\begin{document}
+\begin{center}{\Large\bfseries CS182: Introduction to Machine Learning}\par{\Large\bfseries Lecture 01: Introduction}\par{\large Worked Solutions and Marking Guide}\end{center}
+\textbf{Scope:} Introduction.pdf. Independent practice material based on the official 2026 Fall lecture.\par\textbf{Total:} 100 marks. \quad \textbf{Suggested time:} 120 minutes.
+\begin{center}\begin{tabular}{lrrr}\toprule
+Section & Questions & Each & Marks\\\midrule
+A. Misconceptions: True/False & 12 & 1 & 12\\
+B. Multiple response & 12 & 2 & 24\\
+C. Proofs and formula derivations & 4 & 10 & 40\\
+D. Applications & 2 & 12 & 24\\\midrule
+Total & 30 & & 100\\\bottomrule\end{tabular}\end{center}
+\textbf{Scoring.} In Section B each item has exactly four options, of which one,
+two, or three are correct. The complete correct set earns 2 marks; a nonempty
+proper subset earns 1 mark; any incorrect option or no selection earns 0.
+T/F answers earn 1 mark only when correct. Show reasoning in Sections C and D;
+part marks are available for valid intermediate work. Equivalent correct methods receive credit.
+\par\medskip\textbf{Instructions.} Answer in English. Use natural logarithms.
+Exact values and justified approximations are accepted. All vectors are columns
+unless stated otherwise. Use local assumptions, label conventions, and tie rules.
+\par\medskip\textbf{Quick key --- Section A}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+1 & 2 & 3 & 4 & 5 & 6\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}T} & \makebox[20mm]{\rule{0pt}{5mm}T} & \makebox[20mm]{\rule{0pt}{5mm}T} & \makebox[20mm]{\rule{0pt}{5mm}F} & \makebox[20mm]{\rule{0pt}{5mm}F} & \makebox[20mm]{\rule{0pt}{5mm}F}\\\hline
+\end{tabular}\end{center}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+7 & 8 & 9 & 10 & 11 & 12\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}T} & \makebox[20mm]{\rule{0pt}{5mm}F} & \makebox[20mm]{\rule{0pt}{5mm}F} & \makebox[20mm]{\rule{0pt}{5mm}T} & \makebox[20mm]{\rule{0pt}{5mm}F} & \makebox[20mm]{\rule{0pt}{5mm}T}\\\hline
+\end{tabular}\end{center}
+\par\medskip\textbf{Quick key --- Section B}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+13 & 14 & 15 & 16 & 17 & 18\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}BD} & \makebox[20mm]{\rule{0pt}{5mm}B} & \makebox[20mm]{\rule{0pt}{5mm}AB} & \makebox[20mm]{\rule{0pt}{5mm}CD} & \makebox[20mm]{\rule{0pt}{5mm}ABD} & \makebox[20mm]{\rule{0pt}{5mm}ACD}\\\hline
+\end{tabular}\end{center}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+19 & 20 & 21 & 22 & 23 & 24\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}CD} & \makebox[20mm]{\rule{0pt}{5mm}AB} & \makebox[20mm]{\rule{0pt}{5mm}ABD} & \makebox[20mm]{\rule{0pt}{5mm}A} & \makebox[20mm]{\rule{0pt}{5mm}AB} & \makebox[20mm]{\rule{0pt}{5mm}CD}\\\hline
+\end{tabular}\end{center}
+\newpage\section*{Section A. True/False --- Explanations}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{1.} \textbf{True.} The lecture distinguishes delayed reward or penalty and the credit assignment problem from supervised outputs.
+
+{\footnotesize\textit{Source: PDF p.18.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{2.} \textbf{True.} Clustering, density estimation, and dimensionality reduction are examples of finding structure without supplied outputs.
+
+{\footnotesize\textit{Source: PDF p.17.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{3.} \textbf{True.} The lecture describes data science or data analytics as a broader concept including statistics, machine learning, data mining, and data visualization.
+
+{\footnotesize\textit{Source: PDF p.4.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{4.} \textbf{False.} The lecture allows a useful approximation; exact replication of the complete process is unnecessary.
+
+{\footnotesize\textit{Source: PDF p.7.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{5.} \textbf{False.} Different hypotheses can fit the same observed labels perfectly and make different predictions outside the training sample.
+
+{\footnotesize\textit{Source: PDF p.39.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{6.} \textbf{False.} Numbers may encode categories, such as 0 and 1 for class labels. The meaning and prediction task determine whether this is classification or regression.
+
+{\footnotesize\textit{Source: PDF pp.15,36,45.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{7.} \textbf{True.} Each parameter multiplies a fixed feature of the input; there are no products or nonlinear transformations of the parameters.
+
+{\footnotesize\textit{Source: PDF p.21.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{8.} \textbf{False.} An algorithm may stop early, find a local solution, or choose among multiple minimizers. Optimization is a separate dimension of a learning algorithm.
+
+{\footnotesize\textit{Source: PDF p.52.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{9.} \textbf{False.} VC dimension requires the existence of a shattered configuration of that size. Some configurations of four points cannot be shattered.
+
+{\footnotesize\textit{Source: PDF p.41.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{10.} \textbf{True.} The lecture identifies both the assumed function family and the squared-error selection criterion as inductive biases.
+
+{\footnotesize\textit{Source: PDF p.48.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{11.} \textbf{False.} The triple tradeoff describes a general statistical tendency. A particular finite test error can stay unchanged or increase.
+
+{\footnotesize\textit{Source: PDF p.49.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{12.} \textbf{True.} Multiplication by a strictly positive constant preserves every comparison of objective values. This does not assert that an arbitrary numerical optimizer follows the same path.
+
+{\footnotesize\textit{Source: PDF pp.22,45.}}
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section B. Multiple Response --- Explanations}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q13 / 题目与选项区
+\textbf{13.} \textbf{Correct set: B, D.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Incorrect.} An interpolant matches the observed noisy values and may fit the noise itself.
+\item \textbf{Correct.} The square Vandermonde system is invertible for distinct input values.
+\item \textbf{Incorrect.} Zero training error does not guarantee generalization.
+\item \textbf{Correct.} Add a nonzero multiple of the polynomial that vanishes at every training input.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.23-24; supplementary derivation from PDF pp.21-24.}}
+% END QUESTION Q13
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q14 / 题目与选项区
+\textbf{14.} \textbf{Correct set: B.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Incorrect.} One quarter is the error rate, which includes an additional division by N.
+\item \textbf{Correct.} That slide defines a sum of misclassification indicators.
+\item \textbf{Incorrect.} Noise, limited model capacity, or imperfect optimization can produce nonzero empirical error without an arithmetic bug.
+\item \textbf{Incorrect.} The lecture explicitly lists hidden or latent attributes as a source of noise.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.39,42.}}
+% END QUESTION Q14
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q15 / 题目与选项区
+\textbf{15.} \textbf{Correct set: A, B.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Correct.} Set the extra coefficient to zero to represent every old polynomial.
+\item \textbf{Correct.} There is one coefficient for each power from zero through M.
+\item \textbf{Incorrect.} A finite evaluation map may have a nontrivial nullspace, especially when there are more coefficients than distinct input points.
+\item \textbf{Incorrect.} Its leading coefficients may vanish; constants are also members.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.21-23.}}
+% END QUESTION Q15
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q16 / 题目与选项区
+\textbf{16.} \textbf{Correct set: C, D.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Incorrect.} Descriptive models may provide knowledge about data without a future-target task.
+\item \textbf{Incorrect.} The mechanism may be partly unknown while containing exploitable regularities.
+\item \textbf{Correct.} The lecture lists accuracy, time complexity, and space complexity as performance criteria.
+\item \textbf{Correct.} Speech and vision illustrate expertise that is difficult to articulate.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.6-8.}}
+% END QUESTION Q16
+
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section B. Multiple Response --- Explanations}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q17 / 题目与选项区
+\textbf{17.} \textbf{Correct set: A, B, D.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Correct.} Its smaller squared norm gives it the smaller objective slope.
+\item \textbf{Correct.} The data-fitting errors are 2 and 5.
+\item \textbf{Incorrect.} Comparing two supplied candidates excludes no third candidate with a still lower objective.
+\item \textbf{Correct.} Solve 2+9 lambda=5+lambda.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF p.28.}}
+% END QUESTION Q17
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q18 / 题目与选项区
+\textbf{18.} \textbf{Correct set: A, C, D.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Correct.} Customer segmentation is a clustering example.
+\item \textbf{Incorrect.} The input medium does not determine the paradigm; labeled spam detection is classification.
+\item \textbf{Correct.} The output is a numerical control angle, matching the regression examples.
+\item \textbf{Correct.} The policy is learned through rewards and trial and error.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.14,16-18.}}
+% END QUESTION Q18
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q19 / 题目与选项区
+\textbf{19.} \textbf{Correct set: C, D.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Incorrect.} Customer attributes can distinguish groups with different purchasing behavior, so adding them to the conditioning variables can change the probabilities.
+\item \textbf{Incorrect.} The intersection counts agree, but the conditioning populations have different sizes.
+\item \textbf{Correct.} Conditioning on biscuits uses the 50 biscuit buyers as the denominator.
+\item \textbf{Correct.} The denominator is the 80 customers who buy tea, so the fraction is 30/80.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF p.11.}}
+% END QUESTION Q19
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q20 / 题目与选项区
+\textbf{20.} \textbf{Correct set: A, B.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Correct.} Every rectangle containing the positives also contains that negative example.
+\item \textbf{Correct.} Every consistent rectangle must extend to each coordinate extreme of the positive examples.
+\item \textbf{Incorrect.} Several boundary positions can preserve the observed labels while changing the area.
+\item \textbf{Incorrect.} Negative examples can force tradeoffs between expansion in different directions, giving multiple incomparable maximal rectangles.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.37-40.}}
+% END QUESTION Q20
+
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section B. Multiple Response --- Explanations}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q21 / 题目与选项区
+\textbf{21.} \textbf{Correct set: A, B, D.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Correct.} The sum of squared residuals is 36, divided by 9.
+\item \textbf{Correct.} Taking the square root restores the units of a residual.
+\item \textbf{Incorrect.} Squaring makes the mean squared error four times as large; RMS doubles.
+\item \textbf{Correct.} Its square is 2E/N=36/9=4.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.22,24,45.}}
+% END QUESTION Q21
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q22 / 题目与选项区
+\textbf{22.} \textbf{Correct set: A.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Correct.} The way prediction errors are scored changes.
+\item \textbf{Incorrect.} A purely notational renaming leaves the same prediction functions available.
+\item \textbf{Incorrect.} Adding a freely weighted feature expands the model family; the same squared loss may still be used.
+\item \textbf{Incorrect.} This changes the optimization procedure; the set of allowable prediction functions can remain the same.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF p.52.}}
+% END QUESTION Q22
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q23 / 题目与选项区
+\textbf{23.} \textbf{Correct set: A, B.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Correct.} Keeping test cases outside selection avoids adapting the choice to their observed errors.
+\item \textbf{Correct.} Model selection needs an estimate of performance beyond the training examples.
+\item \textbf{Incorrect.} Those test outcomes have then influenced the selected model.
+\item \textbf{Incorrect.} The lecture presents those percentages as an example, and also mentions resampling.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.48-50.}}
+% END QUESTION Q23
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q24 / 题目与选项区
+\textbf{24.} \textbf{Correct set: C, D.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Incorrect.} The no-free-lunch discussion rejects a universally best algorithm.
+\item \textbf{Incorrect.} The reduction does not make the subproblems perfectly separable.
+\item \textbf{Correct.} Independently learned binary decisions need not be mutually exclusive.
+\item \textbf{Correct.} The reduction compares one class against the other classes.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.43,52; supplementary interpretation from PDF p.43.}}
+% END QUESTION Q24
+
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{25. Least squares as orthogonality, including redundant features}\hfill\textbf{[10 marks]}\par\medskip
+\textbf{(a) [3 marks]} For any direction \(v\) and real \(t\), set \(r=\Phi w_*-y\). Expanding gives \[E(w_*+tv)-E(w_*)=t\,v^T\Phi^Tr+\tfrac12t^2\|\Phi v\|_2^2.\] At a minimum the linear coefficient must vanish for every \(v\), since otherwise one sufficiently small choice of the sign of \(t\) decreases the objective. Thus \(v^T\Phi^Tr=0\) for every direction, giving \(\Phi^Tr=0\). Award one mark for the expansion, one for the sign-of-perturbation argument, and one for the normal equations.
+
+\textbf{(b) [4 marks]} If \(\Phi^T(\Phi w_*-y)=0\), the same expansion with \(t=1\) yields \[E(w_*+v)=E(w_*)+\tfrac12\|\Phi v\|_2^2\geq E(w_*).\] Hence the condition is sufficient. It says that the residual is orthogonal to every vector in the column space of \(\Phi\). This column space is a finite-dimensional, closed subspace of \(\mathbb R^N\). An orthonormal basis \(q_1,\ldots,q_r\) gives the closest vector \(p=\sum_i q_i(q_i^Ty)\), whose residual is orthogonal to the subspace. Since \(p\) is in the column space, there exists a coefficient vector with \(\Phi w_*=p\). This establishes existence without invertibility. Award two marks for sufficiency, one for orthogonality, and one for existence.
+
+\textbf{(c) [3 marks]} Apply the sufficient-condition expansion at \(u\) with perturbation \(v-u\): \[0=E(v)-E(u)=\tfrac12\|\Phi(v-u)\|_2^2.\] Therefore the fitted training predictions are unique. The coefficient vectors can differ precisely by vectors in \(\operatorname{null}(\Phi)\): adding such a vector preserves all predictions and the objective, and the preceding identity shows every pair of minimizers differs this way. Coefficients are unique if and only if \(\Phi\) has full column rank. Award one mark each for the equality, the nullspace characterization, and the uniqueness condition.
+
+\textit{Marking: use the displayed subpart allocations; award credit for the logical or numerical intermediate steps.}\par
+{\footnotesize\textit{Source: Supplementary derivation from PDF pp.21-22,45.}}
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{26. Why a larger polynomial class cannot worsen optimal training RMS}\hfill\textbf{[10 marks]}\par\medskip
+\textbf{(a) [3 marks]} Every polynomial in \(\mathcal H_M\) is also in \(\mathcal H_{M+1}\) by setting the new coefficient to zero. Thus an optimizer from the smaller class is a feasible candidate for the larger class, so its minimum cannot be smaller than the larger minimum: \(E_{M+1}^*\leq E_M^*\). Because \(N>0\), the map \(a\mapsto\sqrt{2a/N}\) is increasing for nonnegative \(a\), giving \(\mathrm{RMS}_{M+1}^*\leq\mathrm{RMS}_M^*\). Award one mark for inclusion and one for each inequality.
+
+\textbf{(b) [4 marks]} The old residual satisfies \(\Phi_M^Tr=0\). If also \(\phi^Tr=0\), the zero-extended vector \((w_*^T,0)^T\) satisfies the normal equations for \([\Phi_M\ \phi]\), so it is a larger-class minimizer with the same objective. Conversely, if the optimal errors agree, this zero-extended vector attains the larger optimum and must satisfy its normal equations, including \(\phi^Tr=0\). If \(\phi=\Phi_Ma\), then \(\phi^Tr=a^T\Phi_M^Tr=0\), so equality follows. Award one mark for the old orthogonality, two for the two implications, and one for the column-space consequence.
+
+\textbf{(c) [3 marks]} The best constant is \(2/3\): completing the square in \((c-1)^2+c^2+(c-1)^2\) yields \(3(c-2/3)^2+2/3\). Its residual is \((-1/3,2/3,-1/3)^T\) for prediction minus target, and its inner product with the added feature \((-1,0,1)^T\) is zero. Thus the best affine model has the same \(E=1/3\) and RMS \(\sqrt2/3\). The polynomial \(h(x)=x^2\) interpolates all three observations and gives zero error. Test error is evaluated on other points and is not the objective minimized over the nested training classes, so it need not decrease. Award one mark for the constant and error, one for the linear/quadratic comparison, and one for the test-error explanation.
+
+\textit{Marking: use the displayed subpart allocations; award credit for the logical or numerical intermediate steps.}\par
+{\footnotesize\textit{Source: Supplementary derivation from PDF pp.21-24,48-49.}}
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{27. Regularization: prove the tradeoff without an inverse formula}\hfill\textbf{[10 marks]}\par\medskip
+\textbf{(a) [4 marks]} Optimality at the two parameter values gives \[F(w_1)+\lambda_1R(w_1)\leq F(w_2)+\lambda_1R(w_2),\]\[F(w_2)+\lambda_2R(w_2)\leq F(w_1)+\lambda_2R(w_1).\] Adding and rearranging yields \((\lambda_2-\lambda_1)(R(w_2)-R(w_1))\leq0\). The coefficient is strictly positive, so \(R(w_2)\leq R(w_1)\). The proof allows nonunique minimizers. Award one mark for each optimality inequality and two for the conclusion with the correct sign.
+
+\textbf{(b) [3 marks]} The first optimality inequality rearranges to \[F(w_1)-F(w_2)\leq\lambda_1\bigl(R(w_2)-R(w_1)\bigr)\leq0.\] Thus the unpenalized training error cannot decrease as the penalty increases. Equality is possible; for example, if \(y=0\), \(w=0\) minimizes the objective for every parameter. Test error is a different quantity and can first fall and then rise; neither inequality controls it. Award one mark for the data-fit inequality, one for the equality example, and one for the test-error limitation.
+
+\textbf{(c) [3 marks]} Existence follows because the objective is continuous and at least \(\lambda\|w\|_2^2/2\), so it tends to infinity as \(\|w\|_2\to\infty\). For distinct \(u,v\), the squared-norm midpoint identity gives \[J((u+v)/2)=\tfrac12J(u)+\tfrac12J(v)-\tfrac18\|\Phi(u-v)\|_2^2-\tfrac{\lambda}{8}\|u-v\|_2^2.\] The final term is strictly negative. Two distinct minimizers would therefore have a midpoint with smaller objective, a contradiction. Award one mark for existence, one for the identity or strict-convexity argument, and one for uniqueness.
+
+\textit{Marking: use the displayed subpart allocations; award credit for the logical or numerical intermediate steps.}\par
+{\footnotesize\textit{Source: Supplementary derivation from PDF pp.28-32.}}
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{28. The VC dimension of axis-aligned rectangles}\hfill\textbf{[10 marks]}\par\medskip
+\textbf{(a) [5 marks]} For a nonempty subset \(S\) of these four points, take its coordinatewise bounding rectangle. Each omitted point is the unique extreme in one coordinate: the left point has x=-1, the right point x=1, the lower point y=-1, and the upper point y=1. If that point is omitted, the corresponding extreme bound of the rectangle moves strictly inward, excluding it. Every selected point is included by construction. Singleton subsets may use degenerate rectangles; if strictly positive side lengths are required, expand the bounding box slightly without reaching any omitted point. For the empty subset, use a small rectangle far from the four points. Thus each of the 16 labelings is realizable. Award two marks for the bounding-box construction, two for exclusion of omitted extremes, and one for the empty/singleton cases.
+
+\textbf{(b) [5 marks]} From any five-point set, select one point attaining minimum x, one attaining maximum x, one attaining minimum y, and one attaining maximum y. Some selections may coincide, so their union \(T\) has at most four points. Choose a remaining point \(z\notin T\). Label every point of \(T\) positive and every point outside \(T\) negative. Any closed axis-aligned rectangle containing the positive extremes must contain the entire bounding box of the five-point set, including \(z\). It therefore cannot realize this labeling. This argument remains valid when extremes are tied because one selected representative at each extreme is sufficient to force the bound. Hence no five-point set is shattered. Any larger shattered set would have a shattered five-point subset, so the VC dimension is at most four; the construction in the first part makes it exactly four. Award two marks for selecting the at-most-four extremes, two for the impossible labeling, and one for the conclusion.
+
+\textit{Marking: use the displayed subpart allocations; award credit for the logical or numerical intermediate steps.}\par
+{\footnotesize\textit{Source: PDF p.41; supplementary proof from PDF pp.37-41.}}
+\newpage\section*{Section D. Applications}
+\textbf{29. Compare candidate polynomials, regularization, and validation}\hfill\textbf{[12 marks]}\par\medskip
+\textbf{(a) [3 marks]} Model A predicts \((1/2,1,3/2)\), so its residuals are \((1/2,0,-5/2)\). The squared-residual sum is \(1/4+25/4=13/2\), giving \(E_A=13/4\) and RMS \(\sqrt{13/6}\). Model B predicts \((0,1,4)\), so \(E_B=0\) and RMS is zero. Award one mark for the predictions or residuals, one for the half-sum errors, and one for the RMS values.
+
+\textbf{(b) [3 marks]} Model A predicts \((3/4,5/4)\), giving residuals \((-1/4,-1/4)\); its mean squared error is \(1/16\) and RMS is \(1/4\). Model B predicts \((1/4,9/4)\), giving residuals \((-3/4,3/4)\); its mean squared error is \(9/16\) and RMS is \(3/4\). Select A. The zero training error of B did not give the better validation result. Award one mark per RMS and one for the selection.
+
+\textbf{(c) [4 marks]} The vectors are \(w_A=(1/2,1/2,0)^T\) and \(w_B=(0,0,1)^T\), with squared norms \(1/2\) and 1. Therefore \[J_A=13/4+\lambda/4,\qquad J_B=\lambda/2.\] They tie at \(\lambda=13\). At 14, \(J_A=27/4=6.75\) and \(J_B=7\), so A wins among these candidates. This does not establish the global minimizer over all degree-two coefficient vectors, because other coefficients have not been optimized. Award one mark for the vectors/norms, one for the objectives, one for the threshold and numerical comparison, and one for the limitation.
+
+\textbf{(d) [2 marks]} Freeze the candidate choice and evaluate it once on test examples that influenced neither fitting nor selection. Comparing candidates used the validation outcomes to guide the choice, so the selected validation score can benefit from selection and is not an untouched final assessment. Award one mark for the test protocol and one for recognizing selection on validation outcomes.
+
+\textit{Marking: use the displayed subpart allocations; award credit for the logical or numerical intermediate steps.}\par
+{\footnotesize\textit{Source: PDF pp.21-24,28,48-50.}}
+\newpage\section*{Section D. Applications}
+\textbf{30. Consistent rectangles and predictions that data do not determine}\hfill\textbf{[12 marks]}\par\medskip
+\textbf{(a) [3 marks]} The coordinate extrema of the positives give \(S=[2,4]\times[3,5]\). Both positives lie on its boundary and are included. The negative at x=1 lies left, the negative at x=5 lies right, and the negative at y=6 lies above. Thus all five examples are correctly labeled, and the empirical error count is zero. Award one mark for the bounds and two for the verification.
+
+\textbf{(b) [4 marks]} Take \(R=[1.5,4.5]\times[2.5,5.5]\). It includes both positives, excludes x=1 and x=5, and excludes y=6, so it is consistent. It contains q, whereas S excludes q because 1.7<2. Thus two zero-error hypotheses disagree on q; consistency alone leaves its class undetermined. Award two marks for a valid second rectangle and its consistency, one for the disagreement, and one for the conclusion.
+
+\textbf{(c) [3 marks]} Every rectangle containing the positives must contain their entire bounding box S, so a=(3,4) is forced positive. Every consistent hypothesis must respect the observed negative label at b, so b is forced negative. The reason for a is geometric containment, and the reason for b is its explicit training constraint. Award two marks for a with its reasoning and one for b with its reasoning.
+
+\textbf{(d) [2 marks]} The version space is empty. Every rectangle containing both positive examples contains (3,4), so it must violate the new negative label; excluding that point requires violating at least one positive. No boundary search can remove this incompatibility within the stated hypothesis class. Award one mark for emptiness and one for the bounding-box explanation.
+
+\textit{Marking: use the displayed subpart allocations; award credit for the logical or numerical intermediate steps.}\par
+{\footnotesize\textit{Source: PDF pp.37-40,48.}}
+\newpage\section*{Lecture Alignment and Coverage}
+Primary source: \texttt{Introduction.pdf} in \texttt{E:\textbackslash CS182\textbackslash 2026fall\textbackslash lecture}. All PDF pages count the cover as page 1. Additional arguments are marked as supplementary derivations when appropriate. These are original practice questions, not copied homework questions.
+
+\textbf{T/F}
+\begin{description}[leftmargin=12mm,itemsep=1pt]
+\item[1] PDF p.18.
+\item[2] PDF p.17.
+\item[3] PDF p.4.
+\item[4] PDF p.7.
+\item[5] PDF p.39.
+\item[6] PDF pp.15,36,45.
+\item[7] PDF p.21.
+\item[8] PDF p.52.
+\item[9] PDF p.41.
+\item[10] PDF p.48.
+\item[11] PDF p.49.
+\item[12] PDF pp.22,45.
+\end{description}
+\textbf{Multiple response}
+\begin{description}[leftmargin=12mm,itemsep=1pt]
+\item[13] PDF pp.23-24; supplementary derivation from PDF pp.21-24.
+\item[14] PDF pp.39,42.
+\item[15] PDF pp.21-23.
+\item[16] PDF pp.6-8.
+\item[17] PDF p.28.
+\item[18] PDF pp.14,16-18.
+\item[19] PDF p.11.
+\item[20] PDF pp.37-40.
+\item[21] PDF pp.22,24,45.
+\item[22] PDF p.52.
+\item[23] PDF pp.48-50.
+\item[24] PDF pp.43,52; supplementary interpretation from PDF p.43.
+\end{description}
+\textbf{Proofs and applications}
+\begin{description}[leftmargin=12mm,itemsep=1pt]
+\item[25] Supplementary derivation from PDF pp.21-22,45.
+\item[26] Supplementary derivation from PDF pp.21-24,48-49.
+\item[27] Supplementary derivation from PDF pp.28-32.
+\item[28] PDF p.41; supplementary proof from PDF pp.37-41.
+\item[29] PDF pp.21-24,28,48-50.
+\item[30] PDF pp.37-40,48.
+\end{description}
+\end{document}

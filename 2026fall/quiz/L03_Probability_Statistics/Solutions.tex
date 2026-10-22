@@ -1,0 +1,381 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,array,amsmath,amssymb,booktabs,enumitem,fancyhdr,lastpage,needspace,microtype}
+\usepackage[margin=19mm,headheight=14pt,footskip=11mm]{geometry}
+\usepackage[hidelinks]{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\setlength{\emergencystretch}{2em}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small CS182 --- Lecture 03}
+\fancyhead[R]{\small Solutions}
+\fancyfoot[L]{\small Independent practice quiz}
+\fancyfoot[R]{\small Page \thepage\ of \pageref{LastPage}}
+\newcommand{\SetAnswer}[2]{\expandafter\gdef\csname QuizAnswer#1\endcsname{#2}}
+\newcommand{\GetAnswer}[1]{\csname QuizAnswer#1\endcsname}
+\newlength{\BlankAnswerHeight}\setlength{\BlankAnswerHeight}{16mm}
+\newcommand{\AnswerBlank}{\leavevmode\par\vspace{\BlankAnswerHeight}}
+
+\begin{document}
+\begin{center}{\Large\bfseries CS182: Introduction to Machine Learning}\par{\Large\bfseries Lecture 03: Probability and Statistics}\par{\large Worked Solutions and Marking Guide}\end{center}
+\textbf{Scope:} Probability\_Statistics.pdf. Independent practice material based on the official 2026 Fall lecture.\par\textbf{Total:} 100 marks. \quad \textbf{Suggested time:} 120 minutes.
+\begin{center}\begin{tabular}{lrrr}\toprule
+Section & Questions & Each & Marks\\\midrule
+A. Misconceptions: True/False & 12 & 1 & 12\\
+B. Multiple response & 12 & 2 & 24\\
+C. Proofs and formula derivations & 4 & 10 & 40\\
+D. Applications & 2 & 12 & 24\\\midrule
+Total & 30 & & 100\\\bottomrule\end{tabular}\end{center}
+\textbf{Scoring.} In Section B each item has exactly four options, of which one,
+two, or three are correct. The complete correct set earns 2 marks; a nonempty
+proper subset earns 1 mark; any incorrect option or no selection earns 0.
+T/F answers earn 1 mark only when correct. Show reasoning in Sections C and D;
+part marks are available for valid intermediate work. Equivalent correct methods receive credit.
+\par\medskip\textbf{Instructions.} Answer in English. Use natural logarithms.
+Exact values and justified approximations are accepted. All vectors are columns
+unless stated otherwise. Use local assumptions, label conventions, and tie rules.
+\par\medskip\textbf{Quick key --- Section A}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+1 & 2 & 3 & 4 & 5 & 6\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}F} & \makebox[20mm]{\rule{0pt}{5mm}F} & \makebox[20mm]{\rule{0pt}{5mm}F} & \makebox[20mm]{\rule{0pt}{5mm}F} & \makebox[20mm]{\rule{0pt}{5mm}F} & \makebox[20mm]{\rule{0pt}{5mm}F}\\\hline
+\end{tabular}\end{center}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+7 & 8 & 9 & 10 & 11 & 12\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}T} & \makebox[20mm]{\rule{0pt}{5mm}T} & \makebox[20mm]{\rule{0pt}{5mm}T} & \makebox[20mm]{\rule{0pt}{5mm}T} & \makebox[20mm]{\rule{0pt}{5mm}T} & \makebox[20mm]{\rule{0pt}{5mm}F}\\\hline
+\end{tabular}\end{center}
+\par\medskip\textbf{Quick key --- Section B}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+13 & 14 & 15 & 16 & 17 & 18\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}BD} & \makebox[20mm]{\rule{0pt}{5mm}D} & \makebox[20mm]{\rule{0pt}{5mm}AC} & \makebox[20mm]{\rule{0pt}{5mm}A} & \makebox[20mm]{\rule{0pt}{5mm}BD} & \makebox[20mm]{\rule{0pt}{5mm}ACD}\\\hline
+\end{tabular}\end{center}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+19 & 20 & 21 & 22 & 23 & 24\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}ABC} & \makebox[20mm]{\rule{0pt}{5mm}BC} & \makebox[20mm]{\rule{0pt}{5mm}AD} & \makebox[20mm]{\rule{0pt}{5mm}BD} & \makebox[20mm]{\rule{0pt}{5mm}AC} & \makebox[20mm]{\rule{0pt}{5mm}AD}\\\hline
+\end{tabular}\end{center}
+\newpage\section*{Section A. True/False --- Explanations}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{1.} \textbf{False.} Mutual exclusivity gives \(P(A\cap B)=0\), whereas independence would require \(P(A\cap B)=P(A)P(B)>0\).
+
+{\footnotesize\textit{Source: PDF pp.4-7.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{2.} \textbf{False.} The central limit theorem gives a limiting distribution, hence a large-sample approximation. Exact finite-sample normality follows when the observations themselves are iid normal.
+
+{\footnotesize\textit{Source: PDF pp.29-30,37.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{3.} \textbf{False.} The slide gives \(\operatorname{Var}(T)=\nu/(\nu-2)\) for \(\nu>2\). Thus \(t_3\) has variance \(3\), reflecting uncertainty in the random denominator.
+
+{\footnotesize\textit{Source: PDF pp.35-36.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{4.} \textbf{False.} The sufficient condition is joint Gaussianity. Let \(Z\sim N(0,1)\) and let an independent sign \(R\) equal \(\pm1\) with equal probabilities. Then \(X=Z\) and \(Y=RZ\) each are standard normal and have covariance zero, but \(|X|=|Y|\), so they are dependent. This states the qualification needed for the normal-variable claim on the slide.
+
+{\footnotesize\textit{Source: PDF pp.20,29,38.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{5.} \textbf{False.} Linearity of expectation needs existence of the relevant expectations, not independence. Independence is relevant to factoring product expectations and eliminating covariance terms.
+
+{\footnotesize\textit{Source: PDF pp.18-20.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{6.} \textbf{False.} The law concerns convergence in probability: for each fixed \(\epsilon>0\), \(P(|\bar X_n-\mu|>\epsilon)\to0\). It does not assert exact equality at a finite sample size.
+
+{\footnotesize\textit{Source: PDF p.23.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{7.} \textbf{True.} The mean has weights \(1/n\); independence eliminates all off-diagonal covariance terms, giving \(n\sigma^2/n^2\).
+
+{\footnotesize\textit{Source: PDF pp.20,23.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{8.} \textbf{True.} A density is integrated to obtain probabilities. A uniform variable on \((0,1/4)\) has density \(4\) there, and every singleton has probability zero.
+
+{\footnotesize\textit{Source: PDF pp.12,28.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{9.} \textbf{True.} Expand the centered difference and take expectations; the cross term has a minus sign.
+
+{\footnotesize\textit{Source: PDF p.20.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{10.} \textbf{True.} Centering removes one orthogonal Gaussian coordinate, leaving the sum of squares of \(n-1\) independent standard normals. The factor is \((n-1)S^2/\sigma^2\), which also corrects the scaling typographical error on p.37.
+
+{\footnotesize\textit{Source: PDF pp.31-34,37.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{11.} \textbf{True.} This is the construction of \(\chi_k^2\); its mean is \(k\) and its variance is \(2k\). Independence and unit normal scaling both matter.
+
+{\footnotesize\textit{Source: PDF p.31.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{12.} \textbf{False.} Bayes' rule gives \(P(A\mid B)/P(B\mid A)=P(A)/P(B)\) when the common joint probability is positive. For example, \(B\subset A\) can make the two conditional probabilities different.
+
+{\footnotesize\textit{Source: PDF pp.5-8.}}
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section B. Multiple Response --- Explanations}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q13 / 题目与选项区
+\textbf{13.} \textbf{Correct set: B, D.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Incorrect.} The assumptions do not say the observations are normal; the central limit theorem supplies an asymptotic approximation.
+\item \textbf{Correct.} This is the weak law of large numbers under the supplied assumptions.
+\item \textbf{Incorrect.} The variance of the sum is \(9n\), so dividing by \(n^2\) gives \(9/n\).
+\item \textbf{Correct.} The central limit theorem approximates the centered and scaled mean by a standard normal.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.20,23,30.}}
+% END QUESTION Q13
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q14 / 题目与选项区
+\textbf{14.} \textbf{Correct set: D.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Incorrect.} The final factor must condition on both earlier events: \(P(C\mid A\cap B)\). Conditioning only on \(B\) needs an additional conditional-independence assumption.
+\item \textbf{Incorrect.} The denominator is the probability of the conditioning event \(B\).
+\item \textbf{Incorrect.} The conditional terms must be weighted by \(P(A_1)\) and \(P(A_2)\).
+\item \textbf{Correct.} The intersection is counted twice by the first two terms and must be subtracted once.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.3-8.}}
+% END QUESTION Q14
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q15 / 题目与选项区
+\textbf{15.} \textbf{Correct set: A, C.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Correct.} At a fixed \(x\), integrate \(2\) over \(x<y<1\).
+\item \textbf{Incorrect.} The triangular support is not the product of the marginal supports. The joint density does not equal \(p_X(x)p_Y(y)\).
+\item \textbf{Correct.} The triangular support has area \(1/2\), so multiplying by two gives total mass one.
+\item \textbf{Incorrect.} The marginal is \(p_Y(y)=2y\), giving conditional density \(1/y\) on \((0,y)\).
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.12,15-17.}}
+% END QUESTION Q15
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q16 / 题目与选项区
+\textbf{16.} \textbf{Correct set: A.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Correct.} Compute the finite sums over the three equally likely values.
+\item \textbf{Incorrect.} Knowing \(X=0\) forces \(Y=0\); \(P(Y=0\mid X=0)=1\ne1/3\).
+\item \textbf{Incorrect.} Correlation requires positive variances, not nonzero means. Here \(\operatorname{Var}(X)=2/3\), \(\operatorname{Var}(Y)=2/9\), and the correlation is zero.
+\item \textbf{Incorrect.} Here \(E[XY]=E[X^3]=0\) and \(E[X]=0\), so the covariance is zero. The number \(2/9\) is the variance of \(Y\), not this covariance.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.18-20.}}
+% END QUESTION Q16
+
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section B. Multiple Response --- Explanations}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q17 / 题目与选项区
+\textbf{17.} \textbf{Correct set: B, D.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Incorrect.} Each marginal count is binomial with ten trials; a Bernoulli variable only takes values zero and one.
+\item \textbf{Correct.} Each trial contributes to exactly one category count.
+\item \textbf{Incorrect.} The fixed total couples the category counts. For example, \(N_1=10\) forces \(N_2=0\).
+\item \textbf{Correct.} The multinomial coefficient counts distinct arrangements of the category outcomes.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.25-27.}}
+% END QUESTION Q17
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q18 / 题目与选项区
+\textbf{18.} \textbf{Correct set: A, C, D.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Correct.} A constant shift vanishes after centering; the scale is squared.
+\item \textbf{Incorrect.} The missing term is \(\operatorname{Var}(X)\), which need not be zero.
+\item \textbf{Correct.} Centering removes constants and multiplication contributes the product \(2(-1)\).
+\item \textbf{Correct.} Expand the centered square and use linearity.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.18-20.}}
+% END QUESTION Q18
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q19 / 题目与选项区
+\textbf{19.} \textbf{Correct set: A, B, C.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Correct.} They are jointly Gaussian with zero covariance, so the joint density factors.
+\item \textbf{Correct.} The inverse covariance is diagonal with entries \(1/4\) and \(1/9\).
+\item \textbf{Correct.} The determinant is \(36\), whose positive square root is six.
+\item \textbf{Incorrect.} The density at the mean is \(1/(12\pi)\), while the probability of that exact point is zero.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.12,29,38.}}
+% END QUESTION Q19
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q20 / 题目与选项区
+\textbf{20.} \textbf{Correct set: B, C.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Incorrect.} Variance scales by the square of the divisor, so the variance is \(2.55/400\).
+\item \textbf{Correct.} There are \(\binom{20}{2}\) disjoint placements of the two successes, each with the displayed product probability.
+\item \textbf{Correct.} Add the expectations of the twenty success indicators.
+\item \textbf{Incorrect.} The variance is \(20(0.15)(0.85)=2.55\).
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.20,25-26.}}
+% END QUESTION Q20
+
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section B. Multiple Response --- Explanations}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q21 / 题目与选项区
+\textbf{21.} \textbf{Correct set: A, D.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Correct.} They depend on disjoint coordinates after an orthogonal transformation of the standardized Gaussian sample.
+\item \textbf{Incorrect.} The residual sum of squares has \(n-1\) degrees of freedom, so the ratio has distribution \(t_{n-1}\).
+\item \textbf{Incorrect.} The correct residual sum is \((n-1)S^2/\sigma^2\sim\chi^2_{n-1}\).
+\item \textbf{Correct.} A normalized linear combination of independent normal variables is exactly standard normal.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.31-35,37.}}
+% END QUESTION Q21
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q22 / 题目与选项区
+\textbf{22.} \textbf{Correct set: B, D.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Incorrect.} The t distribution approaches the standard normal as degrees of freedom grow; finite degrees of freedom retain heavier tails.
+\item \textbf{Correct.} This is the location and scale transformation in the general t density.
+\item \textbf{Incorrect.} The scale parameter squared is four, but \(\operatorname{Var}(T)=5/3\), so \(\operatorname{Var}(W)=20/3\).
+\item \textbf{Correct.} The mean of \(t_5\) exists and is zero.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.35-36.}}
+% END QUESTION Q22
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q23 / 题目与选项区
+\textbf{23.} \textbf{Correct set: A, C.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Correct.} Conditioning on both bits being one forces them to be equal.
+\item \textbf{Incorrect.} This construction is pairwise independent, but its triple intersection fails the product rule for mutual independence.
+\item \textbf{Correct.} Both have probability \(1/2\) and their intersection has probability \(1/4\).
+\item \textbf{Incorrect.} Their triple intersection has probability \(1/4\), whereas the product of the three probabilities is \(1/8\).
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.5-7.}}
+% END QUESTION Q23
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q24 / 题目与选项区
+\textbf{24.} \textbf{Correct set: A, D.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Correct.} Sum the joint probabilities across both values of \(Y\): \(0.20+0.40=0.60\).
+\item \textbf{Incorrect.} The conditional probability is \(0.30/(0.30+0.20)=0.60\).
+\item \textbf{Incorrect.} The product of marginals at \((1,1)\) is \(0.60\cdot0.50=0.30\), not \(0.40\).
+\item \textbf{Correct.} Divide \(0.40\) by the marginal \(0.60\).
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.13-17.}}
+% END QUESTION Q24
+
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{25. Deriving total probability, Bayes' rule, and posterior odds}\hfill\textbf{[10 marks]}\par\medskip
+\textbf{(a) [3 marks]} The events \(B\cap A_i\) are disjoint and their union is \(B\). Therefore \[P(B)=\sum_{i=1}^kP(B\cap A_i)=\sum_{i=1}^kP(B\mid A_i)P(A_i).\] To condition on \(B\), require this sum, and hence \(P(B)\), to be positive.
+
+\textbf{(b) [3 marks]} By conditional probability and the product rule, \[P(A_i\mid B)=\frac{P(A_i\cap B)}{P(B)}=\frac{P(B\mid A_i)P(A_i)}{\sum_jP(B\mid A_j)P(A_j)}.\] Summing the numerators over \(i\) reproduces the common positive denominator, so the posteriors sum to one.
+
+\textbf{(c) [4 marks]} Cancel the common evidence denominator in Bayes' rule to obtain \[\frac{P(H_1\mid E\cap F)}{P(H_0\mid E\cap F)}=\frac{P(H_1)}{P(H_0)}\frac{P(E\cap F\mid H_1)}{P(E\cap F\mid H_0)}.\] The conditional product rule gives \(P(E\cap F\mid H_i)=P(E\mid H_i)P(F\mid E,H_i)\). If \(E\) and \(F\) are conditionally independent given each hypothesis, this becomes \(P(E\mid H_i)P(F\mid H_i)\). Thus posterior odds equal prior odds times two likelihood ratios. Unconditional independence of the two observations is not a substitute for this assumption.
+
+\textit{Marking: use the displayed subpart allocations; award credit for the logical or numerical intermediate steps.}\par
+{\footnotesize\textit{Source: PDF pp.5-8.}}
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{26. Variance formulas and the effect of shared noise}\hfill\textbf{[10 marks]}\par\medskip
+\textbf{(a) [3 marks]} Writing \(\mu_X=E[X]\) and \(\mu_Y=E[Y]\), expansion yields \(E[(X-\mu_X)(Y-\mu_Y)]=E[XY]-\mu_X\mu_Y\). Also \(aX+bY+c-E[aX+bY+c]=a(X-\mu_X)+b(Y-\mu_Y)\). Squaring and taking expectations gives \[\operatorname{Var}(aX+bY+c)=a^2\operatorname{Var}(X)+b^2\operatorname{Var}(Y)+2ab\operatorname{Cov}(X,Y).\]
+
+\textbf{(b) [4 marks]} Linearity gives \(E[\bar X_n]=\mu\). Expanding the centered sum gives \[\operatorname{Var}(\bar X_n)=\frac{1}{n^2}E\!\left[\sum_i(X_i-\mu)\sum_j(X_j-\mu)\right]=\frac{1}{n^2}\sum_{i,j}\operatorname{Cov}(X_i,X_j).\] Equivalently it is \(\sigma^2/n+(2/n^2)\sum_{i<j}\operatorname{Cov}(X_i,X_j)\). Under independence, each off-diagonal term is zero, so \(\operatorname{Var}(\bar X_n)=\sigma^2/n\). Identical means alone do not eliminate these terms.
+
+\textbf{(c) [3 marks]} We have \(\bar X_n=\mu+B+n^{-1}\sum_i\epsilon_i\). Independence gives \[\operatorname{Var}(\bar X_n)=\tau^2+\frac{\sigma_\epsilon^2}{n}.\] Alternatively, each individual variance is \(\tau^2+\sigma_\epsilon^2\), and every distinct pair has covariance \(\tau^2\), which gives the same result in the formula above. The measurements share \(B\) and are not independent. Averaging removes the independent noise component but leaves the positive variance floor \(\tau^2\).
+
+\textit{Marking: use the displayed subpart allocations; award credit for the logical or numerical intermediate steps.}\par
+{\footnotesize\textit{Source: PDF pp.18-20,23.}}
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{27. Constructing the binomial distribution from trials}\hfill\textbf{[10 marks]}\par\medskip
+\textbf{(a) [3 marks]} A fixed ordered sequence containing \(k\) successes and \(n-k\) failures has probability \(p^k(1-p)^{n-k}\) by independence. Choosing the \(k\) success positions gives \(\binom nk\) disjoint sequences. Therefore \[P(K=k)=\binom nkp^k(1-p)^{n-k},\qquad k=0,\ldots,n.\]
+
+\textbf{(b) [3 marks]} For an indicator \(I\), \(E[I]=0(1-p)+1p=p\), and \(I^2=I\), so \(\operatorname{Var}(I)=E[I^2]-(E[I])^2=p-p^2=p(1-p)\). Linearity then gives \(E[K]=\sum_iE[I_i]=np\); this expectation calculation alone does not need independence.
+
+\textbf{(c) [4 marks]} Expand the centered square: \[\operatorname{Var}(K)=\sum_i\operatorname{Var}(I_i)+2\sum_{i<j}\operatorname{Cov}(I_i,I_j).\] Independence implies \(E[I_iI_j]=p^2\), so the cross covariances vanish and \(\operatorname{Var}(K)=np(1-p)\). Scaling by \(1/n\) gives \(\operatorname{Var}(K/n)=p(1-p)/n\). With dependent indicators the general expression is \(np(1-p)+2\sum_{i<j}\operatorname{Cov}(I_i,I_j)\); the binomial pmf is also no longer guaranteed.
+
+\textit{Marking: use the displayed subpart allocations; award credit for the logical or numerical intermediate steps.}\par
+{\footnotesize\textit{Source: PDF pp.5-7,18-20,25-26.}}
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{28. An exact Gaussian mean and residual decomposition}\hfill\textbf{[10 marks]}\par\medskip
+\textbf{(a) [3 marks]} The independent standardized observations have joint density \((2\pi)^{-n/2}\exp(-z^Tz/2)\). Since \(z=A^Ty\), \(z^Tz=y^Ty\) and the absolute Jacobian determinant is \(|\det A^T|=1\). Thus \[p_Y(y)=(2\pi)^{-n/2}e^{-\sum_jy_j^2/2}=\prod_{j=1}^n\frac{1}{\sqrt{2\pi}}e^{-y_j^2/2}.\] This factorization proves that the coordinates are iid standard normal. The first row has norm one because its entries are \(1/\sqrt n\).
+
+\textbf{(b) [4 marks]} The first coordinate is \(Y_1=n^{-1/2}\sum_iZ_i=\sqrt n(\bar X-\mu)/\sigma\). The residual identity is \[\frac{\sum_i(X_i-\bar X)^2}{\sigma^2}=\sum_i(Z_i-\bar Z)^2=\sum_iZ_i^2-n\bar Z^2=\sum_{j=2}^nY_j^2.\] The last sum is \(\chi^2_{n-1}\), since it contains \(n-1\) independent squared standard normals. It is a function only of \(Y_2,\ldots,Y_n\), and hence is independent of \(Y_1\). The sample mean is a function of \(Y_1\); \(S^2\) is a function of the remaining coordinates. They are independent.
+
+\textbf{(c) [3 marks]} Let \(U=(n-1)S^2/\sigma^2=\sum_{j=2}^nY_j^2\). Then \(U\sim\chi^2_{n-1}\) and \(U\) is independent of \(Y_1\sim N(0,1)\). Therefore \[\frac{\sqrt n(\bar X-\mu)}{S}=\frac{Y_1}{\sqrt{U/(n-1)}}\sim t_{n-1}.\] For general iid finite-variance data, the normal-coordinate density factorization and exact chi-square residual law need not hold. The central limit theorem gives asymptotic normal behavior for a standardized mean, not this finite-sample t law.
+
+\textit{Marking: use the displayed subpart allocations; award credit for the logical or numerical intermediate steps.}\par
+{\footnotesize\textit{Source: PDF pp.29,31-35,37-38.}}
+\newpage\section*{Section D. Applications}
+\textbf{29. Two inspections and the base rate of defective components}\hfill\textbf{[12 marks]}\par\medskip
+\textbf{(a) [4 marks]} Let \(D\) denote a defect and \(F\) a flag. Total probability gives \(P(F)=0.90(0.03)+0.04(0.97)=0.0658\). Bayes' rule gives \[P(D\mid F)=\frac{0.027}{0.0658}=\frac{135}{329}\approx0.410334.\] Even with high sensitivity, nondefective components are common enough to contribute substantial false flags.
+
+\textbf{(b) [4 marks]} Conditional independence gives \(P(F_1\cap F_2\mid D)=0.90^2\) and \(P(F_1\cap F_2\mid D^c)=0.04^2\). Thus \[P(F_1\cap F_2)=0.03(0.81)+0.97(0.0016)=0.025852,\] and \[P(D\mid F_1\cap F_2)=\frac{0.0243}{0.025852}=\frac{6075}{6463}\approx0.939966.\] We factor within each defect class; the two flag events need not be independent without conditioning.
+
+\textbf{(c) [4 marks]} Each flag indicator is Bernoulli with probability \(q=0.0658\), and the stated assumptions make the indicators independent. Hence \(K\sim\operatorname{Bin}(200,0.0658)\), \(E[K]=200q=13.16\), and \[\operatorname{Var}(K)=200q(1-q)=12.294072.\] The fraction has variance \(12.294072/200^2=0.0003073518\). Its mean is \(q\), not the underlying defect probability \(0.03\).
+
+\textit{Marking: use the displayed subpart allocations; award credit for the logical or numerical intermediate steps.}\par
+{\footnotesize\textit{Source: PDF pp.5-8,18-20,25-26.}}
+\newpage\section*{Section D. Applications}
+\textbf{30. Exact inference for a normally distributed calibration error}\hfill\textbf{[12 marks]}\par\medskip
+\textbf{(a) [4 marks]} The deviations from \(500\) are \(-2,2,1,-1,0,3,-3,0,0\), which sum to zero. Thus \(\bar x=500\) and the squared deviations sum to \(4+4+1+1+0+9+9=28\). Therefore \(s^2=28/8=3.5\) square millimeters, and \(s/\sqrt9=\sqrt{3.5}/3\approx0.623610\) millimeters.
+
+\textbf{(b) [4 marks]} The observed statistic is \(t=(500-499)/(\sqrt{3.5}/3)=3/\sqrt{3.5}\approx1.603567\). Under the normal model, \(T=\sqrt9(\bar X-\mu)/S\sim t_8\). The probability statement \(P(-2.306\le T\le2.306)\approx0.95\), with rounding in the quantile, rearranges to \[\bar X-2.306\frac{S}{3}\le\mu\le\bar X+2.306\frac{S}{3}.\] Substitution yields \(500\pm1.438044\), or approximately \([498.561956,501.438044]\) millimeters. Exact t coverage requires iid normal observations; finite variance by itself is insufficient.
+
+\textbf{(c) [4 marks]} The observed chi-square statistic is \((9-1)s^2/\sigma_0^2=28/4=7\). For the unknown true variance, \(U=8S^2/\sigma^2\sim\chi^2_8\). Inverting \(2.180\le8S^2/\sigma^2\le17.535\) reverses the corresponding reciprocal inequalities and gives \[\frac{8S^2}{17.535}\le\sigma^2\le\frac{8S^2}{2.180}.\] The interval is \([28/17.535,28/2.180]\approx[1.596806,12.844037]\) square millimeters. The coverage is approximately \(95\%\) because the supplied quantiles are rounded.
+
+\textit{Marking: use the displayed subpart allocations; award credit for the logical or numerical intermediate steps.}\par
+{\footnotesize\textit{Source: PDF pp.31-37; interval construction is a supplemental application of the lecture pivots.}}
+\newpage\section*{Lecture Alignment and Coverage}
+Primary source: \texttt{Probability\_Statistics.pdf} in \texttt{E:\textbackslash CS182\textbackslash 2026fall\textbackslash lecture}. All PDF pages count the cover as page 1. Additional arguments are marked as supplementary derivations when appropriate. These are original practice questions, not copied homework questions.
+
+\textbf{T/F}
+\begin{description}[leftmargin=12mm,itemsep=1pt]
+\item[1] PDF pp.4-7.
+\item[2] PDF pp.29-30,37.
+\item[3] PDF pp.35-36.
+\item[4] PDF pp.20,29,38.
+\item[5] PDF pp.18-20.
+\item[6] PDF p.23.
+\item[7] PDF pp.20,23.
+\item[8] PDF pp.12,28.
+\item[9] PDF p.20.
+\item[10] PDF pp.31-34,37.
+\item[11] PDF p.31.
+\item[12] PDF pp.5-8.
+\end{description}
+\textbf{Multiple response}
+\begin{description}[leftmargin=12mm,itemsep=1pt]
+\item[13] PDF pp.20,23,30.
+\item[14] PDF pp.3-8.
+\item[15] PDF pp.12,15-17.
+\item[16] PDF pp.18-20.
+\item[17] PDF pp.25-27.
+\item[18] PDF pp.18-20.
+\item[19] PDF pp.12,29,38.
+\item[20] PDF pp.20,25-26.
+\item[21] PDF pp.31-35,37.
+\item[22] PDF pp.35-36.
+\item[23] PDF pp.5-7.
+\item[24] PDF pp.13-17.
+\end{description}
+\textbf{Proofs and applications}
+\begin{description}[leftmargin=12mm,itemsep=1pt]
+\item[25] PDF pp.5-8.
+\item[26] PDF pp.18-20,23.
+\item[27] PDF pp.5-7,18-20,25-26.
+\item[28] PDF pp.29,31-35,37-38.
+\item[29] PDF pp.5-8,18-20,25-26.
+\item[30] PDF pp.31-37; interval construction is a supplemental application of the lecture pivots.
+\end{description}
+\end{document}

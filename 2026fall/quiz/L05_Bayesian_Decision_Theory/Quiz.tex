@@ -1,0 +1,441 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,array,amsmath,amssymb,booktabs,enumitem,fancyhdr,lastpage,needspace,microtype}
+\usepackage[margin=19mm,headheight=14pt,footskip=11mm]{geometry}
+\usepackage[hidelinks]{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\setlength{\emergencystretch}{2em}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small CS182 --- Lecture 05}
+\fancyhead[R]{\small Personal answer copy}
+\fancyfoot[L]{\small Independent practice quiz}
+\fancyfoot[R]{\small Page \thepage\ of \pageref{LastPage}}
+\newcommand{\SetAnswer}[2]{\expandafter\gdef\csname QuizAnswer#1\endcsname{#2}}
+\newcommand{\GetAnswer}[1]{\csname QuizAnswer#1\endcsname}
+\newlength{\BlankAnswerHeight}\setlength{\BlankAnswerHeight}{16mm}
+\newcommand{\AnswerBlank}{\leavevmode\par\vspace{\BlankAnswerHeight}}
+% 本文件为独立可填写答题卷；用 pdfLaTeX 编译两次。
+% 在 BEGIN TF ANSWERS 和 BEGIN MC ANSWERS 中填写短答案。
+% 大题请搜索 BEGIN ANSWER Q25(a) 等注释；每个小问都有独立区域。
+% 写完小问后删除该处的 \AnswerBlank，或将 BlankAnswerHeight 改为 0mm。
+% 所有打印内容及你填写的回答请使用英文。中文只出现在源文件注释中。
+% build_per_lecture.py 不会覆盖已经存在的 Quiz.tex，以保留你的作答。
+% BEGIN STUDENT INFO / 个人信息
+\newcommand{\StudentName}{}
+\newcommand{\StudentID}{}
+% END STUDENT INFO
+% BEGIN TF ANSWERS / 判断题答题区（第二组花括号填 T 或 F）
+\SetAnswer{TF01}{} % Question 1
+\SetAnswer{TF02}{} % Question 2
+\SetAnswer{TF03}{} % Question 3
+\SetAnswer{TF04}{} % Question 4
+\SetAnswer{TF05}{} % Question 5
+\SetAnswer{TF06}{} % Question 6
+\SetAnswer{TF07}{} % Question 7
+\SetAnswer{TF08}{} % Question 8
+\SetAnswer{TF09}{} % Question 9
+\SetAnswer{TF10}{} % Question 10
+\SetAnswer{TF11}{} % Question 11
+\SetAnswer{TF12}{} % Question 12
+% END TF ANSWERS
+% BEGIN MC ANSWERS / 不定项选择答题区（填选项字母，如 BD；仅格式示例）
+\SetAnswer{MC13}{} % Question 13
+\SetAnswer{MC14}{} % Question 14
+\SetAnswer{MC15}{} % Question 15
+\SetAnswer{MC16}{} % Question 16
+\SetAnswer{MC17}{} % Question 17
+\SetAnswer{MC18}{} % Question 18
+\SetAnswer{MC19}{} % Question 19
+\SetAnswer{MC20}{} % Question 20
+\SetAnswer{MC21}{} % Question 21
+\SetAnswer{MC22}{} % Question 22
+\SetAnswer{MC23}{} % Question 23
+\SetAnswer{MC24}{} % Question 24
+% END MC ANSWERS
+
+\begin{document}
+\begin{center}{\Large\bfseries CS182: Introduction to Machine Learning}\par{\Large\bfseries Lecture 05: Bayesian Decision Theory}\par{\large Lecture Quiz and Answer Copy}\end{center}
+\textbf{Scope:} Bayesian\_Decision\_Theory.pdf. Independent practice material based on the official 2026 Fall lecture.\par\textbf{Total:} 100 marks. \quad \textbf{Suggested time:} 120 minutes.
+\par\textbf{Name:} \underline{\makebox[60mm][l]{\StudentName}}\hfill\textbf{Student ID:} \underline{\makebox[45mm][l]{\StudentID}}
+\begin{center}\begin{tabular}{lrrr}\toprule
+Section & Questions & Each & Marks\\\midrule
+A. Misconceptions: True/False & 12 & 1 & 12\\
+B. Multiple response & 12 & 2 & 24\\
+C. Proofs and formula derivations & 4 & 10 & 40\\
+D. Applications & 2 & 12 & 24\\\midrule
+Total & 30 & & 100\\\bottomrule\end{tabular}\end{center}
+\textbf{Scoring.} In Section B each item has exactly four options, of which one,
+two, or three are correct. The complete correct set earns 2 marks; a nonempty
+proper subset earns 1 mark; any incorrect option or no selection earns 0.
+T/F answers earn 1 mark only when correct. Show reasoning in Sections C and D;
+part marks are available for valid intermediate work. Equivalent correct methods receive credit.
+\par\medskip\textbf{Instructions.} Answer in English. Use natural logarithms.
+Exact values and justified approximations are accepted. All vectors are columns
+unless stated otherwise. Use local assumptions, label conventions, and tie rules.
+\par\medskip\textbf{Answer sheet --- Section A}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+1 & 2 & 3 & 4 & 5 & 6\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF01}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF02}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF03}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF04}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF05}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF06}}\\\hline
+\end{tabular}\end{center}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+7 & 8 & 9 & 10 & 11 & 12\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF07}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF08}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF09}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF10}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF11}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF12}}\\\hline
+\end{tabular}\end{center}
+\par\medskip\textbf{Answer sheet --- Section B}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+13 & 14 & 15 & 16 & 17 & 18\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC13}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC14}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC15}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC16}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC17}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC18}}\\\hline
+\end{tabular}\end{center}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+19 & 20 & 21 & 22 & 23 & 24\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC19}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC20}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC21}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC22}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC23}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC24}}\\\hline
+\end{tabular}\end{center}
+\newpage\section*{Section A. True/False \hfill 12 marks}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{1.} A class-conditional density \(p(x\mid C_i)\) must lie between 0 and 1 at every \(x\).
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{2.} With unequal misclassification costs, a class whose posterior is below one half can still be the minimum-risk classification action.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{3.} Every point satisfying \(g_i(x)=g_j(x)\) belongs to a decision boundary between \(C_i\) and \(C_j\).
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{4.} Replacing every discriminant by \(a(x)g_i(x)+b(x)\), using the same \(a(x)>0\) and \(b(x)\) for all classes, preserves the entire set of maximizing classes.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{5.} Under 0-1 loss, if no features are observed, always predicting a class with the largest prior probability minimizes the probability of error.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{6.} Applying a different strictly increasing function to each class discriminant always preserves the classifier.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{7.} Because the evidence \(p(x)\) cancels when comparing classes, it can also be omitted when reporting normalized posterior probabilities.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{8.} Under 0-1 loss, choosing the largest class likelihood always gives the Bayes decision, even with unequal class priors.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{9.} Randomly mixing classification actions at a fixed \(x\) can give conditional risk strictly below the smallest risk of those actions.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{10.} If two classes tie for the largest posterior probability, choosing either one has the same conditional 0-1 risk.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{11.} With unit error cost and rejection cost \(\lambda\), classification is strictly preferred to rejection exactly when the largest posterior exceeds \(1-\lambda\).
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{12.} Naive Bayes requires the features to be independent in the unconditional feature distribution.
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section B. Multiple Response \hfill 24 marks}
+\textit{Select all correct options. Each question has 1--3 correct options.}\par
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q13 / 题目与选项区
+\textbf{13.} For \(x\in\mathbb R\), define \(g_1(x)=1-x^2\), \(g_2(x)=0\), and \(g_3(x)=1/2\). Use the largest score and allow ties on boundaries. Select every correct statement.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item Class \(C_2\) has a nonempty decision region.
+\item The region where \(C_3\) is the unique winner has two disconnected components.
+\item The actual class changes occur at \(x=\pm1/\sqrt2\).
+\item The equation \(g_1=g_2\) produces \(x=\pm1\), but neither point is a decision boundary.
+\end{enumerate}
+% END QUESTION Q13
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q14 / 题目与选项区
+\textbf{14.} Let the true joint distribution be known, and use 0-1 loss. Select every correct statement about using features.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item The Bayes error using \(X\) is no larger than the error of always predicting a class with largest prior.
+\item Any rule that depends on \(X\) must outperform every constant rule.
+\item If each observed input identifies its class with posterior probability 1 almost surely, the Bayes error is zero.
+\item If the posterior equals the prior almost surely, observing \(X\) cannot improve the minimum error.
+\end{enumerate}
+% END QUESTION Q14
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q15 / 题目与选项区
+\textbf{15.} A three-class posterior is \((0.46,0.34,0.20)\). Correct classifications cost 0 and mistakes cost 1. Select every correct statement about a constant rejection cost.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item At rejection cost \(0.55\), acceptance requires the largest posterior to exceed \(0.55\).
+\item At rejection cost \(0.50\), rejection is strictly preferable to every class action.
+\item At rejection cost \(0.55\), predicting \(C_1\) is strictly preferable to rejection.
+\item Increasing the rejection cost cannot enlarge the set where rejection is strictly optimal.
+\end{enumerate}
+% END QUESTION Q15
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q16 / 题目与选项区
+\textbf{16.} Assume all discriminants are finite. Which transformations preserve the full maximizing-class set at every \(x\), for arbitrary original scores?
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item Multiply every score by the same negative constant.
+\item Add a different constant \(b_i\) to each class score.
+\item Apply one common strictly increasing function \(f\) to every score.
+\item Replace every \(g_i(x)\) by \(a(x)g_i(x)+b(x)\), with common \(a(x)>0\) and \(b(x)\).
+\end{enumerate}
+% END QUESTION Q16
+
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section B. Multiple Response \hfill 24 marks}
+\textit{Select all correct options. Each question has 1--3 correct options.}\par
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q17 / 题目与选项区
+\textbf{17.} Consider any finite loss matrix \(\lambda_{ik}\). Which modifications preserve all minimum-risk actions for every posterior?
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item Add one state-dependent number \(b_k\) to every entry in column \(k\).
+\item Replace risks by their negatives and choose the largest resulting score.
+\item Multiply the entire loss matrix by one positive constant.
+\item Add a different arbitrary constant to every row.
+\end{enumerate}
+% END QUESTION Q17
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q18 / 题目与选项区
+\textbf{18.} For two classes with positive priors and positive likelihoods, let \(P(C_1)=1/4\), \(P(C_2)=3/4\), and \(L(x)=p(x\mid C_1)/p(x\mid C_2)\). Under 0-1 loss, select every correct statement.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item For the given priors, a log discriminant is \(\log L(x)-\log3\).
+\item Predicting \(C_1\) is strictly optimal when \(L(x)>3\).
+\item The evidence is needed to determine which posterior is larger.
+\item Replacing the priors by \(0.1\) and \(0.9\) changes the likelihood-ratio threshold to 9.
+\end{enumerate}
+% END QUESTION Q18
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q19 / 题目与选项区
+\textbf{19.} Which statements about the naive Bayes assumption are correct?
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item It is sufficient that the features be mutually independent conditional on each class.
+\item Unconditional independence alone guarantees the required class-conditional factorization.
+\item The class prior is unnecessary once the likelihood is factorized.
+\item The factorization makes \(P(C_i\mid x)\) equal to \(\prod_jP(C_i\mid x_j)\) without any normalization or prior correction.
+\end{enumerate}
+% END QUESTION Q19
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q20 / 题目与选项区
+\textbf{20.} For three classes, let the priors be \((0.2,0.3,0.5)\) and the class likelihoods at one observed \(x\) be \((0.9,0.4,0.2)\). Under 0-1 loss, select every correct statement.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item The Bayes action predicts \(C_1\).
+\item The minimum conditional probability of error is \(0.45\).
+\item The posterior probability of \(C_1\) is \(0.60\).
+\item The evidence is \(p(x)=0.40\).
+\end{enumerate}
+% END QUESTION Q20
+
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section B. Multiple Response \hfill 24 marks}
+\textit{Select all correct options. Each question has 1--3 correct options.}\par
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q21 / 题目与选项区
+\textbf{21.} A posterior is \((0.4,0.4,0.2)\), unit error loss is used, and rejection costs \(0.6\). Select every correct statement.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item Any random mixture of rejection and predictions of \(C_1\) or \(C_2\) also has risk \(0.6\).
+\item Predicting \(C_3\) is also optimal because all posterior values are below \(0.6\).
+\item The minimum conditional risk is \(0.6\).
+\item Rejection is the unique risk-minimizing action.
+\end{enumerate}
+% END QUESTION Q21
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q22 / 题目与选项区
+\textbf{22.} Write \(q=P(C_1\mid x)=0.55\). Correct decisions cost 0; predicting \(C_1\) when \(C_2\) is true costs 8, and predicting \(C_2\) when \(C_1\) is true costs 2. Select every correct statement.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item Predicting \(C_1\) has risk \(3.6\).
+\item Predicting \(C_2\) minimizes conditional risk.
+\item Without rejection, predicting \(C_1\) is strictly optimal when \(q>0.8\).
+\item The larger posterior must determine the minimum-risk action.
+\end{enumerate}
+% END QUESTION Q22
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q23 / 题目与选项区
+\textbf{23.} At a fixed input, suppose the risks of three available actions are \(0.2,0.5,0.2\). Select every correct statement about randomized actions.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item Assigning positive probability to the second action can still yield risk below \(0.2\).
+\item Every minimum-risk randomization must put zero probability on the second action.
+\item A half-and-half mixture of the first and third actions has risk \(0.2\).
+\item The existence of two minimizing actions forces a unique optimal randomization.
+\end{enumerate}
+% END QUESTION Q23
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q24 / 题目与选项区
+\textbf{24.} At an observed point, two continuous class densities have values \(4\) and \(1\), and their priors are \(0.1\) and \(0.9\). Under 0-1 loss, select every correct statement.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item The evidence density is \(1.3\).
+\item The posterior of \(C_1\) is \(4/13\).
+\item The Bayes action predicts \(C_2\).
+\item The larger likelihood proves that \(C_1\) is the Bayes choice.
+\end{enumerate}
+% END QUESTION Q24
+
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{25. Why pointwise decisions minimize total risk}\hfill\textbf{[10 marks]}\par\medskip
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item Let \(A\) be a finite action set, let \(\lambda_{ak}\) be finite nonnegative losses, and let \(X\) have density or mass function \(p(x)\). Define a deterministic rule \(\delta(x)\). Starting from \(E[\lambda_{\delta(X),C}]\), derive the total-risk formula and prove that choosing a minimum-conditional-risk action at each \(x\) minimizes total risk. State the almost-sure qualification.\hfill\textbf{[4 marks]}
+\item Specialize to \(K\) classification actions and 0-1 loss. Derive the MAP rule and the Bayes error expression in terms of the largest posterior.\hfill\textbf{[3 marks]}
+\item Prove that this Bayes error is at most \(1-\max_iP(C_i)\), the best constant-rule error. Explain why this does not guarantee that every fitted classifier improves on the constant rule.\hfill\textbf{[3 marks]}
+\end{enumerate}\par\medskip\hrule\medskip\textbf{Student response}\par
+% BEGIN ANSWER Q25 / 第25题答题区
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item
+% >>> BEGIN ANSWER Q25(a)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q25(a)
+\item
+% >>> BEGIN ANSWER Q25(b)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q25(b)
+\item
+% >>> BEGIN ANSWER Q25(c)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q25(c)
+\end{enumerate}
+% END ANSWER Q25
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{26. Asymmetric errors and rejection thresholds}\hfill\textbf{[10 marks]}\par\medskip
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item For two classes, write \(q=P(C_1\mid x)\). Correct decisions cost 0, predicting \(C_1\) when \(C_2\) is true costs \(a>0\), and predicting \(C_2\) when \(C_1\) is true costs \(b>0\). Derive the optimal posterior threshold without rejection and the equivalent likelihood-ratio threshold when priors and likelihoods are positive.\hfill\textbf{[4 marks]}
+\item Add a reject action with constant loss \(r>0\) for either true class. Derive the interval where rejection is strictly optimal and determine when that interval has positive width.\hfill\textbf{[3 marks]}
+\item Return to \(K\) classes, unit cost for any error, and reject cost \(\lambda\). Derive the acceptance rule. Then show that if \(\lambda>1-1/K\), rejection cannot be strictly optimal at any input.\hfill\textbf{[3 marks]}
+\end{enumerate}\par\medskip\hrule\medskip\textbf{Student response}\par
+% BEGIN ANSWER Q26 / 第26题答题区
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item
+% >>> BEGIN ANSWER Q26(a)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q26(a)
+\item
+% >>> BEGIN ANSWER Q26(b)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q26(b)
+\item
+% >>> BEGIN ANSWER Q26(c)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q26(c)
+\end{enumerate}
+% END ANSWER Q26
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{27. Equivalent discriminants and the role of strict monotonicity}\hfill\textbf{[10 marks]}\par\medskip
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item Prove that applying one common strictly increasing function to all finite discriminants preserves their full argmax set. Explain why merely nondecreasing is insufficient for preserving the argmax set, using a concrete counterexample.\hfill\textbf{[4 marks]}
+\item For \(p(x)>0\) and positive class joint scores, derive the equivalence of posterior, prior-weighted likelihood, and log prior-weighted likelihood discriminants. Identify the qualification needed for zero joint scores.\hfill\textbf{[3 marks]}
+\item For two classes with positive priors and likelihoods, derive a single scalar log discriminant. Show how its sign determines the 0-1 decision, and explain why a negative-risk discriminant rather than posterior probability is needed for arbitrary losses.\hfill\textbf{[3 marks]}
+\end{enumerate}\par\medskip\hrule\medskip\textbf{Student response}\par
+% BEGIN ANSWER Q27 / 第27题答题区
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item
+% >>> BEGIN ANSWER Q27(a)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q27(a)
+\item
+% >>> BEGIN ANSWER Q27(b)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q27(b)
+\item
+% >>> BEGIN ANSWER Q27(c)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q27(c)
+\end{enumerate}
+% END ANSWER Q27
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{28. What a decision boundary actually represents}\hfill\textbf{[10 marks]}\par\medskip
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item Suppose \(g_i(x)=w_i^\mathsf Tx+b_i\) on \(\mathbb R^d\). Show that the weak decision region \(\mathcal R_i=\{x:g_i(x)\ge g_j(x)\text{ for all }j\}\) is convex. Describe the supporting equality between two competing classes.\hfill\textbf{[4 marks]}
+\item Give an explicit two-class example on \(\mathbb R\) with a disconnected decision region, and derive the regions and boundaries. Use \(g_1(x)=x^2-4\) and \(g_2(x)=0\).\hfill\textbf{[3 marks]}
+\item For \(g_1(x)=2-x^2\), \(g_2(x)=0\), and \(g_3(x)=1\), identify all pairwise equality points and determine which are actual decision boundaries. Use the result to disprove the claim that every discriminant equality is a boundary.\hfill\textbf{[3 marks]}
+\end{enumerate}\par\medskip\hrule\medskip\textbf{Student response}\par
+% BEGIN ANSWER Q28 / 第28题答题区
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item
+% >>> BEGIN ANSWER Q28(a)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q28(a)
+\item
+% >>> BEGIN ANSWER Q28(b)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q28(b)
+\item
+% >>> BEGIN ANSWER Q28(c)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q28(c)
+\end{enumerate}
+% END ANSWER Q28
+\newpage\section*{Section D. Applications}
+\textbf{29. A sensor with asymmetric mistakes and a review action}\hfill\textbf{[12 marks]}\par\medskip
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item A sensor reports \(A,B,\) or \(C\). The class priors are \(P(C_1)=0.35\), \(P(C_2)=0.65\), and the class-conditional probabilities for \((A,B,C)\) are \((0.50,0.30,0.20)\) in \(C_1\) and \((0.10,0.40,0.50)\) in \(C_2\). Compute each report probability and each posterior \(q_s=P(C_1\mid s)\).\hfill\textbf{[4 marks]}
+\item Correct classifications cost 0. Predicting \(C_1\) when \(C_2\) is true costs 3; predicting \(C_2\) when \(C_1\) is true costs 9. A human review action costs 1.7 regardless of class. Compute all three conditional risks for each report and choose the optimal action.\hfill\textbf{[4 marks]}
+\item Compute the expected loss of your review-enabled rule. Compare it with the best rule forced to classify every report and with the MAP rule that ignores the asymmetric costs.\hfill\textbf{[4 marks]}
+\end{enumerate}\par\medskip\hrule\medskip\textbf{Student response}\par
+% BEGIN ANSWER Q29 / 第29题答题区
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item
+% >>> BEGIN ANSWER Q29(a)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q29(a)
+\item
+% >>> BEGIN ANSWER Q29(b)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q29(b)
+\item
+% >>> BEGIN ANSWER Q29(c)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q29(c)
+\end{enumerate}
+% END ANSWER Q29
+\newpage\section*{Section D. Applications}
+\textbf{30. Conditional independence, posterior decisions, and rejection}\hfill\textbf{[12 marks]}\par\medskip
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item Two binary features are independent conditional on class. Let \(P(C_1)=0.4\), \(P(C_2)=0.6\); within \(C_1\), the probabilities \(P(X_1=1\mid C_1)\), \(P(X_2=1\mid C_1)\) are \(0.8,0.3\); within \(C_2\), they are \(0.25,0.7\). For every binary pair \((00,01,10,11)\), compute the two joint class-feature scores, give the MAP class, and find the overall 0-1 Bayes error.\hfill\textbf{[4 marks]}
+\item Add a rejection action costing \(0.30\), with unit misclassification costs. Determine which feature pairs are accepted and compute the total expected risk including rejected inputs.\hfill\textbf{[4 marks]}
+\item Are \(X_1\) and \(X_2\) independent without conditioning on class? Establish your answer by computing the necessary marginal and joint probabilities.\hfill\textbf{[4 marks]}
+\end{enumerate}\par\medskip\hrule\medskip\textbf{Student response}\par
+% BEGIN ANSWER Q30 / 第30题答题区
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item
+% >>> BEGIN ANSWER Q30(a)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q30(a)
+\item
+% >>> BEGIN ANSWER Q30(b)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q30(b)
+\item
+% >>> BEGIN ANSWER Q30(c)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q30(c)
+\end{enumerate}
+% END ANSWER Q30
+\end{document}

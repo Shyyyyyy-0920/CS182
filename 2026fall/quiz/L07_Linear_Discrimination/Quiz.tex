@@ -1,0 +1,453 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,array,amsmath,amssymb,booktabs,enumitem,fancyhdr,lastpage,needspace,microtype}
+\usepackage[margin=19mm,headheight=14pt,footskip=11mm]{geometry}
+\usepackage[hidelinks]{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\setlength{\emergencystretch}{2em}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small CS182 --- Lecture 07}
+\fancyhead[R]{\small Personal answer copy}
+\fancyfoot[L]{\small Independent practice quiz}
+\fancyfoot[R]{\small Page \thepage\ of \pageref{LastPage}}
+\newcommand{\SetAnswer}[2]{\expandafter\gdef\csname QuizAnswer#1\endcsname{#2}}
+\newcommand{\GetAnswer}[1]{\csname QuizAnswer#1\endcsname}
+\newlength{\BlankAnswerHeight}\setlength{\BlankAnswerHeight}{16mm}
+\newcommand{\AnswerBlank}{\leavevmode\par\vspace{\BlankAnswerHeight}}
+% 本文件为独立可填写答题卷；用 pdfLaTeX 编译两次。
+% 在 BEGIN TF ANSWERS 和 BEGIN MC ANSWERS 中填写短答案。
+% 大题请搜索 BEGIN ANSWER Q25(a) 等注释；每个小问都有独立区域。
+% 写完小问后删除该处的 \AnswerBlank，或将 BlankAnswerHeight 改为 0mm。
+% 所有打印内容及你填写的回答请使用英文。中文只出现在源文件注释中。
+% build_per_lecture.py 不会覆盖已经存在的 Quiz.tex，以保留你的作答。
+% BEGIN STUDENT INFO / 个人信息
+\newcommand{\StudentName}{}
+\newcommand{\StudentID}{}
+% END STUDENT INFO
+% BEGIN TF ANSWERS / 判断题答题区（第二组花括号填 T 或 F）
+\SetAnswer{TF01}{} % Question 1
+\SetAnswer{TF02}{} % Question 2
+\SetAnswer{TF03}{} % Question 3
+\SetAnswer{TF04}{} % Question 4
+\SetAnswer{TF05}{} % Question 5
+\SetAnswer{TF06}{} % Question 6
+\SetAnswer{TF07}{} % Question 7
+\SetAnswer{TF08}{} % Question 8
+\SetAnswer{TF09}{} % Question 9
+\SetAnswer{TF10}{} % Question 10
+\SetAnswer{TF11}{} % Question 11
+\SetAnswer{TF12}{} % Question 12
+% END TF ANSWERS
+% BEGIN MC ANSWERS / 不定项选择答题区（填选项字母，如 BD；仅格式示例）
+\SetAnswer{MC13}{} % Question 13
+\SetAnswer{MC14}{} % Question 14
+\SetAnswer{MC15}{} % Question 15
+\SetAnswer{MC16}{} % Question 16
+\SetAnswer{MC17}{} % Question 17
+\SetAnswer{MC18}{} % Question 18
+\SetAnswer{MC19}{} % Question 19
+\SetAnswer{MC20}{} % Question 20
+\SetAnswer{MC21}{} % Question 21
+\SetAnswer{MC22}{} % Question 22
+\SetAnswer{MC23}{} % Question 23
+\SetAnswer{MC24}{} % Question 24
+% END MC ANSWERS
+
+\begin{document}
+\begin{center}{\Large\bfseries CS182: Introduction to Machine Learning}\par{\Large\bfseries Lecture 07: Linear Discrimination}\par{\large Lecture Quiz and Answer Copy}\end{center}
+\textbf{Scope:} Linear\_Discrimination.pdf. Independent practice material based on the official 2026 Fall lecture.\par\textbf{Total:} 100 marks. \quad \textbf{Suggested time:} 120 minutes.
+\par\textbf{Name:} \underline{\makebox[60mm][l]{\StudentName}}\hfill\textbf{Student ID:} \underline{\makebox[45mm][l]{\StudentID}}
+\begin{center}\begin{tabular}{lrrr}\toprule
+Section & Questions & Each & Marks\\\midrule
+A. Misconceptions: True/False & 12 & 1 & 12\\
+B. Multiple response & 12 & 2 & 24\\
+C. Proofs and formula derivations & 4 & 10 & 40\\
+D. Applications & 2 & 12 & 24\\\midrule
+Total & 30 & & 100\\\bottomrule\end{tabular}\end{center}
+\textbf{Scoring.} In Section B each item has exactly four options, of which one,
+two, or three are correct. The complete correct set earns 2 marks; a nonempty
+proper subset earns 1 mark; any incorrect option or no selection earns 0.
+T/F answers earn 1 mark only when correct. Show reasoning in Sections C and D;
+part marks are available for valid intermediate work. Equivalent correct methods receive credit.
+\par\medskip\textbf{Instructions.} Answer in English. Use natural logarithms.
+Exact values and justified approximations are accepted. All vectors are columns
+unless stated otherwise. Use local assumptions, label conventions, and tie rules.
+\par\medskip\textbf{Answer sheet --- Section A}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+1 & 2 & 3 & 4 & 5 & 6\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF01}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF02}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF03}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF04}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF05}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF06}}\\\hline
+\end{tabular}\end{center}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+7 & 8 & 9 & 10 & 11 & 12\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF07}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF08}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF09}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF10}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF11}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF12}}\\\hline
+\end{tabular}\end{center}
+\par\medskip\textbf{Answer sheet --- Section B}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+13 & 14 & 15 & 16 & 17 & 18\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC13}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC14}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC15}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC16}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC17}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC18}}\\\hline
+\end{tabular}\end{center}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+19 & 20 & 21 & 22 & 23 & 24\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC19}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC20}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC21}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC22}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC23}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC24}}\\\hline
+\end{tabular}\end{center}
+\newpage\section*{Section A. True/False \hfill 12 marks}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{1.} A multiclass argmax classifier with affine scores can have a nonconvex class region even when there are no ties.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{2.} For any fixed \(w\) and \(w_0\), the set \(\{x:w^{\mathsf T}x+w_0=0\}\) is a separating hyperplane of dimension \(d-1\).
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{3.} Multiplying both the weights and intercept of a binary linear score by a positive constant preserves the predicted labels but generally changes its sigmoid probabilities.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{4.} The batch algorithm shown in the lecture accumulates errors over all samples before updating the weight vector.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{5.} For finite binary logits and no numerical rounding, sigmoid produces probabilities strictly between zero and one.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{6.} For one-hot softmax cross-entropy, a sample generally contributes a gradient to the weights of classes other than its true class.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{7.} Training \(K\) independent one-vs.-rest sigmoid models automatically makes their \(K\) outputs sum to one.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{8.} Adding the same input-dependent affine function to every softmax class score leaves every predicted class probability unchanged.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{9.} Two learning procedures that both produce a linear class boundary must estimate their parameters by the same statistical objective.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{10.} When training a one-vs.-one classifier for classes \(C_i\) and \(C_j\), examples from other classes are excluded from that particular binary training problem.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{11.} A standard linear logistic-regression model requires every input feature to have a Gaussian class-conditional distribution.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{12.} Convexity of unregularized logistic cross-entropy guarantees a finite maximum-likelihood parameter vector on every strictly linearly separable dataset.
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section B. Multiple Response \hfill 24 marks}
+\textit{Select all correct options. Each question has 1--3 correct options.}\par
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q13 / 题目与选项区
+\textbf{13.} Let a batch contain four samples. Compare summed cross-entropy and average cross-entropy at exactly the same weights. Which statements are correct?
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item At the same learning rate, the average-loss gradient step is one quarter of the summed-loss step.
+\item Choosing the average-loss learning rate four times as large reproduces the summed-loss update.
+\item Zero initialization forces the binary logistic gradient to be zero for every labeled dataset.
+\item Updating weights after every sample is necessarily identical to accumulating the four gradients at fixed weights.
+\end{enumerate}
+% END QUESTION Q13
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q14 / 题目与选项区
+\textbf{14.} Three independently trained affine scores at one test point are \((-2,-1,-3)\). The specified decision rule is argmax over these scores, with no rejection option. Which statements are correct?
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item Adding ten to every score changes the argmax class.
+\item The point must be rejected because every score is negative.
+\item No label can be assigned until the scores have been individually transformed to probabilities.
+\item The predicted class is \(C_2\).
+\end{enumerate}
+% END QUESTION Q14
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q15 / 题目与选项区
+\textbf{15.} Correct decisions cost zero. Predicting \(C_1\) when the truth is \(C_2\) costs three; the reverse error costs two. At a point with \(y=P(C_1\mid x)=0.55\), which statements are correct?
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item The risk of predicting \(C_2\) at the point is \(0.9\).
+\item The rule must predict \(C_1\) at the given point because \(0.55>0.5\).
+\item The risk-minimizing rule predicts \(C_1\) when \(y>3/5\).
+\item The equivalent logit threshold is \(\log(2/3)\).
+\end{enumerate}
+% END QUESTION Q15
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q16 / 题目与选项区
+\textbf{16.} Consider adding \(\lambda\|\theta\|_2^2/2\), with \(\lambda>0\), to a finite-sample linear binary logistic loss, where \(\theta\) includes the intercept. Which statements are correct?
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item The added Hessian is \(\lambda I\).
+\item The penalty weight can be selected using validation data.
+\item The penalty necessarily sets some fitted coefficients exactly to zero.
+\item The penalized objective has a unique finite minimizer.
+\end{enumerate}
+% END QUESTION Q16
+
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section B. Multiple Response \hfill 24 marks}
+\textit{Select all correct options. Each question has 1--3 correct options.}\par
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q17 / 题目与选项区
+\textbf{17.} For \(\sigma(a)=1/(1+e^{-a})\), which statements are correct?
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item The derivative equals zero at every finite positive logit.
+\item The largest derivative value is \(1/4\), attained at \(a=0\).
+\item \(\sigma(a+b)=\sigma(a)+\sigma(b)\) for all real \(a,b\).
+\item \(\sigma(\log9)=0.9\).
+\end{enumerate}
+% END QUESTION Q17
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q18 / 题目与选项区
+\textbf{18.} A binary logistic model predicts \(y=1/4\) for a sample with label \(r=1\) and feature vector \(x=(1,-2)^{\mathsf T}\). Which statements are correct?
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item The intercept gradient is \(-3/4\).
+\item The negative-gradient update decreases the intercept when the learning rate is positive.
+\item The feature-weight gradient is \((-3/4,-3/2)^{\mathsf T}\).
+\item The sample cross-entropy is \(\log4\).
+\end{enumerate}
+% END QUESTION Q18
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q19 / 题目与选项区
+\textbf{19.} Two Gaussian classes have means \(1\) and \(-1\), shared variance two, and equal priors. Which statements are correct?
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item This derivation proves that all logistic input distributions must be Gaussian.
+\item The posterior probability of \(C_1\) is \(\sigma(x)\).
+\item Changing only the priors, with means and variance fixed, changes only the logit intercept.
+\item Two distinct Gaussian variances always yield the same linear logit.
+\end{enumerate}
+% END QUESTION Q19
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q20 / 题目与选项区
+\textbf{20.} At a point where softmax probabilities are \((0.2,0.5,0.3)\), which statements are correct?
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \(\partial y_2/\partial a_1=-0.1\).
+\item Every column of the Jacobian sums to one.
+\item \(\partial y_2/\partial a_2=0.5\).
+\item The Jacobian is diagonal because each numerator uses one score.
+\end{enumerate}
+% END QUESTION Q20
+
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section B. Multiple Response \hfill 24 marks}
+\textit{Select all correct options. Each question has 1--3 correct options.}\par
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q21 / 题目与选项区
+\textbf{21.} Consider \(g(x)=x_1^2+x_2^2-1\), with \(C_1\) predicted for \(g(x)>0\). Which statements are correct?
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item The score is affine in the transformed feature \(z=x_1^2+x_2^2\).
+\item The boundary is a straight line in the original input plane because the coefficients enter linearly.
+\item The boundary is a unit circle in the original input plane.
+\item The model requires \(x\) to have a Gaussian distribution.
+\end{enumerate}
+% END QUESTION Q21
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q22 / 题目与选项区
+\textbf{22.} Let \(w=(4,-3)^{\mathsf T}\), \(w_0=-5\), and \(x=(2,0)^{\mathsf T}\). Which statements are correct?
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item The ordinary distance from the origin to the boundary equals minus one.
+\item The Euclidean distance from \(x\) to the boundary equals three.
+\item The score at \(x\) equals three.
+\item The orthogonal projection is \((38/25,9/25)^{\mathsf T}\).
+\end{enumerate}
+% END QUESTION Q22
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q23 / 题目与选项区
+\textbf{23.} Three softmax logits are \((0,\log3,\log2)\). Which statements are correct?
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item The second class has probability \(1/2\).
+\item Adding seven to every logit preserves all three probabilities.
+\item The predicted class must be rejected because its probability does not strictly exceed \(1/2\).
+\item The posterior odds of \(C_2\) against \(C_3\) equal \(3/2\).
+\end{enumerate}
+% END QUESTION Q23
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q24 / 题目与选项区
+\textbf{24.} A four-class softmax model has two original input features and an intercept per class. Which statements are correct?
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item Adding the same three-component augmented weight vector to every class changes the probabilities.
+\item Fixing the reference-class score to zero leaves nine free coefficients.
+\item The symmetric parameterization has twelve coefficients.
+\item For a row-weight matrix \(B\in\mathbb R^{4\times3}\), the gradient has the same \(4\times3\) shape.
+\end{enumerate}
+% END QUESTION Q24
+
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{25. Derive the geometry rather than treating the score as a distance}\hfill\textbf{[10 marks]}\par\medskip
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item Let \(g(x)=w^{\mathsf T}x+b\), with \(w\ne0\). Prove that \(w\) is normal to its zero hyperplane by comparing two points on that hyperplane.\hfill\textbf{[2 marks]}
+\item Write a point as \(x=x_p+r w/\|w\|_2\), where \(x_p\) is its orthogonal projection. Derive both the signed-distance formula and an explicit formula for \(x_p\). Explain the corresponding unsigned distance.\hfill\textbf{[4 marks]}
+\item Prove what happens to the hyperplane, signed distance, and predicted class when \((w,b)\) is multiplied by \(c>0\). Does the corresponding sigmoid probability remain fixed? Include the degenerate case \(w=0\).\hfill\textbf{[4 marks]}
+\end{enumerate}\par\medskip\hrule\medskip\textbf{Student response}\par
+% BEGIN ANSWER Q25 / 第25题答题区
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item
+% >>> BEGIN ANSWER Q25(a)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q25(a)
+\item
+% >>> BEGIN ANSWER Q25(b)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q25(b)
+\item
+% >>> BEGIN ANSWER Q25(c)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q25(c)
+\end{enumerate}
+% END ANSWER Q25
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{26. Derive the LDA-to-logistic bridge with its assumptions}\hfill\textbf{[10 marks]}\par\medskip
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item Assume \(x\mid C_i\sim\mathcal N(\mu_i,\Sigma)\) for two classes, with shared positive-definite \(\Sigma\) and positive priors \(\pi_i\). Derive \(\log[P(C_1\mid x)/P(C_2\mid x)]=w^{\mathsf T}x+b\), explicitly finding \(w,b\).\hfill\textbf{[5 marks]}
+\item Solve \(a=\log[y/(1-y)]\) for \(y\), and prove the equivalence between the equal-cost posterior threshold and the zero-score threshold.\hfill\textbf{[2 marks]}
+\item Identify the canceled term that generally remains with unequal class covariances. Explain why the Gaussian derivation does not impose a Gaussian-input requirement on discriminatively fitted logistic regression.\hfill\textbf{[3 marks]}
+\end{enumerate}\par\medskip\hrule\medskip\textbf{Student response}\par
+% BEGIN ANSWER Q26 / 第26题答题区
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item
+% >>> BEGIN ANSWER Q26(a)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q26(a)
+\item
+% >>> BEGIN ANSWER Q26(b)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q26(b)
+\item
+% >>> BEGIN ANSWER Q26(c)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q26(c)
+\end{enumerate}
+% END ANSWER Q26
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{27. Derive Bernoulli cross-entropy, its gradient, and its limits}\hfill\textbf{[10 marks]}\par\medskip
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item For conditionally independent labels \(r^t\in\{0,1\}\) with \(y^t=\sigma(\theta^{\mathsf T}\widetilde x^t)\), derive the conditional likelihood and its negative log-likelihood. Here \(\widetilde x^t\) contains the intercept feature.\hfill\textbf{[3 marks]}
+\item Use the chain rule to derive \(\nabla_\theta E=\sum_t(y^t-r^t)\widetilde x^t\). Then derive the Hessian and prove convexity without treating sigmoid itself as a linear function.\hfill\textbf{[5 marks]}
+\item For the two observations \((x,r)=(-2,0),(2,1)\), set intercept zero and slope \(c>0\). Prove that the unregularized minimum need not be attained at a finite parameter, although the classification error is already zero.\hfill\textbf{[2 marks]}
+\end{enumerate}\par\medskip\hrule\medskip\textbf{Student response}\par
+% BEGIN ANSWER Q27 / 第27题答题区
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item
+% >>> BEGIN ANSWER Q27(a)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q27(a)
+\item
+% >>> BEGIN ANSWER Q27(b)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q27(b)
+\item
+% >>> BEGIN ANSWER Q27(c)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q27(c)
+\end{enumerate}
+% END ANSWER Q27
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{28. Derive softmax normalization and the coupled learning rule}\hfill\textbf{[10 marks]}\par\medskip
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item Take \(C_K\) as reference and assume \(\log[P(C_i\mid x)/P(C_K\mid x)]=a_i\) for \(i<K\). Derive all class probabilities from normalization, then express them in symmetric softmax form.\hfill\textbf{[3 marks]}
+\item Derive \(\partial y_i/\partial a_j\), then derive \(\partial\ell/\partial a_j=y_j-r_j\) for one-hot cross-entropy. Give feature-weight and intercept gradients for affine scores.\hfill\textbf{[4 marks]}
+\item Prove softmax invariance to a common affine score shift, give the free parameter count after fixing a reference class, and explain why a nontrue class still receives a gradient.\hfill\textbf{[3 marks]}
+\end{enumerate}\par\medskip\hrule\medskip\textbf{Student response}\par
+% BEGIN ANSWER Q28 / 第28题答题区
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item
+% >>> BEGIN ANSWER Q28(a)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q28(a)
+\item
+% >>> BEGIN ANSWER Q28(b)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q28(b)
+\item
+% >>> BEGIN ANSWER Q28(c)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q28(c)
+\end{enumerate}
+% END ANSWER Q28
+\newpage\section*{Section D. Applications}
+\textbf{29. Audit one binary batch update and the resulting decision}\hfill\textbf{[12 marks]}\par\medskip
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item Train on \((x,r)=(-2,0),(1,1),(3,1)\), starting from slope \(w=0\) and intercept \(b=0\). Use summed cross-entropy and one batch gradient step with learning rate \(0.1\). Compute the gradients and new parameters.\hfill\textbf{[4 marks]}
+\item Compute the new probabilities and total cross-entropy. Compare it to the initial loss; exact logarithmic expressions are acceptable.\hfill\textbf{[4 marks]}
+\item Using the equal-cost threshold, classify all three training points. Does a zero classification error here imply that further loss reduction is impossible?\hfill\textbf{[2 marks]}
+\item Now suppose predicting \(C_1\) when the truth is \(C_2\) costs four, while the reverse error costs one, with zero correct-decision loss. Derive the posterior threshold and classify the same points under this cost rule.\hfill\textbf{[2 marks]}
+\end{enumerate}\par\medskip\hrule\medskip\textbf{Student response}\par
+% BEGIN ANSWER Q29 / 第29题答题区
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item
+% >>> BEGIN ANSWER Q29(a)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q29(a)
+\item
+% >>> BEGIN ANSWER Q29(b)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q29(b)
+\item
+% >>> BEGIN ANSWER Q29(c)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q29(c)
+\item
+% >>> BEGIN ANSWER Q29(d)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q29(d)
+\end{enumerate}
+% END ANSWER Q29
+\newpage\section*{Section D. Applications}
+\textbf{30. Train a three-class model and check the normalization}\hfill\textbf{[12 marks]}\par\medskip
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item Consider one training sample \(x=(2,-1)^{\mathsf T}\) in class \(C_3\). Use augmented input \(\widetilde x=(1,2,-1)^{\mathsf T}\) and a row-weight matrix \(B\in\mathbb R^{3\times3}\), initially zero. Compute the one-hot target, probabilities, and loss.\hfill\textbf{[3 marks]}
+\item Compute the full gradient matrix and update \(B\) using learning rate \(1/2\). Display every entry and state its dimension.\hfill\textbf{[5 marks]}
+\item Recompute the logits, the probability of \(C_3\), and the new loss at this sample. Identify the predicted class.\hfill\textbf{[2 marks]}
+\item Add the row vector \((10,0,0)\) to each fitted row of \(B\). Prove whether probabilities change, and describe a numerically stable way to compute the original softmax.\hfill\textbf{[2 marks]}
+\end{enumerate}\par\medskip\hrule\medskip\textbf{Student response}\par
+% BEGIN ANSWER Q30 / 第30题答题区
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item
+% >>> BEGIN ANSWER Q30(a)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q30(a)
+\item
+% >>> BEGIN ANSWER Q30(b)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q30(b)
+\item
+% >>> BEGIN ANSWER Q30(c)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q30(c)
+\item
+% >>> BEGIN ANSWER Q30(d)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q30(d)
+\end{enumerate}
+% END ANSWER Q30
+\end{document}

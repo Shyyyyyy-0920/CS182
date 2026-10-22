@@ -1,0 +1,503 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,array,amsmath,amssymb,booktabs,enumitem,fancyhdr,lastpage,needspace,microtype}
+\usepackage[margin=19mm,headheight=14pt,footskip=11mm]{geometry}
+\usepackage[hidelinks]{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\setlength{\emergencystretch}{2em}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small CS182 --- Lecture 06}
+\fancyhead[R]{\small Solutions}
+\fancyfoot[L]{\small Independent practice quiz}
+\fancyfoot[R]{\small Page \thepage\ of \pageref{LastPage}}
+\newcommand{\SetAnswer}[2]{\expandafter\gdef\csname QuizAnswer#1\endcsname{#2}}
+\newcommand{\GetAnswer}[1]{\csname QuizAnswer#1\endcsname}
+\newlength{\BlankAnswerHeight}\setlength{\BlankAnswerHeight}{16mm}
+\newcommand{\AnswerBlank}{\leavevmode\par\vspace{\BlankAnswerHeight}}
+
+\begin{document}
+\begin{center}{\Large\bfseries CS182: Introduction to Machine Learning}\par{\Large\bfseries Lecture 06: Parameter Estimation}\par{\large Worked Solutions and Marking Guide}\end{center}
+\textbf{Scope:} Parameter\_Estimation.pdf. Independent practice material based on the official 2026 Fall lecture.\par\textbf{Total:} 100 marks. \quad \textbf{Suggested time:} 120 minutes.
+\begin{center}\begin{tabular}{lrrr}\toprule
+Section & Questions & Each & Marks\\\midrule
+A. Misconceptions: True/False & 12 & 1 & 12\\
+B. Multiple response & 12 & 2 & 24\\
+C. Proofs and formula derivations & 4 & 10 & 40\\
+D. Applications & 2 & 12 & 24\\\midrule
+Total & 30 & & 100\\\bottomrule\end{tabular}\end{center}
+\textbf{Scoring.} In Section B each item has exactly four options, of which one,
+two, or three are correct. The complete correct set earns 2 marks; a nonempty
+proper subset earns 1 mark; any incorrect option or no selection earns 0.
+T/F answers earn 1 mark only when correct. Show reasoning in Sections C and D;
+part marks are available for valid intermediate work. Equivalent correct methods receive credit.
+\par\medskip\textbf{Instructions.} Answer in English. Use natural logarithms.
+Exact values and justified approximations are accepted. All vectors are columns
+unless stated otherwise. Use local assumptions, label conventions, and tie rules.
+\par\medskip\textbf{Quick key --- Section A}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+1 & 2 & 3 & 4 & 5 & 6\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}F} & \makebox[20mm]{\rule{0pt}{5mm}F} & \makebox[20mm]{\rule{0pt}{5mm}F} & \makebox[20mm]{\rule{0pt}{5mm}T} & \makebox[20mm]{\rule{0pt}{5mm}F} & \makebox[20mm]{\rule{0pt}{5mm}F}\\\hline
+\end{tabular}\end{center}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+7 & 8 & 9 & 10 & 11 & 12\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}F} & \makebox[20mm]{\rule{0pt}{5mm}T} & \makebox[20mm]{\rule{0pt}{5mm}F} & \makebox[20mm]{\rule{0pt}{5mm}F} & \makebox[20mm]{\rule{0pt}{5mm}F} & \makebox[20mm]{\rule{0pt}{5mm}T}\\\hline
+\end{tabular}\end{center}
+\par\medskip\textbf{Quick key --- Section B}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+13 & 14 & 15 & 16 & 17 & 18\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}ABD} & \makebox[20mm]{\rule{0pt}{5mm}ACD} & \makebox[20mm]{\rule{0pt}{5mm}AD} & \makebox[20mm]{\rule{0pt}{5mm}ABD} & \makebox[20mm]{\rule{0pt}{5mm}AB} & \makebox[20mm]{\rule{0pt}{5mm}AC}\\\hline
+\end{tabular}\end{center}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+19 & 20 & 21 & 22 & 23 & 24\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}CD} & \makebox[20mm]{\rule{0pt}{5mm}B} & \makebox[20mm]{\rule{0pt}{5mm}C} & \makebox[20mm]{\rule{0pt}{5mm}BC} & \makebox[20mm]{\rule{0pt}{5mm}BCD} & \makebox[20mm]{\rule{0pt}{5mm}CD}\\\hline
+\end{tabular}\end{center}
+\newpage\section*{Section A. True/False --- Explanations}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{1.} \textbf{False.} Centering gives rank at most \(d-1\), so it is singular. Positive diagonal entries do not imply full rank because the columns may be linearly dependent.
+
+{\footnotesize\textit{Source: PDF pp.59,63,71,74; supplementary centered-rank argument.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{2.} \textbf{False.} The posterior mean is optimal under squared error loss. Other losses can lead to other optimal estimates; for example, absolute error uses a posterior median.
+
+{\footnotesize\textit{Source: PDF pp.24-25; supplementary absolute-loss contrast.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{3.} \textbf{False.} Zero covariance only excludes linear association. Joint normality is a special case in which zero covariance implies independence.
+
+{\footnotesize\textit{Source: PDF pp.58,65-66.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{4.} \textbf{True.} The common quadratic term and log determinant cancel across classes. Positive unequal priors change only the offsets. Distinct class means give a hyperplane equality boundary; identical means give a constant difference, with either no equality boundary or ties everywhere.
+
+{\footnotesize\textit{Source: PDF pp.70,75-76.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{5.} \textbf{False.} The plug-in variance is the observation variance \(\sigma^2\). Full prediction also includes posterior uncertainty in the mean, giving \(\sigma^2+\operatorname{Var}(\theta\mid D)\). Normality makes posterior mean and mode coincide; it does not remove uncertainty.
+
+{\footnotesize\textit{Source: PDF pp.23-28; supplementary evaluated predictive variance.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{6.} \textbf{False.} If \(n\) values were observed and \(m>0\) were missing, the filled entries add zero centered squared deviation. The centered sum of squares stays the same but the denominator becomes \(n+m\), shrinking a nonzero ML variance by \(n/(n+m)\).
+
+{\footnotesize\textit{Source: PDF pp.59-60; supplementary imputation calculation.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{7.} \textbf{False.} MSE is squared bias plus variance. A biased estimator can have enough smaller variance to obtain lower MSE.
+
+{\footnotesize\textit{Source: PDF pp.17-19.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{8.} \textbf{True.} The MLE is its count divided by \(N\). Assigning positive mass to an unseen category would remove mass from observed categories and reduce their product likelihood. An imposed positive-probability restriction or a prior changes this conclusion.
+
+{\footnotesize\textit{Source: PDF pp.14-15; supplementary boundary condition.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{9.} \textbf{False.} The likelihood is \(p(D\mid\theta)\) viewed as a function of \(\theta\), with \(D\) fixed. It is normalized over possible data for each parameter, not generally over the parameter. A posterior over \(\theta\) requires a prior and a normalizing evidence.
+
+{\footnotesize\textit{Source: PDF pp.9,22.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{10.} \textbf{False.} Different diagonal variances leave different coefficients of \(x_j^2\) in the score differences. Conditional independence removes cross-products, but shared covariance is what cancels all quadratic terms.
+
+{\footnotesize\textit{Source: PDF pp.70-72,75,78.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{11.} \textbf{False.} Its expectation is \((N-1)\sigma^2/N\), so it has downward bias. The denominator \(N-1\) gives the usual unbiased estimator for \(N>1\).
+
+{\footnotesize\textit{Source: PDF pp.16,19.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{12.} \textbf{True.} The model \(w_0+w_1x+w_2x^2+w_3\sin x\) is linear in the coefficients \(w\), even though its dependence on the original input is nonlinear.
+
+{\footnotesize\textit{Source: PDF pp.42,44,90.}}
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section B. Multiple Response --- Explanations}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q13 / 题目与选项区
+\textbf{13.} \textbf{Correct set: A, B, D.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Correct.} The absent category contributes no observations, so its likelihood factor is 1; the notation \(0\log0=0\) represents this limiting convention.
+\item \textbf{Correct.} The categorical likelihood is maximized at relative category counts.
+\item \textbf{Incorrect.} The probabilities must sum to 1. Independent unconstrained optimization would not produce a normalized categorical model.
+\item \textbf{Correct.} The maximum has \(p_2=0\), outside that assumed interior. Positive-count probabilities can be derived on their face of the simplex.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.14-15; supplementary zero-count handling.}}
+% END QUESTION Q13
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q14 / 题目与选项区
+\textbf{14.} \textbf{Correct set: A, C, D.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Correct.} The log-density contribution is \(-[r^t-g(x^t)]^2/(2\sigma_t^2)\), up to terms independent of the mean parameters.
+\item \textbf{Incorrect.} It can only be dropped when it does not depend on the fitted parameters; the slides use that assumption explicitly.
+\item \textbf{Correct.} The parameter-dependent log likelihood is a negative positive-scaled sum of squared residuals.
+\item \textbf{Correct.} The design columns may be \(x_j^2\), interactions, or \(\sin x_j\); linearity here concerns the unknown coefficients.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.38-44,88-90; supplementary known unequal-variance extension.}}
+% END QUESTION Q14
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q15 / 题目与选项区
+\textbf{15.} \textbf{Correct set: A, D.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Correct.} Its denominator is \(N-1=4\), giving \(20/4=5\).
+\item \textbf{Incorrect.} That denominator corrects finite-sample bias; the likelihood optimum uses \(N\).
+\item \textbf{Incorrect.} The standard deviation MLE is the positive square root of the variance MLE: \(\sqrt4=2\). The number five is the unbiased variance estimate.
+\item \textbf{Correct.} The Gaussian maximum-likelihood variance is the centered sum of squares divided by \(N\): \(20/5=4\).
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.16-19.}}
+% END QUESTION Q15
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q16 / 题目与选项区
+\textbf{16.} \textbf{Correct set: A, B, D.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Correct.} The quadratic form is \(3^2/9+1^2/1=2\).
+\item \textbf{Correct.} A diagonal Gaussian covariance factorizes the joint normal density into univariate normal densities.
+\item \textbf{Incorrect.} It is \(3^2+1^2=10\); Mahalanobis distance rescales the coordinates.
+\item \textbf{Correct.} The positive covariance aligns larger simultaneous deviations along the rising direction.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.64-68.}}
+% END QUESTION Q16
+
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section B. Multiple Response --- Explanations}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q17 / 题目与选项区
+\textbf{17.} \textbf{Correct set: A, B.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Correct.} The posterior precision is \(1/4+3/9=7/12\), so its variance is \(12/7\).
+\item \textbf{Correct.} The precision-weighted numerator is \(1/4+(3/9)4=19/12\); dividing by \(7/12\) gives \(19/7\).
+\item \textbf{Incorrect.} The Gaussian posterior mode equals its posterior mean \(19/7\); the value four is the likelihood maximizer before incorporating the prior.
+\item \textbf{Incorrect.} It is \(9+12/7=75/7\); variance 9 belongs to the plug-in distribution.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.22-28; supplementary predictive evaluation.}}
+% END QUESTION Q17
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q18 / 题目与选项区
+\textbf{18.} \textbf{Correct set: A, C.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Correct.} Expanding each term gives \(x_j\log[p_{ij}/(1-p_{ij})]+\log(1-p_{ij})\), plus the log prior.
+\item \textbf{Incorrect.} For a zero-valued Bernoulli feature, the factor is \(1-p_{ij}\), which is essential to the likelihood.
+\item \textbf{Correct.} They are \(0.6(1-0.5)(0.8)=0.24\) and \(0.4(1-0.9)(0.3)=0.012\).
+\item \textbf{Incorrect.} The value \(0.24\) is an unnormalized joint score. Normalize both scores to obtain \(0.24/(0.24+0.012)=20/21\).
+\end{enumerate}
+{\footnotesize\textit{Source: PDF p.85.}}
+% END QUESTION Q18
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q19 / 题目与选项区
+\textbf{19.} \textbf{Correct set: C, D.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Incorrect.} For uncertain parameters it averages likelihood over a normalized parameter prior: \(p(D\mid M)=\int p(D\mid\theta,M)p(\theta\mid M)\,d\theta\). A maximum is a different operation.
+\item \textbf{Incorrect.} Validation estimates generalization by evaluating data unused in that predictor's training.
+\item \textbf{Correct.} The objective is data error plus \(\lambda\) times a complexity penalty; changing \(\lambda\) changes this tradeoff.
+\item \textbf{Correct.} Bayes' rule gives \(p(M\mid D)\propto p(D\mid M)p(M)\).
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.22-23,47,51-53; supplementary evidence integral.}}
+% END QUESTION Q19
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q20 / 题目与选项区
+\textbf{20.} \textbf{Correct set: B.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Incorrect.} A maximizer can occur on the boundary; derivative-zero conditions only locate interior candidates.
+\item \textbf{Correct.} The likelihood is \(p^5\), which increases up to the right endpoint.
+\item \textbf{Incorrect.} Its derivative is \(5/p>0\), so no interior stationary point exists.
+\item \textbf{Incorrect.} The likelihood \(p^5\) is strictly increasing throughout the open interval. Its supremum is approached as \(p\to1\) and is never attained; \(4/5\) is not a maximizer.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.9-11; supplementary boundary analysis.}}
+% END QUESTION Q20
+
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section B. Multiple Response --- Explanations}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q21 / 题目与选项区
+\textbf{21.} \textbf{Correct set: C.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Incorrect.} They sum to 1, leaving \(K-1=2\) free parameters. Means additionally require \(Kd=12\) parameters.
+\item \textbf{Incorrect.} All coordinate variances share one scalar \(s^2\), so only one covariance parameter is free.
+\item \textbf{Correct.} Each symmetric \(4\times4\) matrix has \(4(5)/2=10\) independent entries; three require 30.
+\item \textbf{Incorrect.} A covariance matrix is symmetric. Its \(4(5)/2=10\) independent entries are fewer than its 16 displayed matrix entries.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.14-15,74-75,78,80,82.}}
+% END QUESTION Q21
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q22 / 题目与选项区
+\textbf{22.} \textbf{Correct set: B, C.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Incorrect.} The lecture's bias-variance discussion is a common tendency, not a universal strict monotonicity result.
+\item \textbf{Correct.} Two centered square expansions give \(\sigma^2(x)+[E_Dg_D(x)-f(x)]^2+\operatorname{Var}_D(g_D(x))\).
+\item \textbf{Correct.} Both prediction bias and training-sample variance vanish, leaving response noise.
+\item \textbf{Incorrect.} Validation estimates generalization from a finite sample and therefore has sampling uncertainty.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.48-53,82; supplementary precise probabilistic conditions.}}
+% END QUESTION Q22
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q23 / 题目与选项区
+\textbf{23.} \textbf{Correct set: B, C, D.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Incorrect.} Here \(7/16<2/3\), so the biased maximum-likelihood variance has lower MSE.
+\item \textbf{Correct.} The sample mean has expectation \(\mu\) and variance \(\sigma^2/N\); Chebyshev's inequality makes its deviation probability tend to zero.
+\item \textbf{Correct.} Its bias is \(3/4-1=-1/4\), its variance is \(6/16\), and their MSE sum is \(1/16+6/16=7/16\).
+\item \textbf{Correct.} It is unbiased and has variance \(6/9=2/3\).
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.17-20; supplementary supplied Gaussian residual moments.}}
+% END QUESTION Q23
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q24 / 题目与选项区
+\textbf{24.} \textbf{Correct set: C, D.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Incorrect.} It makes full rank possible, but the centered observations may still occupy a lower-dimensional subspace.
+\item \textbf{Incorrect.} Its rank is at most \(\min(d,N-K)=\min(5,9)=5\); pooled within-class directions can span all five dimensions.
+\item \textbf{Correct.} Its rank is at most \(N_i-1=3<5\).
+\item \textbf{Correct.} If all estimated coordinate variances are positive, the diagonal matrix is invertible even though the centered sample vectors span fewer than \(d\) dimensions.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.59,63,71,74-75,78; supplementary rank constraints.}}
+% END QUESTION Q24
+
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{25. Discrete likelihoods, constraints, and naive Bayes}\hfill\textbf{[10 marks]}\par\medskip
+\textbf{(a) [3 marks]} The likelihood is \(L(p)=p^s(1-p)^{N-s}\). For \(0<s<N\),
+\[
+\ell'(p)=\frac{s}{p}-\frac{N-s}{1-p}=0
+\quad\Longrightarrow\quad \hat p=s/N.
+\]
+The second derivative \(-s/p^2-(N-s)/(1-p)^2<0\) gives strict concavity on the interior, and the likelihood is zero at both endpoints, so this is the unique global maximum. If \(s=0\), \(L=(1-p)^N\) is maximized at 0; if \(s=N\), \(L=p^N\) is maximized at 1. Marking: likelihood/derivative (1), interior global maximum (1), both boundary cases (1).
+
+\textbf{(b) [4 marks]} The log likelihood is \(\ell(p)=\sum_kn_k\log p_k\), with \(p_k\ge0\) and \(\sum_kp_k=1\). First suppose all counts are positive. The Lagrangian \(\ell+\eta(1-\sum_kp_k)\) gives \(n_k/p_k=\eta\); summing \(p_k=n_k/\eta\) yields \(\eta=N\), hence \(\hat p_k=n_k/N\). Strict concavity on the positive-count simplex proves global maximality. For zero-count categories, let their total probability be \(z\). Write the observed-category probabilities as \(p_k=(1-z)q_k\), with the \(q_k\) summing to 1. Then
+\[
+\ell(p)=N\log(1-z)+\sum_{n_k>0}n_k\log q_k.
+\]
+This is maximized at \(z=0\); any positive mass on unseen categories reduces the likelihood. Applying the previous derivation on the observed categories gives the same formula for all \(k\), including zeros. Marking: constrained objective (1), multiplier derivation (1), global maximum (1), zero-count argument (1).
+
+\textbf{(c) [3 marks]} For class \(C_i\),
+\[
+p(x\mid C_i)=\prod_{j=1}^d p_{ij}^{x_j}(1-p_{ij})^{1-x_j}.
+\]
+With \(N_i>0\) class-\(i\) observations, the log likelihood separates over \(j\), giving \(\hat p_{ij}=(1/N_i)\sum_{t:C^t=C_i}x_j^t\). The class prior MLE is \(N_i/N\). For \(0<p_{ij}<1\),
+\[
+g_i(x)=\log P(C_i)+\sum_j\log(1-p_{ij})
++\sum_jx_j\log\frac{p_{ij}}{1-p_{ij}},
+\]
+which is affine in \(x\). A zero or unit estimate requires handling zero likelihoods or infinite logs; finite coefficients cannot simply be assumed. Marking: likelihood (1), MLEs (1), affine expansion and boundary qualification (1).
+
+\textit{Marking: use the displayed subpart allocations; award credit for the logical or numerical intermediate steps.}\par
+{\footnotesize\textit{Source: PDF pp.9-15,85-86; supplementary boundary analysis.}}
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{26. Gaussian variance and two kinds of bias-variance decomposition}\hfill\textbf{[10 marks]}\par\medskip
+\textbf{(a) [3 marks]} For each \(v>0\), the identity shows that the squared-deviation term is minimized at \(\mu=\bar X\). The profile log likelihood is
+\[
+\ell(v)=\text{constant}-\frac N2\log v-\frac{T}{2v},
+\quad
+\ell'(v)=\frac{T-Nv}{2v^2}.
+\]
+It increases for \(v<T/N\) and decreases for \(v>T/N\), so \(\hat v=T/N\) is the global maximum. If \(T=0\), \(\ell(v)=\text{constant}-(N/2)\log v\to+\infty\) as \(v\downarrow0\). No maximizer exists within the ordinary positive-variance model. Marking: profiling (1), derivative/global maximum (1), degeneracy (1).
+
+\textbf{(b) [2 marks]} The identity \(T=\sum_t(X_t-\mu)^2-N(\bar X-\mu)^2\) gives
+\[
+E[T]=Nv-N\operatorname{Var}(\bar X)
+=Nv-N(v/N)=(N-1)v.
+\]
+Thus \(E[T/N]=(N-1)v/N\), with bias \(-v/N\). For \(N>1\), \(T/(N-1)\) is unbiased. Marking: expectation calculation using \(v/N\) (1), bias and correction (1).
+
+\textbf{(c) [2 marks]} Write \(d-\theta=(d-E[d])+(E[d]-\theta)\). Squaring and taking expectations gives the variance plus squared bias, because \(E[d-E[d]]=0\) makes the cross term vanish. Removing bias does not control variance; a biased estimator can have smaller variance by more than its added squared bias. Marking: centered expansion/cross term (1), identity and comparison implication (1).
+
+\textbf{(d) [3 marks]} First condition on \(D\):
+\[
+E_Y[(Y-g_D(x))^2\mid x,D]
+=\sigma^2(x)+(f(x)-g_D(x))^2,
+\]
+since \(E[Y-f(x)\mid x,D]=0\) by independent test sampling. Let \(\bar g(x)=E_D[g_D(x)]\). Expanding \(f-g_D=(f-\bar g)+(\bar g-g_D)\) and averaging over \(D\) removes the second cross term. Therefore
+\[
+E_{D,Y}[(Y-g_D(x))^2\mid x]
+=\sigma^2(x)+[f(x)-\bar g(x)]^2+
+\operatorname{Var}_D(g_D(x)).
+\]
+This bias concerns the average fitted prediction relative to \(f(x)\); parameter-estimator bias instead compares \(E[d]\) with a fixed parameter \(\theta\). Marking: response-noise decomposition (1), training-set decomposition (1), final identity and distinction (1).
+
+\textit{Marking: use the displayed subpart allocations; award credit for the logical or numerical intermediate steps.}\par
+{\footnotesize\textit{Source: PDF pp.16-20,48-49; supplementary degenerate-sample qualification.}}
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{27. A Gaussian prior is more than a point estimate}\hfill\textbf{[10 marks]}\par\medskip
+\textbf{(a) [4 marks]} Ignoring factors independent of \(\theta\), the posterior kernel is
+\[
+\exp\left\{-\frac12\left[
+\frac{\sum_t(X_t-\theta)^2}{\sigma^2}
++\frac{(\theta-m_0)^2}{\tau^2}\right]\right\}.
+\]
+The coefficient of \(\theta^2\) is \(A=N/\sigma^2+1/\tau^2\); the linear coefficient is \(-2B\), where \(B=\sum_tX_t/\sigma^2+m_0/\tau^2\). Since \(A\theta^2-2B\theta=A(\theta-B/A)^2-B^2/A\), the normalized posterior is
+\[
+\theta\mid D\sim N(m_N,v_N),\qquad
+v_N=A^{-1},\quad
+m_N=v_N\left(\frac{N\bar X}{\sigma^2}+\frac{m_0}{\tau^2}\right).
+\]
+Thus posterior precision is the sum of data and prior precisions, and the mean is their normalized precision-weighted average. Marking: kernel (1), quadratic coefficients/completion (1), variance (1), mean/weights (1).
+
+\textbf{(b) [3 marks]} Conditional on the data, represent \(X_*=\theta+\varepsilon_*\), where \(\theta\sim N(m_N,v_N)\) and \(\varepsilon_*\sim N(0,\sigma^2)\) are independent. Hence
+\[
+p(X_*\mid D)=\int p(X_*\mid\theta)p(\theta\mid D)\,d\theta
+=N(m_N,\sigma^2+v_N).
+\]
+Equivalently, the laws of total expectation and variance give mean \(m_N\) and variance \(\sigma^2+v_N\), and Gaussian convolution identifies the normal distribution. Plugging in \(\theta=m_N\) gives \(N(m_N,\sigma^2)\), omitting posterior parameter uncertainty \(v_N>0\). Marking: posterior averaging/convolution (1), predictive distribution (1), plug-in comparison (1).
+
+\textbf{(c) [3 marks]} For any point estimate \(a\),
+\[
+E[(\theta-a)^2\mid D]=v_N+(m_N-a)^2,
+\]
+so the unique squared-loss minimizer is \(a=m_N\). The normal posterior also has its mode at \(m_N\), so MAP and the posterior mean agree here. As \(\tau^2\to\infty\), prior precision vanishes: \(m_N\to\bar X\) and \(v_N\to\sigma^2/N\). This variance remains positive for finite \(N\); full prediction has limiting variance \(\sigma^2(1+1/N)\), whereas the plug-in variance remains \(\sigma^2\). Marking: squared-loss argument (1), MAP relationship (1), diffuse limits and predictive consequence (1).
+
+\textit{Marking: use the displayed subpart allocations; award credit for the logical or numerical intermediate steps.}\par
+{\footnotesize\textit{Source: PDF pp.22-28; supplementary evaluated predictive distribution.}}
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{28. Gaussian discriminants and when covariance estimates can be used}\hfill\textbf{[10 marks]}\par\medskip
+\textbf{(a) [3 marks]} Taking logs and removing only the common \(-d\log(2\pi)/2\) gives
+\[
+g_i(x)=-\frac12\log|S_i|-\frac12(x-m_i)^\mathsf TS_i^{-1}(x-m_i)+\log\pi_i.
+\]
+Using symmetry of \(S_i^{-1}\), expand the quadratic form to obtain
+\[
+W_i=-\tfrac12S_i^{-1},\quad
+w_i=S_i^{-1}m_i,\quad
+b_i=-\tfrac12m_i^\mathsf TS_i^{-1}m_i-\tfrac12\log|S_i|+\log\pi_i.
+\]
+Different \(S_i^{-1}\) generally leave quadratic terms in pairwise score differences, producing QDA boundaries. Marking: log density (1), expansion/coefficients (1), boundary implication (1).
+
+\textbf{(b) [3 marks]} The terms \(-x^\mathsf TS^{-1}x/2\) and \(-\log|S|/2\) are common and cancel. Equivalent scores are
+\[
+\tilde g_i(x)=m_i^\mathsf TS^{-1}x-\tfrac12m_i^\mathsf TS^{-1}m_i+\log\pi_i.
+\]
+A boundary between distinct means satisfies
+\[
+(m_i-m_j)^\mathsf TS^{-1}x
+-\tfrac12(m_i^\mathsf TS^{-1}m_i-m_j^\mathsf TS^{-1}m_j)
++\log(\pi_i/\pi_j)=0,
+\]
+a hyperplane. For equal priors, maximizing the original scores minimizes \((x-m_i)^\mathsf TS^{-1}(x-m_i)\), a squared Mahalanobis distance. This agrees with ordinary Euclidean nearest mean when \(S=s^2I\) with common \(s^2>0\). A shared diagonal matrix generally gives unequal coordinate weights. Marking: cancellation/affine score (1), boundary (1), metric interpretations (1).
+
+\textbf{(c) [4 marks]} A symmetric \(d\times d\) covariance has \(d(d+1)/2\) free entries. Separate matrices need \(Kd(d+1)/2\), shared full covariance needs \(d(d+1)/2\); both also need \(Kd\) mean entries and \(K-1\) free priors. Form \(Z_i\in\mathbb R^{N_i\times d}\) with centered observations as rows. Its rows sum to zero, so \(\operatorname{rank}(Z_i)\le N_i-1\). Since \(S_i=Z_i^\mathsf TZ_i/N_i\),
+\[
+\operatorname{rank}(S_i)\le\min(d,N_i-1).
+\]
+Thus \(N_i\ge d+1\) is necessary for a class covariance to be invertible. Stacking all \(Z_i\) gives \(Z\) and
+\[
+S=\frac1N Z^\mathsf TZ,\qquad
+\operatorname{rank}(S)\le\min\!\left(d,\sum_i(N_i-1)\right)=\min(d,N-K).
+\]
+Hence \(N-K\ge d\) is necessary for pooled invertibility. These inequalities only allow full rank: the centered observations must also span \(\mathbb R^d\). Redundant features or samples confined to a subspace still cause singularity, invalidating the ordinary inverse/determinant density formula. Marking: counts (1), class rank/condition (1), pooled rank/condition (1), spanning and insufficiency (1).
+
+\textit{Marking: use the displayed subpart allocations; award credit for the logical or numerical intermediate steps.}\par
+{\footnotesize\textit{Source: PDF pp.59,63,70-82; supplementary centered-rank conditions.}}
+\newpage\section*{Section D. Applications}
+\textbf{29. Estimating a Gaussian classifier from rectangular samples}\hfill\textbf{[12 marks]}\par\medskip
+\textbf{(a) [4 marks]} Both classes contain four of eight observations, giving \(\hat\pi_1=\hat\pi_2=1/2\). The means are \(m_1=(0,0)^\mathsf T\), \(m_2=(2,2)^\mathsf T\). Within either class, centered vectors are \((\pm1,\pm2)\) with all four sign combinations. Their centered outer products sum to \(\operatorname{diag}(4,16)\), since the cross-products cancel. Dividing by 4 gives
+\[
+S_1=S_2=\begin{pmatrix}1&0\\0&4\end{pmatrix}.
+\]
+The pooled estimate \((1/2)S_1+(1/2)S_2\) is the same matrix. Marking: priors/means (1), centered outer-product computation (2), pooled estimate (1).
+
+\textbf{(b) [3 marks]} Here \(S^{-1}=\operatorname{diag}(1,1/4)\). With equal priors,
+\[
+g_2-g_1=(m_2-m_1)^\mathsf TS^{-1}x
+-\tfrac12(m_2^\mathsf TS^{-1}m_2-m_1^\mathsf TS^{-1}m_1)
+=2x_1+\tfrac12x_2-\tfrac52.
+\]
+Thus the boundary is \(4x_1+x_2=5\), with \(C_2\) preferred where \(4x_1+x_2>5\). The separately fitted covariances happen to be equal, so the QDA quadratic terms cancel and produce this same classifier. Marking: score difference (1), boundary/side (1), QDA comparison (1).
+
+\textbf{(c) [2 marks]} The squared Mahalanobis distances are \(0.5^2+2^2/4=1.25\) to \(m_1\) and \((-1.5)^2+0^2/4=2.25\) to \(m_2\), so LDA chooses \(C_1\). Euclidean distances squared are \(4.25\) and \(2.25\), so ordinary nearest mean chooses \(C_2\). LDA discounts deviations in the second coordinate because its within-class variance is four times as large. Marking: distances and choices (1), covariance-based explanation (1).
+
+\textbf{(d) [3 marks]} The covariance counts are \(2[2(3)/2]=6\), \(2(3)/2=3\), \(d=2\), and 1, respectively. The fitted covariance is shared diagonal with unequal coordinate variances, so the shared diagonal model matches it exactly; shared full and separate full also contain it. A shared spherical matrix cannot equal \(\operatorname{diag}(1,4)\). Here each \(N_i=4\ge d+1=3\), and \(N-K=8-2=6\ge d=2\). These are necessary conditions only; the directly computed determinant \(1(4)=4>0\) establishes invertibility for this sample. Marking: counts (1), exact covariance assumptions (1), sample-size checks versus determinant (1).
+
+\textit{Marking: use the displayed subpart allocations; award credit for the logical or numerical intermediate steps.}\par
+{\footnotesize\textit{Source: PDF pp.59,63-64,70-82; supplementary numerical sample.}}
+\newpage\section*{Section D. Applications}
+\textbf{30. Gaussian regression, prediction error, and model selection}\hfill\textbf{[12 marks]}\par\medskip
+\textbf{(a) [3 marks]} The joint likelihood factors as \(\prod_t p(y^t\mid x^t,w,\sigma^2)p(x^t)\). Its log is
+\[
+-\frac N2\log(2\pi\sigma^2)-\frac{1}{2\sigma^2}\|y-Xw\|^2+\sum_t\log p(x^t),
+\]
+where row \(t\) of \(X\) is \((1,x^t)\). At any fixed positive \(\sigma^2\), maximizing in \(w\) is equivalent to minimizing \(E(w)=\tfrac12\|y-Xw\|^2\). Differentiating gives \(\nabla E=X^\mathsf T(Xw-y)\), so every optimum satisfies \(X^\mathsf TXw=X^\mathsf Ty\). The inverse expression requires full column rank. Marking: likelihood and parameter-independent input term (1), squared-error equivalence (1), normal equations/rank condition (1).
+
+\textbf{(b) [3 marks]} The sums are \(N=4\), \(\sum x=2\), \(\sum x^2=6\), \(\sum y=8\), and \(\sum xy=12\). Thus
+\[
+\begin{pmatrix}4&2\\2&6\end{pmatrix}
+\begin{pmatrix}\hat w_0\\\hat w_1\end{pmatrix}
+=\begin{pmatrix}8\\12\end{pmatrix}.
+\]
+The determinant is 20, and the solution is \(\hat w_0=1.2,\hat w_1=1.6\). The residuals \(y-\hat y\) are \(0.4,-0.2,-0.8,0.6\), giving SSE \(=0.16+0.04+0.64+0.36=1.20\). The Gaussian variance MLE is SSE/\(N=0.30\); a degrees-of-freedom correction addresses unbiasedness rather than likelihood maximization. Marking: normal system/solution (1), residuals and SSE (1), variance MLE (1).
+
+\textbf{(c) [3 marks]} The squared biases are \((1.7-2)^2=0.09\), \((1.9-2)^2=0.01\), and 0. Adding variance and irreducible noise gives
+\[
+E_1=0.25+0.09+0.09=0.43,\quad
+E_2=0.25+0.01+0.12=0.38,\quad
+E_3=0.25+0+0.50=0.75.
+\]
+Degree 2 is best at this input. Degree 3 removes this bias but pays a larger training-sample variance. Marking: squared biases (1), three total errors (1), choice and explanation (1).
+
+\textbf{(d) [3 marks]} The equally weighted validation means are \(1.2,0.8,1.2\), so cross-validation selects degree 2. For each fold, fit only on the other folds and score the held-out observations; after choosing the degree, refit that model on the available training data. A final test set should remain unused during tuning. More flexible nested polynomial models can reduce training SSE while fitting sampling noise, so their training-error ordering does not determine future error. Finite-fold validation is an estimate rather than a guarantee of the population ranking. Marking: fold averages/choice (1), correct separation and refit (1), training-versus-generalization explanation (1).
+
+\textit{Marking: use the displayed subpart allocations; award credit for the logical or numerical intermediate steps.}\par
+{\footnotesize\textit{Source: PDF pp.38-44,47-53,88-90; supplementary numerical model comparison.}}
+\newpage\section*{Lecture Alignment and Coverage}
+Primary source: \texttt{Parameter\_Estimation.pdf} in \texttt{E:\textbackslash CS182\textbackslash 2026fall\textbackslash lecture}. All PDF pages count the cover as page 1. Additional arguments are marked as supplementary derivations when appropriate. These are original practice questions, not copied homework questions.
+
+\textbf{T/F}
+\begin{description}[leftmargin=12mm,itemsep=1pt]
+\item[1] PDF pp.59,63,71,74; supplementary centered-rank argument.
+\item[2] PDF pp.24-25; supplementary absolute-loss contrast.
+\item[3] PDF pp.58,65-66.
+\item[4] PDF pp.70,75-76.
+\item[5] PDF pp.23-28; supplementary evaluated predictive variance.
+\item[6] PDF pp.59-60; supplementary imputation calculation.
+\item[7] PDF pp.17-19.
+\item[8] PDF pp.14-15; supplementary boundary condition.
+\item[9] PDF pp.9,22.
+\item[10] PDF pp.70-72,75,78.
+\item[11] PDF pp.16,19.
+\item[12] PDF pp.42,44,90.
+\end{description}
+\textbf{Multiple response}
+\begin{description}[leftmargin=12mm,itemsep=1pt]
+\item[13] PDF pp.14-15; supplementary zero-count handling.
+\item[14] PDF pp.38-44,88-90; supplementary known unequal-variance extension.
+\item[15] PDF pp.16-19.
+\item[16] PDF pp.64-68.
+\item[17] PDF pp.22-28; supplementary predictive evaluation.
+\item[18] PDF p.85.
+\item[19] PDF pp.22-23,47,51-53; supplementary evidence integral.
+\item[20] PDF pp.9-11; supplementary boundary analysis.
+\item[21] PDF pp.14-15,74-75,78,80,82.
+\item[22] PDF pp.48-53,82; supplementary precise probabilistic conditions.
+\item[23] PDF pp.17-20; supplementary supplied Gaussian residual moments.
+\item[24] PDF pp.59,63,71,74-75,78; supplementary rank constraints.
+\end{description}
+\textbf{Proofs and applications}
+\begin{description}[leftmargin=12mm,itemsep=1pt]
+\item[25] PDF pp.9-15,85-86; supplementary boundary analysis.
+\item[26] PDF pp.16-20,48-49; supplementary degenerate-sample qualification.
+\item[27] PDF pp.22-28; supplementary evaluated predictive distribution.
+\item[28] PDF pp.59,63,70-82; supplementary centered-rank conditions.
+\item[29] PDF pp.59,63-64,70-82; supplementary numerical sample.
+\item[30] PDF pp.38-44,47-53,88-90; supplementary numerical model comparison.
+\end{description}
+\end{document}

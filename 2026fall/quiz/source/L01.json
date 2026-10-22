@@ -1,0 +1,539 @@
+{
+  "id": "01",
+  "slug": "Introduction",
+  "title": "Introduction",
+  "pdf": "Introduction.pdf",
+  "tf": [
+    {
+      "statement": "A useful learned model must exactly reproduce the complete process that generated the data.",
+      "answer": false,
+      "explanation": "The lecture allows a useful approximation; exact replication of the complete process is unnecessary.",
+      "source": "PDF p.7"
+    },
+    {
+      "statement": "The fact that a stored target is a number is sufficient to classify the learning task as regression.",
+      "answer": false,
+      "explanation": "Numbers may encode categories, such as 0 and 1 for class labels. The meaning and prediction task determine whether this is classification or regression.",
+      "source": "PDF pp.15,36,45"
+    },
+    {
+      "statement": "Unsupervised learning can discover structure even when no target output is supplied for each example.",
+      "answer": true,
+      "explanation": "Clustering, density estimation, and dimensionality reduction are examples of finding structure without supplied outputs.",
+      "source": "PDF p.17"
+    },
+    {
+      "statement": "In reinforcement learning, an action can be assessed through a reward received later rather than through an immediate correct-action label.",
+      "answer": true,
+      "explanation": "The lecture distinguishes delayed reward or penalty and the credit assignment problem from supervised outputs.",
+      "source": "PDF p.18"
+    },
+    {
+      "statement": "The model \\(h(x,w)=w_0+w_1x+w_2x^2\\) is linear in its parameters even though it is nonlinear in \\(x\\).",
+      "answer": true,
+      "explanation": "Each parameter multiplies a fixed feature of the input; there are no products or nonlinear transformations of the parameters.",
+      "source": "PDF p.21"
+    },
+    {
+      "statement": "For a fixed dataset and hypothesis class, replacing a squared-error objective by twice that objective leaves its set of global minimizers unchanged.",
+      "answer": true,
+      "explanation": "Multiplication by a strictly positive constant preserves every comparison of objective values. This does not assert that an arbitrary numerical optimizer follows the same path.",
+      "source": "PDF pp.22,45"
+    },
+    {
+      "statement": "Zero empirical classification error guarantees that all consistent hypotheses agree on every future input.",
+      "answer": false,
+      "explanation": "Different hypotheses can fit the same observed labels perfectly and make different predictions outside the training sample.",
+      "source": "PDF p.39"
+    },
+    {
+      "statement": "If axis-aligned rectangles have VC dimension four, every configuration of four planar points must be shattered.",
+      "answer": false,
+      "explanation": "VC dimension requires the existence of a shattered configuration of that size. Some configurations of four points cannot be shattered.",
+      "source": "PDF p.41"
+    },
+    {
+      "statement": "Choosing squared loss rather than another loss can express an inductive bias, even after the model family has been fixed.",
+      "answer": true,
+      "explanation": "The lecture identifies both the assumed function family and the squared-error selection criterion as inductive biases.",
+      "source": "PDF p.48"
+    },
+    {
+      "statement": "Increasing the sample size guarantees a strictly smaller error on every particular realized test set.",
+      "answer": false,
+      "explanation": "The triple tradeoff describes a general statistical tendency. A particular finite test error can stay unchanged or increase.",
+      "source": "PDF p.49"
+    },
+    {
+      "statement": "Once a hypothesis class and loss have been fixed, every possible optimization procedure must return the same predictor.",
+      "answer": false,
+      "explanation": "An algorithm may stop early, find a local solution, or choose among multiple minimizers. Optimization is a separate dimension of a learning algorithm.",
+      "source": "PDF p.52"
+    },
+    {
+      "statement": "Data science, as described in the lecture, includes machine learning and also activities such as visualization.",
+      "answer": true,
+      "explanation": "The lecture describes data science or data analytics as a broader concept including statistics, machine learning, data mining, and data visualization.",
+      "source": "PDF p.4"
+    }
+  ],
+  "mc": [
+    {
+      "stem": "In a transaction sample, 80 customers buy tea, 50 buy biscuits, and 30 buy both. Select every correct statement about the sample conditional probabilities.",
+      "options": [
+        {
+          "text": "\\(P(\\text{biscuits}\\mid\\text{tea})=3/8\\).",
+          "correct": true,
+          "why": "The denominator is the 80 customers who buy tea, so the fraction is 30/80."
+        },
+        {
+          "text": "\\(P(\\text{tea}\\mid\\text{biscuits})=3/5\\).",
+          "correct": true,
+          "why": "Conditioning on biscuits uses the 50 biscuit buyers as the denominator."
+        },
+        {
+          "text": "The two conditional probabilities must be equal because the intersection event is the same.",
+          "correct": false,
+          "why": "The intersection counts agree, but the conditioning populations have different sizes."
+        },
+        {
+          "text": "Conditioning additionally on customer attributes must leave both conditional probabilities unchanged.",
+          "correct": false,
+          "why": "Customer attributes can distinguish groups with different purchasing behavior, so adding them to the conditioning variables can change the probabilities."
+        }
+      ],
+      "source": "PDF p.11"
+    },
+    {
+      "stem": "Select every task that matches the learning role stated in the lecture.",
+      "options": [
+        {
+          "text": "Grouping unlabeled customers by similarity is an unsupervised task.",
+          "correct": true,
+          "why": "Customer segmentation is a clustering example."
+        },
+        {
+          "text": "Predicting a steering wheel angle from a camera image can be a regression task.",
+          "correct": true,
+          "why": "The output is a numerical control angle, matching the regression examples."
+        },
+        {
+          "text": "Learning a policy to maximize delayed game rewards is a reinforcement learning task.",
+          "correct": true,
+          "why": "The policy is learned through rewards and trial and error."
+        },
+        {
+          "text": "Assigning an email to spam or non-spam must be unsupervised learning because the email is text.",
+          "correct": false,
+          "why": "The input medium does not determine the paradigm; labeled spam detection is classification."
+        }
+      ],
+      "source": "PDF pp.14,16-18"
+    },
+    {
+      "stem": "Select every statement supported by the discussion of when machine learning is useful and how it is evaluated.",
+      "options": [
+        {
+          "text": "Machine learning can be useful when humans possess expertise but cannot explain it as explicit rules.",
+          "correct": true,
+          "why": "Speech and vision illustrate expertise that is difficult to articulate."
+        },
+        {
+          "text": "An application is suitable for machine learning only if its data generation mechanism is already fully known.",
+          "correct": false,
+          "why": "The mechanism may be partly unknown while containing exploitable regularities."
+        },
+        {
+          "text": "Computation time and storage requirements can matter alongside prediction accuracy.",
+          "correct": true,
+          "why": "The lecture lists accuracy, time complexity, and space complexity as performance criteria."
+        },
+        {
+          "text": "A descriptive model is useless unless it also predicts a future target.",
+          "correct": false,
+          "why": "Descriptive models may provide knowledge about data without a future-target task."
+        }
+      ],
+      "source": "PDF pp.6-8"
+    },
+    {
+      "stem": "Consider the fixed family \\(h(x;w)=w_0+w_1x\\). Select every change that alters one of the three dimensions of a supervised learning algorithm.",
+      "options": [
+        {
+          "text": "Replacing squared loss by absolute loss changes the error-function dimension.",
+          "correct": true,
+          "why": "The way prediction errors are scored changes."
+        },
+        {
+          "text": "Keeping the objective but replacing exact minimization by a finite number of gradient steps necessarily changes the hypothesis class.",
+          "correct": false,
+          "why": "This changes the optimization procedure; the set of allowable prediction functions can remain the same."
+        },
+        {
+          "text": "Adding a feature \\(x^2\\) with its own coefficient changes only the loss function while leaving the model family fixed.",
+          "correct": false,
+          "why": "Adding a freely weighted feature expands the model family; the same squared loss may still be used."
+        },
+        {
+          "text": "Renaming the coefficient vector without changing any formula necessarily changes the hypothesis class.",
+          "correct": false,
+          "why": "A purely notational renaming leaves the same prediction functions available."
+        }
+      ],
+      "source": "PDF p.52"
+    },
+    {
+      "stem": "For a nonnegative integer \\(M\\), let \\(\\mathcal H_M=\\{\\sum_{j=0}^M w_jx^j:w_j\\in\\mathbb R\\}\\). Select every correct statement.",
+      "options": [
+        {
+          "text": "\\(\\mathcal H_M\\subseteq\\mathcal H_{M+1}\\).",
+          "correct": true,
+          "why": "Set the extra coefficient to zero to represent every old polynomial."
+        },
+        {
+          "text": "A member of \\(\\mathcal H_M\\) must have degree exactly \\(M\\).",
+          "correct": false,
+          "why": "Its leading coefficients may vanish; constants are also members."
+        },
+        {
+          "text": "The coefficient vector has \\(M+1\\) entries.",
+          "correct": true,
+          "why": "There is one coefficient for each power from zero through M."
+        },
+        {
+          "text": "Different coefficient vectors always give different predictions on a fixed finite training set.",
+          "correct": false,
+          "why": "A finite evaluation map may have a nontrivial nullspace, especially when there are more coefficients than distinct input points."
+        }
+      ],
+      "source": "PDF pp.21-23"
+    },
+    {
+      "stem": "Suppose \\(N\\) training inputs are pairwise distinct real numbers. Select every valid statement about unregularized polynomial fitting.",
+      "options": [
+        {
+          "text": "A polynomial of degree at most \\(N-1\\) can interpolate any assigned real targets.",
+          "correct": true,
+          "why": "The square Vandermonde system is invertible for distinct input values."
+        },
+        {
+          "text": "Exact interpolation removes the random noise from each target.",
+          "correct": false,
+          "why": "An interpolant matches the observed noisy values and may fit the noise itself."
+        },
+        {
+          "text": "Allowing degree above \\(N-1\\) can give different interpolating polynomials with identical training predictions.",
+          "correct": true,
+          "why": "Add a nonzero multiple of the polynomial that vanishes at every training input."
+        },
+        {
+          "text": "An interpolating polynomial is guaranteed to have the smallest expected test error among all candidate models.",
+          "correct": false,
+          "why": "Zero training error does not guarantee generalization."
+        }
+      ],
+      "source": "PDF pp.23-24; supplementary derivation from PDF pp.21-24"
+    },
+    {
+      "stem": "The lecture uses \\(E(w)=\\tfrac12\\sum_{n=1}^N(h(x_n,w)-y_n)^2\\). Suppose \\(E(w)=18\\) for \\(N=9\\). Select every correct statement.",
+      "options": [
+        {
+          "text": "The RMS error is \\(2\\).",
+          "correct": true,
+          "why": "Its square is 2E/N=36/9=4."
+        },
+        {
+          "text": "The mean squared error is \\(4\\).",
+          "correct": true,
+          "why": "The sum of squared residuals is 36, divided by 9."
+        },
+        {
+          "text": "The RMS error has the same physical units as the target.",
+          "correct": true,
+          "why": "Taking the square root restores the units of a residual."
+        },
+        {
+          "text": "Doubling every residual doubles the mean squared error.",
+          "correct": false,
+          "why": "Squaring makes the mean squared error four times as large; RMS doubles."
+        }
+      ],
+      "source": "PDF pp.22,24,45"
+    },
+    {
+      "stem": "Two fixed candidate coefficient vectors have \\((E(w_A),\\|w_A\\|_2^2)=(2,18)\\) and \\((E(w_B),\\|w_B\\|_2^2)=(5,2)\\). Compare only these two candidates under \\(E(w)+\\lambda\\|w\\|_2^2/2\\), with \\(\\lambda\\geq0\\). Select every correct statement.",
+      "options": [
+        {
+          "text": "At \\(\\lambda=0\\), candidate \\(A\\) has the smaller objective.",
+          "correct": true,
+          "why": "The data-fitting errors are 2 and 5."
+        },
+        {
+          "text": "The candidates tie at \\(\\lambda=3/8\\).",
+          "correct": true,
+          "why": "Solve 2+9 lambda=5+lambda."
+        },
+        {
+          "text": "For every \\(\\lambda>3/8\\), candidate \\(B\\) has the smaller objective.",
+          "correct": true,
+          "why": "Its smaller squared norm gives it the smaller objective slope."
+        },
+        {
+          "text": "These comparisons prove that one of these two candidates is the global minimizer over every coefficient vector.",
+          "correct": false,
+          "why": "Comparing two supplied candidates excludes no third candidate with a still lower objective."
+        }
+      ],
+      "source": "PDF p.28"
+    },
+    {
+      "stem": "Consider closed axis-aligned rectangles as positive-class regions. Assume at least one positive training example. Select every correct statement.",
+      "options": [
+        {
+          "text": "The smallest rectangle containing all positive examples must be contained in every consistent rectangle.",
+          "correct": true,
+          "why": "Every consistent rectangle must extend to each coordinate extreme of the positive examples."
+        },
+        {
+          "text": "If a negative example lies inside that smallest rectangle, the version space is empty.",
+          "correct": true,
+          "why": "Every rectangle containing the positives also contains that negative example."
+        },
+        {
+          "text": "There is always a unique largest consistent rectangle.",
+          "correct": false,
+          "why": "Negative examples can force tradeoffs between expansion in different directions, giving multiple incomparable maximal rectangles."
+        },
+        {
+          "text": "Every rectangle consistent with the training sample must have the same area.",
+          "correct": false,
+          "why": "Several boundary positions can preserve the observed labels while changing the area."
+        }
+      ],
+      "source": "PDF pp.37-40"
+    },
+    {
+      "stem": "A classifier mislabels exactly 3 of 12 training examples. Use the classification empirical-error definition on slide 39. Select every correct statement.",
+      "options": [
+        {
+          "text": "Its empirical error \\(E(h\\mid X)\\) is \\(3\\).",
+          "correct": true,
+          "why": "That slide defines a sum of misclassification indicators."
+        },
+        {
+          "text": "Its empirical error under that definition is \\(1/4\\).",
+          "correct": false,
+          "why": "One quarter is the error rate, which includes an additional division by N."
+        },
+        {
+          "text": "Nonzero empirical error proves that the learning code contains an arithmetic bug.",
+          "correct": false,
+          "why": "Noise, limited model capacity, or imperfect optimization can produce nonzero empirical error without an arithmetic bug."
+        },
+        {
+          "text": "Hidden attributes can never contribute to apparent noise because they are absent from the feature vector.",
+          "correct": false,
+          "why": "The lecture explicitly lists hidden or latent attributes as a source of noise."
+        }
+      ],
+      "source": "PDF pp.39,42"
+    },
+    {
+      "stem": "A team chooses polynomial degree by comparing validation errors. Select every sound statement about evaluation.",
+      "options": [
+        {
+          "text": "The validation set helps compare candidate model choices.",
+          "correct": true,
+          "why": "Model selection needs an estimate of performance beyond the training examples."
+        },
+        {
+          "text": "A separate test set can assess the final selected procedure after model selection.",
+          "correct": true,
+          "why": "Keeping test cases outside selection avoids adapting the choice to their observed errors."
+        },
+        {
+          "text": "Repeatedly choosing hyperparameters to reduce the reported test error preserves the test set as an untouched final evaluation.",
+          "correct": false,
+          "why": "Those test outcomes have then influenced the selected model."
+        },
+        {
+          "text": "The example 50/25/25 training/validation/test split is a compulsory ratio for every problem.",
+          "correct": false,
+          "why": "The lecture presents those percentages as an example, and also mentions resampling."
+        }
+      ],
+      "source": "PDF pp.48-50"
+    },
+    {
+      "stem": "A four-class classifier is implemented through four one-versus-rest binary classifiers. Select every correct statement.",
+      "options": [
+        {
+          "text": "Each binary target indicates whether an example belongs to its associated class.",
+          "correct": true,
+          "why": "The reduction compares one class against the other classes."
+        },
+        {
+          "text": "Several binary classifiers may predict positive on the same new example, so a final decision rule can be necessary.",
+          "correct": true,
+          "why": "Independently learned binary decisions need not be mutually exclusive."
+        },
+        {
+          "text": "Every binary classifier is guaranteed to have zero empirical error merely because the task was decomposed.",
+          "correct": false,
+          "why": "The reduction does not make the subproblems perfectly separable."
+        },
+        {
+          "text": "The reduction implies that one learning algorithm is universally best for every dataset.",
+          "correct": false,
+          "why": "The no-free-lunch discussion rejects a universally best algorithm."
+        }
+      ],
+      "source": "PDF pp.43,52; supplementary interpretation from PDF p.43"
+    }
+  ],
+  "long": [
+    {
+      "title": "Least squares as orthogonality, including redundant features",
+      "kind": "proof",
+      "marks": 10,
+      "source": "Supplementary derivation from PDF pp.21-22,45",
+      "parts": [
+        {
+          "marks": 3,
+          "question": "Let \\(\\Phi\\in\\mathbb R^{N\\times d}\\), \\(y\\in\\mathbb R^N\\), and \\(E(w)=\\tfrac12\\|\\Phi w-y\\|_2^2\\). Show that a minimizer \\(w_*\\) must satisfy \\(\\Phi^T(\\Phi w_*-y)=0\\), by examining perturbations rather than quoting an inverse formula.",
+          "solution": "For any direction \\(v\\) and real \\(t\\), set \\(r=\\Phi w_*-y\\). Expanding gives \\[E(w_*+tv)-E(w_*)=t\\,v^T\\Phi^Tr+\\tfrac12t^2\\|\\Phi v\\|_2^2.\\] At a minimum the linear coefficient must vanish for every \\(v\\), since otherwise one sufficiently small choice of the sign of \\(t\\) decreases the objective. Thus \\(v^T\\Phi^Tr=0\\) for every direction, giving \\(\\Phi^Tr=0\\). Award one mark for the expansion, one for the sign-of-perturbation argument, and one for the normal equations."
+        },
+        {
+          "marks": 4,
+          "question": "Prove that these normal equations are sufficient for global optimality. Interpret them geometrically and justify that a minimizer exists even if \\(\\Phi\\) has dependent columns.",
+          "solution": "If \\(\\Phi^T(\\Phi w_*-y)=0\\), the same expansion with \\(t=1\\) yields \\[E(w_*+v)=E(w_*)+\\tfrac12\\|\\Phi v\\|_2^2\\geq E(w_*).\\] Hence the condition is sufficient. It says that the residual is orthogonal to every vector in the column space of \\(\\Phi\\). This column space is a finite-dimensional, closed subspace of \\(\\mathbb R^N\\). An orthonormal basis \\(q_1,\\ldots,q_r\\) gives the closest vector \\(p=\\sum_i q_i(q_i^Ty)\\), whose residual is orthogonal to the subspace. Since \\(p\\) is in the column space, there exists a coefficient vector with \\(\\Phi w_*=p\\). This establishes existence without invertibility. Award two marks for sufficiency, one for orthogonality, and one for existence."
+        },
+        {
+          "marks": 3,
+          "question": "If \\(u\\) and \\(v\\) are both minimizers, prove that \\(\\Phi u=\\Phi v\\). State exactly when their coefficient vectors can differ.",
+          "solution": "Apply the sufficient-condition expansion at \\(u\\) with perturbation \\(v-u\\): \\[0=E(v)-E(u)=\\tfrac12\\|\\Phi(v-u)\\|_2^2.\\] Therefore the fitted training predictions are unique. The coefficient vectors can differ precisely by vectors in \\(\\operatorname{null}(\\Phi)\\): adding such a vector preserves all predictions and the objective, and the preceding identity shows every pair of minimizers differs this way. Coefficients are unique if and only if \\(\\Phi\\) has full column rank. Award one mark each for the equality, the nullspace characterization, and the uniqueness condition."
+        }
+      ]
+    },
+    {
+      "title": "Why a larger polynomial class cannot worsen optimal training RMS",
+      "kind": "proof",
+      "marks": 10,
+      "source": "Supplementary derivation from PDF pp.21-24,48-49",
+      "parts": [
+        {
+          "marks": 3,
+          "question": "For a fixed nonempty training set, define \\(E_M^*=\\min_{h\\in\\mathcal H_M}\\tfrac12\\sum_n(h(x_n)-y_n)^2\\), with \\(\\mathcal H_M\\) as in the multiple-response section. Prove \\(E_{M+1}^*\\leq E_M^*\\) and the corresponding inequality for optimal training RMS.",
+          "solution": "Every polynomial in \\(\\mathcal H_M\\) is also in \\(\\mathcal H_{M+1}\\) by setting the new coefficient to zero. Thus an optimizer from the smaller class is a feasible candidate for the larger class, so its minimum cannot be smaller than the larger minimum: \\(E_{M+1}^*\\leq E_M^*\\). Because \\(N>0\\), the map \\(a\\mapsto\\sqrt{2a/N}\\) is increasing for nonnegative \\(a\\), giving \\(\\mathrm{RMS}_{M+1}^*\\leq\\mathrm{RMS}_M^*\\). Award one mark for inclusion and one for each inequality."
+        },
+        {
+          "marks": 4,
+          "question": "Let \\(\\Phi_M\\) be the degree-\\(M\\) design matrix, \\(\\phi=(x_1^{M+1},\\ldots,x_N^{M+1})^T\\), and \\(r=\\Phi_M w_*-y\\) at a smaller-class minimizer. Prove that the two optimal errors are equal if and only if \\(\\phi^Tr=0\\). Explain why an added feature already in \\(\\operatorname{col}(\\Phi_M)\\) cannot improve training error.",
+          "solution": "The old residual satisfies \\(\\Phi_M^Tr=0\\). If also \\(\\phi^Tr=0\\), the zero-extended vector \\((w_*^T,0)^T\\) satisfies the normal equations for \\([\\Phi_M\\ \\phi]\\), so it is a larger-class minimizer with the same objective. Conversely, if the optimal errors agree, this zero-extended vector attains the larger optimum and must satisfy its normal equations, including \\(\\phi^Tr=0\\). If \\(\\phi=\\Phi_Ma\\), then \\(\\phi^Tr=a^T\\Phi_M^Tr=0\\), so equality follows. Award one mark for the old orthogonality, two for the two implications, and one for the column-space consequence."
+        },
+        {
+          "marks": 3,
+          "question": "For the three observations \\((-1,1),(0,0),(1,1)\\), find the optimal constant, show that adding a linear term does not improve its error, and exhibit a quadratic with zero training error. Why does the monotonicity proof say nothing comparable about test RMS?",
+          "solution": "The best constant is \\(2/3\\): completing the square in \\((c-1)^2+c^2+(c-1)^2\\) yields \\(3(c-2/3)^2+2/3\\). Its residual is \\((-1/3,2/3,-1/3)^T\\) for prediction minus target, and its inner product with the added feature \\((-1,0,1)^T\\) is zero. Thus the best affine model has the same \\(E=1/3\\) and RMS \\(\\sqrt2/3\\). The polynomial \\(h(x)=x^2\\) interpolates all three observations and gives zero error. Test error is evaluated on other points and is not the objective minimized over the nested training classes, so it need not decrease. Award one mark for the constant and error, one for the linear/quadratic comparison, and one for the test-error explanation."
+        }
+      ]
+    },
+    {
+      "title": "Regularization: prove the tradeoff without an inverse formula",
+      "kind": "proof",
+      "marks": 10,
+      "source": "Supplementary derivation from PDF pp.28-32",
+      "parts": [
+        {
+          "marks": 4,
+          "question": "Let \\(F(w)=\\tfrac12\\|\\Phi w-y\\|_2^2\\), \\(R(w)=\\tfrac12\\|w\\|_2^2\\), and \\(w_i\\) be a global minimizer of \\(F(w)+\\lambda_iR(w)\\), where \\(0\\leq\\lambda_1<\\lambda_2\\). Prove \\(R(w_2)\\leq R(w_1)\\). Do not use a closed-form minimizer.",
+          "solution": "Optimality at the two parameter values gives \\[F(w_1)+\\lambda_1R(w_1)\\leq F(w_2)+\\lambda_1R(w_2),\\]\\[F(w_2)+\\lambda_2R(w_2)\\leq F(w_1)+\\lambda_2R(w_1).\\] Adding and rearranging yields \\((\\lambda_2-\\lambda_1)(R(w_2)-R(w_1))\\leq0\\). The coefficient is strictly positive, so \\(R(w_2)\\leq R(w_1)\\). The proof allows nonunique minimizers. Award one mark for each optimality inequality and two for the conclusion with the correct sign."
+        },
+        {
+          "marks": 3,
+          "question": "Prove \\(F(w_1)\\leq F(w_2)\\). Does either result imply a monotone test error or a strictly changing coefficient norm?",
+          "solution": "The first optimality inequality rearranges to \\[F(w_1)-F(w_2)\\leq\\lambda_1\\bigl(R(w_2)-R(w_1)\\bigr)\\leq0.\\] Thus the unpenalized training error cannot decrease as the penalty increases. Equality is possible; for example, if \\(y=0\\), \\(w=0\\) minimizes the objective for every parameter. Test error is a different quantity and can first fall and then rise; neither inequality controls it. Award one mark for the data-fit inequality, one for the equality example, and one for the test-error limitation."
+        },
+        {
+          "marks": 3,
+          "question": "For \\(\\lambda>0\\), prove that the penalized squared-error objective has a unique minimizer even if \\(\\Phi\\) has dependent columns. Use a strict-convexity or midpoint argument.",
+          "solution": "Existence follows because the objective is continuous and at least \\(\\lambda\\|w\\|_2^2/2\\), so it tends to infinity as \\(\\|w\\|_2\\to\\infty\\). For distinct \\(u,v\\), the squared-norm midpoint identity gives \\[J((u+v)/2)=\\tfrac12J(u)+\\tfrac12J(v)-\\tfrac18\\|\\Phi(u-v)\\|_2^2-\\tfrac{\\lambda}{8}\\|u-v\\|_2^2.\\] The final term is strictly negative. Two distinct minimizers would therefore have a midpoint with smaller objective, a contradiction. Award one mark for existence, one for the identity or strict-convexity argument, and one for uniqueness."
+        }
+      ]
+    },
+    {
+      "title": "The VC dimension of axis-aligned rectangles",
+      "kind": "proof",
+      "marks": 10,
+      "source": "PDF p.41; supplementary proof from PDF pp.37-41",
+      "parts": [
+        {
+          "marks": 5,
+          "question": "Let \\(\\mathcal R\\) contain all closed axis-aligned rectangles in \\(\\mathbb R^2\\), with label 1 inside and 0 outside. Prove that \\(\\mathcal R\\) shatters \\(\\{(-1,0),(1,0),(0,-1),(0,1)\\}\\). Cover all possible subsets, including the empty subset.",
+          "solution": "For a nonempty subset \\(S\\) of these four points, take its coordinatewise bounding rectangle. Each omitted point is the unique extreme in one coordinate: the left point has x=-1, the right point x=1, the lower point y=-1, and the upper point y=1. If that point is omitted, the corresponding extreme bound of the rectangle moves strictly inward, excluding it. Every selected point is included by construction. Singleton subsets may use degenerate rectangles; if strictly positive side lengths are required, expand the bounding box slightly without reaching any omitted point. For the empty subset, use a small rectangle far from the four points. Thus each of the 16 labelings is realizable. Award two marks for the bounding-box construction, two for exclusion of omitted extremes, and one for the empty/singleton cases."
+        },
+        {
+          "marks": 5,
+          "question": "Prove that no set of five distinct planar points is shattered, allowing ties in coordinate extremes. Deduce the exact VC dimension.",
+          "solution": "From any five-point set, select one point attaining minimum x, one attaining maximum x, one attaining minimum y, and one attaining maximum y. Some selections may coincide, so their union \\(T\\) has at most four points. Choose a remaining point \\(z\\notin T\\). Label every point of \\(T\\) positive and every point outside \\(T\\) negative. Any closed axis-aligned rectangle containing the positive extremes must contain the entire bounding box of the five-point set, including \\(z\\). It therefore cannot realize this labeling. This argument remains valid when extremes are tied because one selected representative at each extreme is sufficient to force the bound. Hence no five-point set is shattered. Any larger shattered set would have a shattered five-point subset, so the VC dimension is at most four; the construction in the first part makes it exactly four. Award two marks for selecting the at-most-four extremes, two for the impossible labeling, and one for the conclusion."
+        }
+      ]
+    },
+    {
+      "title": "Compare candidate polynomials, regularization, and validation",
+      "kind": "application",
+      "marks": 12,
+      "source": "PDF pp.21-24,28,48-50",
+      "parts": [
+        {
+          "marks": 3,
+          "question": "Two supplied candidate models are \\(h_A(x)=\\tfrac12+\\tfrac12x\\) and \\(h_B(x)=x^2\\). The training sample is \\((0,0),(1,1),(2,4)\\). Compute each model\\'s half-sum squared error and training RMS. You are comparing these two candidates only.",
+          "solution": "Model A predicts \\((1/2,1,3/2)\\), so its residuals are \\((1/2,0,-5/2)\\). The squared-residual sum is \\(1/4+25/4=13/2\\), giving \\(E_A=13/4\\) and RMS \\(\\sqrt{13/6}\\). Model B predicts \\((0,1,4)\\), so \\(E_B=0\\) and RMS is zero. Award one mark for the predictions or residuals, one for the half-sum errors, and one for the RMS values."
+        },
+        {
+          "marks": 3,
+          "question": "The validation sample is \\((1/2,1),(3/2,3/2)\\). Compute validation RMS for both candidates and choose the candidate using this criterion.",
+          "solution": "Model A predicts \\((3/4,5/4)\\), giving residuals \\((-1/4,-1/4)\\); its mean squared error is \\(1/16\\) and RMS is \\(1/4\\). Model B predicts \\((1/4,9/4)\\), giving residuals \\((-3/4,3/4)\\); its mean squared error is \\(9/16\\) and RMS is \\(3/4\\). Select A. The zero training error of B did not give the better validation result. Award one mark per RMS and one for the selection."
+        },
+        {
+          "marks": 4,
+          "question": "Embed both models in the degree-two coefficient space ordered as \\((1,x,x^2)\\), and compare \\(E+\\lambda\\|w\\|_2^2/2\\). Find the value of \\(\\lambda\\) at which they tie, and identify the better candidate at \\(\\lambda=14\\). Does this comparison establish a global ridge solution?",
+          "solution": "The vectors are \\(w_A=(1/2,1/2,0)^T\\) and \\(w_B=(0,0,1)^T\\), with squared norms \\(1/2\\) and 1. Therefore \\[J_A=13/4+\\lambda/4,\\qquad J_B=\\lambda/2.\\] They tie at \\(\\lambda=13\\). At 14, \\(J_A=27/4=6.75\\) and \\(J_B=7\\), so A wins among these candidates. This does not establish the global minimizer over all degree-two coefficient vectors, because other coefficients have not been optimized. Award one mark for the vectors/norms, one for the objectives, one for the threshold and numerical comparison, and one for the limitation."
+        },
+        {
+          "marks": 2,
+          "question": "Describe a valid use of an additional test set after choosing the candidate. Explain why the validation RMS of the selected candidate is not automatically an unbiased final assessment of the entire selection process.",
+          "solution": "Freeze the candidate choice and evaluate it once on test examples that influenced neither fitting nor selection. Comparing candidates used the validation outcomes to guide the choice, so the selected validation score can benefit from selection and is not an untouched final assessment. Award one mark for the test protocol and one for recognizing selection on validation outcomes."
+        }
+      ]
+    },
+    {
+      "title": "Consistent rectangles and predictions that data do not determine",
+      "kind": "application",
+      "marks": 12,
+      "source": "PDF pp.37-40,48",
+      "parts": [
+        {
+          "marks": 3,
+          "question": "The positive examples are \\((2,3),(4,5)\\); the negative examples are \\((1,4),(5,4),(3,6)\\). Find the smallest closed axis-aligned rectangle containing the positives and verify its training error.",
+          "solution": "The coordinate extrema of the positives give \\(S=[2,4]\\times[3,5]\\). Both positives lie on its boundary and are included. The negative at x=1 lies left, the negative at x=5 lies right, and the negative at y=6 lies above. Thus all five examples are correctly labeled, and the empirical error count is zero. Award one mark for the bounds and two for the verification."
+        },
+        {
+          "marks": 4,
+          "question": "Construct a second consistent rectangle that disagrees with \\(S\\) at \\(q=(1.7,4)\\). State what this proves about predicting \\(q\\) from consistency alone.",
+          "solution": "Take \\(R=[1.5,4.5]\\times[2.5,5.5]\\). It includes both positives, excludes x=1 and x=5, and excludes y=6, so it is consistent. It contains q, whereas S excludes q because 1.7<2. Thus two zero-error hypotheses disagree on q; consistency alone leaves its class undetermined. Award two marks for a valid second rectangle and its consistency, one for the disagreement, and one for the conclusion."
+        },
+        {
+          "marks": 3,
+          "question": "Which label is forced by all consistent rectangles at \\(a=(3,4)\\)? Which label is forced at the already observed negative point \\(b=(1,4)\\)? Explain using the geometry and the definition of consistency.",
+          "solution": "Every rectangle containing the positives must contain their entire bounding box S, so a=(3,4) is forced positive. Every consistent hypothesis must respect the observed negative label at b, so b is forced negative. The reason for a is geometric containment, and the reason for b is its explicit training constraint. Award two marks for a with its reasoning and one for b with its reasoning."
+        },
+        {
+          "marks": 2,
+          "question": "An additional training record gives \\((3,4)\\) a negative label while keeping all previous labels. Determine the new version space and explain why optimizing rectangle boundaries cannot obtain zero training error.",
+          "solution": "The version space is empty. Every rectangle containing both positive examples contains (3,4), so it must violate the new negative label; excluding that point requires violating at least one positive. No boundary search can remove this incompatibility within the stated hypothesis class. Award one mark for emptiness and one for the bounding-box explanation."
+        }
+      ]
+    }
+  ]
+}

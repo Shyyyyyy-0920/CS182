@@ -1,0 +1,453 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,array,amsmath,amssymb,booktabs,enumitem,fancyhdr,lastpage,needspace,microtype}
+\usepackage[margin=19mm,headheight=14pt,footskip=11mm]{geometry}
+\usepackage[hidelinks]{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\setlength{\emergencystretch}{2em}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small CS182 --- Lecture 02}
+\fancyhead[R]{\small Personal answer copy}
+\fancyfoot[L]{\small Independent practice quiz}
+\fancyfoot[R]{\small Page \thepage\ of \pageref{LastPage}}
+\newcommand{\SetAnswer}[2]{\expandafter\gdef\csname QuizAnswer#1\endcsname{#2}}
+\newcommand{\GetAnswer}[1]{\csname QuizAnswer#1\endcsname}
+\newlength{\BlankAnswerHeight}\setlength{\BlankAnswerHeight}{16mm}
+\newcommand{\AnswerBlank}{\leavevmode\par\vspace{\BlankAnswerHeight}}
+% 本文件为独立可填写答题卷；用 pdfLaTeX 编译两次。
+% 在 BEGIN TF ANSWERS 和 BEGIN MC ANSWERS 中填写短答案。
+% 大题请搜索 BEGIN ANSWER Q25(a) 等注释；每个小问都有独立区域。
+% 写完小问后删除该处的 \AnswerBlank，或将 BlankAnswerHeight 改为 0mm。
+% 所有打印内容及你填写的回答请使用英文。中文只出现在源文件注释中。
+% build_per_lecture.py 不会覆盖已经存在的 Quiz.tex，以保留你的作答。
+% BEGIN STUDENT INFO / 个人信息
+\newcommand{\StudentName}{}
+\newcommand{\StudentID}{}
+% END STUDENT INFO
+% BEGIN TF ANSWERS / 判断题答题区（第二组花括号填 T 或 F）
+\SetAnswer{TF01}{} % Question 1
+\SetAnswer{TF02}{} % Question 2
+\SetAnswer{TF03}{} % Question 3
+\SetAnswer{TF04}{} % Question 4
+\SetAnswer{TF05}{} % Question 5
+\SetAnswer{TF06}{} % Question 6
+\SetAnswer{TF07}{} % Question 7
+\SetAnswer{TF08}{} % Question 8
+\SetAnswer{TF09}{} % Question 9
+\SetAnswer{TF10}{} % Question 10
+\SetAnswer{TF11}{} % Question 11
+\SetAnswer{TF12}{} % Question 12
+% END TF ANSWERS
+% BEGIN MC ANSWERS / 不定项选择答题区（填选项字母，如 BD；仅格式示例）
+\SetAnswer{MC13}{} % Question 13
+\SetAnswer{MC14}{} % Question 14
+\SetAnswer{MC15}{} % Question 15
+\SetAnswer{MC16}{} % Question 16
+\SetAnswer{MC17}{} % Question 17
+\SetAnswer{MC18}{} % Question 18
+\SetAnswer{MC19}{} % Question 19
+\SetAnswer{MC20}{} % Question 20
+\SetAnswer{MC21}{} % Question 21
+\SetAnswer{MC22}{} % Question 22
+\SetAnswer{MC23}{} % Question 23
+\SetAnswer{MC24}{} % Question 24
+% END MC ANSWERS
+
+\begin{document}
+\begin{center}{\Large\bfseries CS182: Introduction to Machine Learning}\par{\Large\bfseries Lecture 02: Linear Algebra}\par{\large Lecture Quiz and Answer Copy}\end{center}
+\textbf{Scope:} Linear\_Algebra.pdf. Independent practice material based on the official 2026 Fall lecture.\par\textbf{Total:} 100 marks. \quad \textbf{Suggested time:} 120 minutes.
+\par\textbf{Name:} \underline{\makebox[60mm][l]{\StudentName}}\hfill\textbf{Student ID:} \underline{\makebox[45mm][l]{\StudentID}}
+\begin{center}\begin{tabular}{lrrr}\toprule
+Section & Questions & Each & Marks\\\midrule
+A. Misconceptions: True/False & 12 & 1 & 12\\
+B. Multiple response & 12 & 2 & 24\\
+C. Proofs and formula derivations & 4 & 10 & 40\\
+D. Applications & 2 & 12 & 24\\\midrule
+Total & 30 & & 100\\\bottomrule\end{tabular}\end{center}
+\textbf{Scoring.} In Section B each item has exactly four options, of which one,
+two, or three are correct. The complete correct set earns 2 marks; a nonempty
+proper subset earns 1 mark; any incorrect option or no selection earns 0.
+T/F answers earn 1 mark only when correct. Show reasoning in Sections C and D;
+part marks are available for valid intermediate work. Equivalent correct methods receive credit.
+\par\medskip\textbf{Instructions.} Answer in English. Use natural logarithms.
+Exact values and justified approximations are accepted. All vectors are columns
+unless stated otherwise. Use local assumptions, label conventions, and tie rules.
+\par\medskip\textbf{Answer sheet --- Section A}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+1 & 2 & 3 & 4 & 5 & 6\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF01}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF02}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF03}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF04}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF05}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF06}}\\\hline
+\end{tabular}\end{center}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+7 & 8 & 9 & 10 & 11 & 12\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF07}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF08}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF09}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF10}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF11}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF12}}\\\hline
+\end{tabular}\end{center}
+\par\medskip\textbf{Answer sheet --- Section B}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+13 & 14 & 15 & 16 & 17 & 18\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC13}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC14}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC15}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC16}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC17}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC18}}\\\hline
+\end{tabular}\end{center}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+19 & 20 & 21 & 22 & 23 & 24\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC19}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC20}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC21}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC22}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC23}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC24}}\\\hline
+\end{tabular}\end{center}
+\newpage\section*{Section A. True/False \hfill 12 marks}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{1.} Under the lecture convention, the gradient of a scalar function of \(x\in\mathbb R^n\) is an \(n\times1\) column vector.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{2.} If \(f\) is twice continuously differentiable on an open neighborhood of \(x\), then its Hessian at \(x\) is symmetric.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{3.} Every pair of eigenvectors of a real symmetric matrix is automatically orthogonal, including pairs with the same eigenvalue.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{4.} A square matrix has an inverse if and only if its determinant is nonzero.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{5.} The correct transpose rule for a product is \((AB)^T=A^TB^T\).
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{6.} Every real symmetric positive semidefinite matrix is invertible.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{7.} A real \(m\times n\) matrix represents a linear map from \(\mathbb R^n\) to \(\mathbb R^m\).
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{8.} For \(x,y\in\mathbb R^3\), the outer product \(xy^T\) is a scalar.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{9.} Every invertible real symmetric matrix has only positive eigenvalues.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{10.} If two real vectors have zero inner product, at least one of them must be the zero vector.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{11.} If \(A\in\mathbb R^{2\times4}\) has full rank, then \(Ax=0\) has only the zero solution.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{12.} If both \(AB\) and \(BA\) are defined and have the same shape, they must be equal.
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section B. Multiple Response \hfill 24 marks}
+\textit{Select all correct options. Each question has 1--3 correct options.}\par
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q13 / 题目与选项区
+\textbf{13.} Let \(A,B\) be invertible real square matrices of the same size. Select every valid formula.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \(\det(AB)=\det(A)+\det(B)\).
+\item \((A^T)^{-1}=(A^{-1})^T\).
+\item \((AB)^{-1}=A^{-1}B^{-1}\) for all such matrices.
+\item \((2A)^{-1}=2A^{-1}\).
+\end{enumerate}
+% END QUESTION Q13
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q14 / 题目与选项区
+\textbf{14.} For \(x=(-2,1,2)^T\), select every correct norm value.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \(\|x\|_\infty=3\).
+\item \(\|x\|_2=3\).
+\item \(\|x\|_1=5\).
+\item \(\|x\|_1=|-2+1+2|=1\).
+\end{enumerate}
+% END QUESTION Q14
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q15 / 题目与选项区
+\textbf{15.} A Cholesky factorization is given as \(C=T^TT\), where \(T\) is a nonsingular upper triangular real matrix. Select every correct conclusion.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item C is positive definite.
+\item The same factor always also satisfies \(C=TT^T\).
+\item The diagonal entry \(c_{ii}\) always equals the squared length of row \(i\) of \(T\).
+\item \(\det(C)=\prod_i t_{ii}\) always holds.
+\end{enumerate}
+% END QUESTION Q15
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q16 / 题目与选项区
+\textbf{16.} Consider a proposed eigendecomposition \(A=Q\Lambda Q^{-1}\), with diagonal \(\Lambda\). Select every correct statement.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item The columns of Q must be linearly independent.
+\item Normalizing every column of Q to length one is sufficient to replace the inverse by its transpose.
+\item Every real square matrix has such a decomposition with a real invertible Q and a real diagonal Lambda.
+\item A real symmetric matrix permits an orthogonal choice of Q and real diagonal entries in the decomposition.
+\end{enumerate}
+% END QUESTION Q16
+
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section B. Multiple Response \hfill 24 marks}
+\textit{Select all correct options. Each question has 1--3 correct options.}\par
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q17 / 题目与选项区
+\textbf{17.} For fixed \(A\in\mathbb R^{m\times n}\), let \(f(u,v)=u^TAv\), with \(u\in\mathbb R^m\) and \(v\in\mathbb R^n\). Select every correct statement.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item When \(v\) is fixed, \(\nabla_u f=Av\).
+\item When \(u\) is fixed, \(\nabla_v f=A^Tu\).
+\item When \(v\) is fixed, the Hessian with respect to \(u\) is the zero \(m\times m\) matrix.
+\item When \(u\) is fixed, \(\nabla_v f=Au\) regardless of dimensions.
+\end{enumerate}
+% END QUESTION Q17
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q18 / 题目与选项区
+\textbf{18.} Let \(Q\in\mathbb R^{n\times n}\) satisfy \(Q^TQ=I\). Select every statement that holds for all real \(x,y\in\mathbb R^n\).
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item If x and y are nonzero, their angle is preserved by Q.
+\item \(\|Qx\|_1=\|x\|_1\).
+\item \((Qx)^T(Qy)=x^Ty\).
+\item \(\|Qx-Qy\|_2=\|x-y\|_2\).
+\end{enumerate}
+% END QUESTION Q18
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q19 / 题目与选项区
+\textbf{19.} Let \(A\in\mathbb R^{m\times n}\) and \(B\in\mathbb R^{n\times m}\). Select every correct trace identity.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \(\operatorname{tr}(A^TA)=\sum_{i=1}^m\sum_{j=1}^n a_{ij}^2\).
+\item For square \(C\), \(\operatorname{tr}(C^T)=\operatorname{tr}(C)\).
+\item \(\operatorname{tr}(AB)=\operatorname{tr}(BA)\).
+\item When \(A,B\) are square, \(\operatorname{tr}(AB)=\operatorname{tr}(A)\operatorname{tr}(B)\).
+\end{enumerate}
+% END QUESTION Q19
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q20 / 题目与选项区
+\textbf{20.} Let \(C\) be a real symmetric positive definite matrix and \(g(C)=\log\det C\). Matrix gradients use \(dg=\operatorname{tr}((\nabla_Cg)^T\,dC)\). Select every correct statement.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item The real logarithm of the determinant is defined for every invertible real matrix.
+\item For a symmetric perturbation \(H\), the directional derivative is \(\operatorname{tr}(C^{-1}H)\).
+\item For positive scalar \(c\), if \(C=cI_n\), then \(g(C)=n\log c\).
+\item \(\nabla_C g=C^{-1}\) at such a matrix.
+\end{enumerate}
+% END QUESTION Q20
+
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section B. Multiple Response \hfill 24 marks}
+\textit{Select all correct options. Each question has 1--3 correct options.}\par
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q21 / 题目与选项区
+\textbf{21.} Let \(A=\begin{pmatrix}1&2&0\\-1&0&3\end{pmatrix}\), with columns \(a_1,a_2,a_3\), and \(x=(2,-1,1)^T\). Select every correct statement.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \(Ax=2a_1-a_2+a_3\).
+\item Every vector \(Ax\), as \(x\) varies, lies in the span of the columns of \(A\).
+\item \(Ax=(0,1)^T\).
+\item \(A^Tx\) is defined for this \(x\).
+\end{enumerate}
+% END QUESTION Q21
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q22 / 题目与选项区
+\textbf{22.} Let \(f(x_1,x_2)=x_1^2x_2+3x_2^2\). Select every correct statement.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \(\nabla f(1,1)=(2,7)^T\).
+\item \(\nabla^2f(1,0)=\begin{pmatrix}0&2\\2&6\end{pmatrix}\) is indefinite.
+\item The Hessian is constant because f is a polynomial.
+\item \(\nabla^2f(1,1)=\begin{pmatrix}2&2\\2&6\end{pmatrix}\) is positive definite.
+\end{enumerate}
+% END QUESTION Q22
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q23 / 题目与选项区
+\textbf{23.} Let \(A,B\) be real symmetric PSD matrices of the same size. Select every statement that always holds.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \(x^TABx\geq0\) for every real vector \(x\).
+\item A+B is PSD.
+\item AB is symmetric.
+\item For every real matrix \(R\) with compatible dimensions, \(R^TAR\) is PSD.
+\end{enumerate}
+% END QUESTION Q23
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q24 / 题目与选项区
+\textbf{24.} Let \(x,y\in\mathbb R^n\) both be nonzero. Select every correct statement about outer products.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \(xy^T=yx^T\) for all such \(x,y\).
+\item \(xy^T\) has rank one.
+\item \(xx^T\) is symmetric positive semidefinite.
+\item \(\operatorname{tr}(xy^T)=x^Ty\).
+\end{enumerate}
+% END QUESTION Q24
+
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{25. The nullspace and definiteness of a Gram matrix}\hfill\textbf{[10 marks]}\par\medskip
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item For any real \(A\in\mathbb R^{m\times n}\), prove \(\operatorname{null}(A^TA)=\operatorname{null}(A)\). Your proof must establish both inclusions without assuming \(A\) is square.\hfill\textbf{[3 marks]}
+\item Use the result to prove that \(A^TA\) is PSD, that its rank equals the rank of \(A\), and that it is PD if and only if \(A\) has full column rank. Explain the case \(m<n\).\hfill\textbf{[4 marks]}
+\item For \(\mu>0\), prove \(A^TA+\mu I_n\) is PD for every \(A\). Give a lower bound on its quadratic form and explain why its inverse exists.\hfill\textbf{[3 marks]}
+\end{enumerate}\par\medskip\hrule\medskip\textbf{Student response}\par
+% BEGIN ANSWER Q25 / 第25题答题区
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item
+% >>> BEGIN ANSWER Q25(a)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q25(a)
+\item
+% >>> BEGIN ANSWER Q25(b)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q25(b)
+\item
+% >>> BEGIN ANSWER Q25(c)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q25(c)
+\end{enumerate}
+% END ANSWER Q25
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{26. Differentiate a nonsymmetric quadratic and a bilinear form}\hfill\textbf{[10 marks]}\par\medskip
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item Let \(A\in\mathbb R^{n\times n}\) be fixed, with no symmetry assumption, and \(f(x)=x^TAx\). Expand \(f(x+h)-f(x)\) and derive its gradient and Hessian. Explain precisely why the formula \(2Ax\) need not be correct.\hfill\textbf{[4 marks]}
+\item Decompose \(A=S+K\), where \(S=(A+A^T)/2\) and \(K=(A-A^T)/2\). Prove \(x^TKx=0\), and show that knowledge of \(x^TAx\) for every real \(x\) cannot identify \(K\).\hfill\textbf{[3 marks]}
+\item For fixed \(B\in\mathbb R^{m\times n}\), derive the first differential of \(g(u,v)=u^TBv\) and both partial gradients. Then state the derivative along differentiable paths \(u(t),v(t)\).\hfill\textbf{[3 marks]}
+\end{enumerate}\par\medskip\hrule\medskip\textbf{Student response}\par
+% BEGIN ANSWER Q26 / 第26题答题区
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item
+% >>> BEGIN ANSWER Q26(a)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q26(a)
+\item
+% >>> BEGIN ANSWER Q26(b)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q26(b)
+\item
+% >>> BEGIN ANSWER Q26(c)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q26(c)
+\end{enumerate}
+% END ANSWER Q26
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{27. Orthogonal eigenspaces and quadratic-form bounds}\hfill\textbf{[10 marks]}\par\medskip
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item Let \(A=A^T\), \(Au=\alpha u\), and \(Av=\beta v\), with nonzero eigenvectors and \(\alpha\neq\beta\). Prove \(u^Tv=0\). Explain what must be changed when the eigenvalues are equal.\hfill\textbf{[3 marks]}
+\item Using the spectral theorem for real symmetric matrices, prove that \(A\) is PSD if and only if all its eigenvalues are nonnegative, and PD if and only if all are positive. Also establish the relation between rank and nonzero eigenvalues.\hfill\textbf{[4 marks]}
+\item For nonzero \(x\), derive the Rayleigh quotient bounds \(\lambda_{\min}\leq x^TAx/(x^Tx)\leq\lambda_{\max}\). Characterize equality at each endpoint.\hfill\textbf{[3 marks]}
+\end{enumerate}\par\medskip\hrule\medskip\textbf{Student response}\par
+% BEGIN ANSWER Q27 / 第27题答题区
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item
+% >>> BEGIN ANSWER Q27(a)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q27(a)
+\item
+% >>> BEGIN ANSWER Q27(b)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q27(b)
+\item
+% >>> BEGIN ANSWER Q27(c)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q27(c)
+\end{enumerate}
+% END ANSWER Q27
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{28. Build an orthogonal projector from an orthonormal basis}\hfill\textbf{[10 marks]}\par\medskip
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item Let \(Q\in\mathbb R^{m\times r}\) have orthonormal columns, with \(1\leq r\leq m\). Define \(P=QQ^T\). Prove \(P^T=P\), \(P^2=P\), and \(Pz=z\) for every \(z\in\operatorname{col}(Q)\).\hfill\textbf{[3 marks]}
+\item For an arbitrary \(y\in\mathbb R^m\), show that \(y=Py+(I-P)y\) is a decomposition into a vector in \(\operatorname{col}(Q)\) and a vector orthogonal to that space. Derive a Pythagorean norm identity.\hfill\textbf{[4 marks]}
+\item Prove that \(Py\) is the unique nearest vector to \(y\) in \(\operatorname{col}(Q)\). Then prove \(\|Py\|_2\leq\|y\|_2\) and give its equality condition.\hfill\textbf{[3 marks]}
+\end{enumerate}\par\medskip\hrule\medskip\textbf{Student response}\par
+% BEGIN ANSWER Q28 / 第28题答题区
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item
+% >>> BEGIN ANSWER Q28(a)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q28(a)
+\item
+% >>> BEGIN ANSWER Q28(b)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q28(b)
+\item
+% >>> BEGIN ANSWER Q28(c)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q28(c)
+\end{enumerate}
+% END ANSWER Q28
+\newpage\section*{Section D. Applications}
+\textbf{29. A rectangular sensor map: rank, Cholesky, and residual geometry}\hfill\textbf{[12 marks]}\par\medskip
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item A sensor model is \(Az\), where \(A=\begin{pmatrix}1&0\\1&1\\0&1\end{pmatrix}\), and the observed vector is \(b=(2,0,1)^T\). Compute \(G=A^TA\) and \(A^Tb\), establish the column rank of \(A\), and decide whether \(G\) is PD.\hfill\textbf{[3 marks]}
+\item Find an upper triangular \(T\) with positive diagonal such that \(G=T^TT\), and verify the product.\hfill\textbf{[3 marks]}
+\item Find \(z_*\) by solving \(Gz_*=A^Tb\). Compute \(r=b-Az_*\), verify \(A^Tr=0\), and use a squared-distance expansion to show that this solution gives the unique best least-squares fit.\hfill\textbf{[4 marks]}
+\item Find the eigenvalues of \(G\) and an orthonormal eigenbasis. Express \(\|Ad\|_2^2\) using the coordinates of \(d\) in that basis.\hfill\textbf{[2 marks]}
+\end{enumerate}\par\medskip\hrule\medskip\textbf{Student response}\par
+% BEGIN ANSWER Q29 / 第29题答题区
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item
+% >>> BEGIN ANSWER Q29(a)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q29(a)
+\item
+% >>> BEGIN ANSWER Q29(b)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q29(b)
+\item
+% >>> BEGIN ANSWER Q29(c)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q29(c)
+\item
+% >>> BEGIN ANSWER Q29(d)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q29(d)
+\end{enumerate}
+% END ANSWER Q29
+\newpage\section*{Section D. Applications}
+\textbf{30. A nonsymmetric representation of a quadratic objective}\hfill\textbf{[12 marks]}\par\medskip
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item Let \(f(x)=\tfrac12x^TBx-c^Tx\), where \(B=\begin{pmatrix}4&5\\-1&6\end{pmatrix}\), \(c=(6,8)^T\), and \(x\in\mathbb R^2\). Compute its gradient and Hessian. Identify the symmetric matrix governing its quadratic part.\hfill\textbf{[3 marks]}
+\item Find the eigenvalues of the Hessian and decide whether it is PD, PSD but not PD, or indefinite. Give a quadratic-form verification of strict positivity as an independent check.\hfill\textbf{[3 marks]}
+\item Solve for the stationary point, compute its objective value, and prove that it is the unique global minimizer.\hfill\textbf{[3 marks]}
+\item Start at \(x_0=0\) and take one gradient step \(x_1=x_0-\eta\nabla f(x_0)\), with \(\eta>0\). Find the complete range of step sizes that strictly decreases the objective on this first step. Also find the best step size along this direction.\hfill\textbf{[3 marks]}
+\end{enumerate}\par\medskip\hrule\medskip\textbf{Student response}\par
+% BEGIN ANSWER Q30 / 第30题答题区
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item
+% >>> BEGIN ANSWER Q30(a)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q30(a)
+\item
+% >>> BEGIN ANSWER Q30(b)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q30(b)
+\item
+% >>> BEGIN ANSWER Q30(c)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q30(c)
+\item
+% >>> BEGIN ANSWER Q30(d)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q30(d)
+\end{enumerate}
+% END ANSWER Q30
+\end{document}

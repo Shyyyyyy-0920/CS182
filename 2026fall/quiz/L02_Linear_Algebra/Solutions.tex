@@ -1,0 +1,385 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,array,amsmath,amssymb,booktabs,enumitem,fancyhdr,lastpage,needspace,microtype}
+\usepackage[margin=19mm,headheight=14pt,footskip=11mm]{geometry}
+\usepackage[hidelinks]{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\setlength{\emergencystretch}{2em}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small CS182 --- Lecture 02}
+\fancyhead[R]{\small Solutions}
+\fancyfoot[L]{\small Independent practice quiz}
+\fancyfoot[R]{\small Page \thepage\ of \pageref{LastPage}}
+\newcommand{\SetAnswer}[2]{\expandafter\gdef\csname QuizAnswer#1\endcsname{#2}}
+\newcommand{\GetAnswer}[1]{\csname QuizAnswer#1\endcsname}
+\newlength{\BlankAnswerHeight}\setlength{\BlankAnswerHeight}{16mm}
+\newcommand{\AnswerBlank}{\leavevmode\par\vspace{\BlankAnswerHeight}}
+
+\begin{document}
+\begin{center}{\Large\bfseries CS182: Introduction to Machine Learning}\par{\Large\bfseries Lecture 02: Linear Algebra}\par{\large Worked Solutions and Marking Guide}\end{center}
+\textbf{Scope:} Linear\_Algebra.pdf. Independent practice material based on the official 2026 Fall lecture.\par\textbf{Total:} 100 marks. \quad \textbf{Suggested time:} 120 minutes.
+\begin{center}\begin{tabular}{lrrr}\toprule
+Section & Questions & Each & Marks\\\midrule
+A. Misconceptions: True/False & 12 & 1 & 12\\
+B. Multiple response & 12 & 2 & 24\\
+C. Proofs and formula derivations & 4 & 10 & 40\\
+D. Applications & 2 & 12 & 24\\\midrule
+Total & 30 & & 100\\\bottomrule\end{tabular}\end{center}
+\textbf{Scoring.} In Section B each item has exactly four options, of which one,
+two, or three are correct. The complete correct set earns 2 marks; a nonempty
+proper subset earns 1 mark; any incorrect option or no selection earns 0.
+T/F answers earn 1 mark only when correct. Show reasoning in Sections C and D;
+part marks are available for valid intermediate work. Equivalent correct methods receive credit.
+\par\medskip\textbf{Instructions.} Answer in English. Use natural logarithms.
+Exact values and justified approximations are accepted. All vectors are columns
+unless stated otherwise. Use local assumptions, label conventions, and tie rules.
+\par\medskip\textbf{Quick key --- Section A}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+1 & 2 & 3 & 4 & 5 & 6\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}T} & \makebox[20mm]{\rule{0pt}{5mm}T} & \makebox[20mm]{\rule{0pt}{5mm}F} & \makebox[20mm]{\rule{0pt}{5mm}T} & \makebox[20mm]{\rule{0pt}{5mm}F} & \makebox[20mm]{\rule{0pt}{5mm}F}\\\hline
+\end{tabular}\end{center}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+7 & 8 & 9 & 10 & 11 & 12\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}T} & \makebox[20mm]{\rule{0pt}{5mm}F} & \makebox[20mm]{\rule{0pt}{5mm}F} & \makebox[20mm]{\rule{0pt}{5mm}F} & \makebox[20mm]{\rule{0pt}{5mm}F} & \makebox[20mm]{\rule{0pt}{5mm}F}\\\hline
+\end{tabular}\end{center}
+\par\medskip\textbf{Quick key --- Section B}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+13 & 14 & 15 & 16 & 17 & 18\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}B} & \makebox[20mm]{\rule{0pt}{5mm}BC} & \makebox[20mm]{\rule{0pt}{5mm}A} & \makebox[20mm]{\rule{0pt}{5mm}AD} & \makebox[20mm]{\rule{0pt}{5mm}ABC} & \makebox[20mm]{\rule{0pt}{5mm}ACD}\\\hline
+\end{tabular}\end{center}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+19 & 20 & 21 & 22 & 23 & 24\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}ABC} & \makebox[20mm]{\rule{0pt}{5mm}BCD} & \makebox[20mm]{\rule{0pt}{5mm}ABC} & \makebox[20mm]{\rule{0pt}{5mm}ABD} & \makebox[20mm]{\rule{0pt}{5mm}BD} & \makebox[20mm]{\rule{0pt}{5mm}BCD}\\\hline
+\end{tabular}\end{center}
+\newpage\section*{Section A. True/False --- Explanations}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{1.} \textbf{True.} The listed partial derivatives are transposed into a column.
+
+{\footnotesize\textit{Source: PDF p.16.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{2.} \textbf{True.} Continuity of the second partial derivatives ensures equality of mixed partial derivatives. The regularity condition makes the symmetry statement precise.
+
+{\footnotesize\textit{Source: PDF p.18; regularity clarification.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{3.} \textbf{False.} Eigenvectors for distinct eigenvalues are orthogonal. Within a repeated eigenspace, vectors may be nonorthogonal, although an orthonormal basis can be chosen; the identity matrix is a counterexample to the unconditional claim.
+
+{\footnotesize\textit{Source: PDF p.15; clarification of repeated eigenvalues.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{4.} \textbf{True.} A zero determinant characterizes singularity; the cofactor inverse is defined when the determinant is nonzero.
+
+{\footnotesize\textit{Source: PDF pp.7,9.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{5.} \textbf{False.} The order reverses: \((AB)^T=B^TA^T\). The stated right side can even have incompatible dimensions.
+
+{\footnotesize\textit{Source: PDF p.6.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{6.} \textbf{False.} The zero matrix and a diagonal matrix with diagonal entries 1 and 0 are positive semidefinite but singular.
+
+{\footnotesize\textit{Source: PDF pp.12,14.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{7.} \textbf{True.} Its n columns multiply the n input coordinates, producing m output coordinates.
+
+{\footnotesize\textit{Source: PDF p.4.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{8.} \textbf{False.} The outer product is \(3\times3\); the inner product \(x^Ty\) is a scalar.
+
+{\footnotesize\textit{Source: PDF p.11.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{9.} \textbf{False.} Invertibility excludes zero eigenvalues but allows negative ones; for example, the diagonal matrix with entries 1 and -1 is invertible and indefinite.
+
+{\footnotesize\textit{Source: PDF pp.12,14-15.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{10.} \textbf{False.} Nonzero perpendicular vectors, such as the two coordinate vectors in the plane, have zero inner product.
+
+{\footnotesize\textit{Source: PDF p.11.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{11.} \textbf{False.} Full rank here means rank 2, not full column rank 4. Rank-nullity gives a two-dimensional nullspace.
+
+{\footnotesize\textit{Source: PDF p.8; supplementary consequence from PDF pp.4,8.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{12.} \textbf{False.} Equal shape does not imply equality. For example, \(A=\begin{pmatrix}1&0\\0&0\end{pmatrix}\) and \(B=\begin{pmatrix}0&1\\0&0\end{pmatrix}\) give \(AB=B\) but \(BA=0\).
+
+{\footnotesize\textit{Source: PDF p.5.}}
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section B. Multiple Response --- Explanations}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q13 / 题目与选项区
+\textbf{13.} \textbf{Correct set: B.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Incorrect.} The determinant is multiplicative for square matrices, rather than additive across a product.
+\item \textbf{Correct.} Transpose the identities defining the inverse.
+\item \textbf{Incorrect.} The general inverse rule reverses the order. The stated expression works under additional commutation conditions, not in general.
+\item \textbf{Incorrect.} The correct scalar factor is one half.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.7,9.}}
+% END QUESTION Q13
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q14 / 题目与选项区
+\textbf{14.} \textbf{Correct set: B, C.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Incorrect.} The largest absolute entry is 2; 3 is the Euclidean norm in this example.
+\item \textbf{Correct.} The sum of squared entries is 4+1+4=9.
+\item \textbf{Correct.} The sum of absolute entries is 2+1+2.
+\item \textbf{Incorrect.} Absolute values must be applied to individual coordinates before summation.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF p.10.}}
+% END QUESTION Q14
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q15 / 题目与选项区
+\textbf{15.} \textbf{Correct set: A.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Correct.} For nonzero \(z\), \(z^TCz=\|Tz\|_2^2>0\).
+\item \textbf{Incorrect.} For T with rows (1,1) and (0,1), T transpose T differs from T T transpose.
+\item \textbf{Incorrect.} In \(T^TT\), \(c_{ii}\) is the squared length of column \(i\) of \(T\). Row lengths instead form the diagonal of \(TT^T\).
+\item \textbf{Incorrect.} The product of the diagonal entries is \(\det T\); \(\det C\) is its square. For \(T=2I_2\), the two claimed quantities are 16 and 4.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.7,13; supplementary determinant and column consequences.}}
+% END QUESTION Q15
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q16 / 题目与选项区
+\textbf{16.} \textbf{Correct set: A, D.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Correct.} The inverse of Q exists only when its columns form a basis.
+\item \textbf{Incorrect.} Unit lengths do not ensure mutual orthogonality.
+\item \textbf{Incorrect.} A real matrix can have nonreal eigenvalues or fail to have enough independent eigenvectors.
+\item \textbf{Correct.} The spectral theorem supplies an orthonormal eigenbasis.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.14-15.}}
+% END QUESTION Q16
+
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section B. Multiple Response --- Explanations}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q17 / 题目与选项区
+\textbf{17.} \textbf{Correct set: A, B, C.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Correct.} The coefficient of the differential du is Av.
+\item \textbf{Correct.} Write the scalar as v transpose A transpose u and differentiate.
+\item \textbf{Correct.} The function is linear in u, so its gradient does not depend on u.
+\item \textbf{Incorrect.} The transpose is required, and Au may not even be defined.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.16-18.}}
+% END QUESTION Q17
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q18 / 题目与选项区
+\textbf{18.} \textbf{Correct set: A, C, D.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Correct.} The inner product and both Euclidean lengths are preserved, so the cosine of the angle is preserved.
+\item \textbf{Incorrect.} A rotation can turn (1,0) into (1/sqrt(2),1/sqrt(2)), changing its 1-norm.
+\item \textbf{Correct.} Insert Q transpose Q between x transpose and y.
+\item \textbf{Correct.} The squared distance is preserved by the same inner-product identity.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.6,10-11; supplementary consequence.}}
+% END QUESTION Q18
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q19 / 题目与选项区
+\textbf{19.} \textbf{Correct set: A, B, C.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Correct.} The diagonal entry indexed by j is the squared Euclidean norm of column j.
+\item \textbf{Correct.} Transposition leaves every diagonal entry unchanged.
+\item \textbf{Correct.} Both equal \(\sum_{i=1}^m\sum_{j=1}^n a_{ij}b_{ji}\), even when the square products have different sizes.
+\item \textbf{Incorrect.} For two 2 by 2 identity matrices the left side is 2 and the right side is 4.
+\end{enumerate}
+{\footnotesize\textit{Source: Supplementary derivation from PDF pp.2,5-6.}}
+% END QUESTION Q19
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q20 / 题目与选项区
+\textbf{20.} \textbf{Correct set: B, C, D.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Incorrect.} An invertible matrix can have a negative determinant, whose real logarithm is undefined.
+\item \textbf{Correct.} Substitute H for dC in the differential.
+\item \textbf{Correct.} The determinant is c to the nth power.
+\item \textbf{Correct.} The general inverse-transpose expression equals the inverse for symmetric C.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.7,12,17; supplementary differential interpretation.}}
+% END QUESTION Q20
+
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section B. Multiple Response --- Explanations}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q21 / 题目与选项区
+\textbf{21.} \textbf{Correct set: A, B, C.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Correct.} Matrix-vector multiplication weights the columns by the coordinates of x.
+\item \textbf{Correct.} The column expansion proves membership in that span.
+\item \textbf{Correct.} The first row gives 2-2=0; the second gives -2+3=1.
+\item \textbf{Incorrect.} A transpose is 3 by 2 and requires a two-dimensional input.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.4-6.}}
+% END QUESTION Q21
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q22 / 题目与选项区
+\textbf{22.} \textbf{Correct set: A, B, D.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Correct.} The partial derivatives are \(2x_1x_2\) and \(x_1^2+6x_2\).
+\item \textbf{Correct.} Its determinant is -4; directly its form is positive at (0,1) and negative at (2,-1).
+\item \textbf{Incorrect.} The general Hessian has entries \(2x_2,2x_1,2x_1,6\), so it depends on \(x\).
+\item \textbf{Correct.} Its quadratic form is 2(a+b) squared plus 4 b squared, positive away from zero.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.12,16-18; supplementary worked example.}}
+% END QUESTION Q22
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q23 / 题目与选项区
+\textbf{23.} \textbf{Correct set: B, D.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Incorrect.} Take \(A=\operatorname{diag}(1,0)\), \(B=\begin{pmatrix}1&2\\2&4\end{pmatrix}\), and \(x=(1,-1)^T\). Both matrices are PSD, but the quadratic value is -1.
+\item \textbf{Correct.} Its quadratic form is the sum of two nonnegative quadratic forms.
+\item \textbf{Incorrect.} The transpose of AB is BA, and PSD matrices need not commute.
+\item \textbf{Correct.} It is symmetric and \(z^TR^TARz=(Rz)^TA(Rz)\geq0\).
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.6,12; supplementary consequences.}}
+% END QUESTION Q23
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q24 / 题目与选项区
+\textbf{24.} \textbf{Correct set: B, C, D.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Incorrect.} For distinct coordinate vectors these matrices have their single nonzero entry in different positions.
+\item \textbf{Correct.} Every column is a multiple of x and at least one column is nonzero.
+\item \textbf{Correct.} Its transpose is itself, and \(z^Txx^Tz=(x^Tz)^2\geq0\).
+\item \textbf{Correct.} Sum the diagonal entries \(x_i y_i\).
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.2,8,11-12; supplementary consequences.}}
+% END QUESTION Q24
+
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{25. The nullspace and definiteness of a Gram matrix}\hfill\textbf{[10 marks]}\par\medskip
+\textbf{(a) [3 marks]} If \(Ax=0\), then \(A^TAx=A^T0=0\), proving one inclusion. Conversely, if \(A^TAx=0\), left-multiply by \(x^T\) to get \[0=x^TA^TAx=(Ax)^T(Ax)=\|Ax\|_2^2.\] A sum of squares is zero only when every coordinate vanishes, so \(Ax=0\). This gives the other inclusion for any rectangular shape. Award one mark for the first inclusion and two for the norm argument in the second.
+
+\textbf{(b) [4 marks]} The matrix is symmetric because \((A^TA)^T=A^TA\), and \(x^TA^TAx=\|Ax\|_2^2\geq0\), so it is PSD. Both maps have domain \(\mathbb R^n\) and the same nullspace. Rank-nullity therefore gives \(\operatorname{rank}(A^TA)=n-\dim\operatorname{null}(A)=\operatorname{rank}(A)\). Its quadratic form is strictly positive for every nonzero x exactly when \(Ax=0\) has no nonzero solution, equivalently rank A=n. If m<n, rank A is at most m<n; hence the Gram matrix is necessarily singular and cannot be PD, even if A has full rank in the rectangular sense. Award one mark each for PSD, rank equality, the PD equivalence, and the wide-matrix case.
+
+\textbf{(c) [3 marks]} For every nonzero x, \[x^T(A^TA+\mu I_n)x=\|Ax\|_2^2+\mu\|x\|_2^2\geq\mu\|x\|_2^2>0.\] The matrix is symmetric, so it is PD. If it had a nonzero null vector, its quadratic form there would be zero, contradicting this bound. Thus its nullspace is trivial and, being square, it is invertible. Award one mark for the expansion, one for the strict bound, and one for invertibility.
+
+\textit{Marking: use the displayed subpart allocations; award credit for the logical or numerical intermediate steps.}\par
+{\footnotesize\textit{Source: PDF pp.8,12-13; supplementary full proof.}}
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{26. Differentiate a nonsymmetric quadratic and a bilinear form}\hfill\textbf{[10 marks]}\par\medskip
+\textbf{(a) [4 marks]} The exact expansion is \[f(x+h)-f(x)=h^TAx+x^TAh+h^TAh=((A+A^T)x)^Th+h^TAh.\] The last term is quadratic in h and is the higher-order remainder. Thus \(df=((A+A^T)x)^Tdx\), giving \(\nabla f=(A+A^T)x\) and \(\nabla^2 f=A+A^T\). The expression 2Ax agrees for all x if and only if A is symmetric; otherwise one must account for both appearances of x in the quadratic. Award one mark for expansion, one for identifying the linear differential, and one each for the gradient and Hessian with the symmetry qualification.
+
+\textbf{(b) [3 marks]} K is skew-symmetric. The scalar \(s=x^TKx\) equals its transpose, which is \(x^TK^Tx=-x^TKx=-s\); hence s=0 over the real numbers. Therefore \(x^TAx=x^TSx\) for all x. Adding any skew-symmetric matrix to A changes K but leaves every quadratic-form value unchanged, so those values cannot identify K. Award one mark for skew symmetry, one for the scalar-transpose proof, and one for the identification conclusion.
+
+\textbf{(c) [3 marks]} Expanding the perturbed bilinear form gives \[dg=(du)^TBv+u^TB(dv)=(Bv)^Tdu+(B^Tu)^Tdv.\] The product \((du)^TB(dv)\) is second order and does not enter the first differential. Thus \(\nabla_u g=Bv\) and \(\nabla_v g=B^Tu\). Along paths, both arguments vary and the chain rule gives \[\frac{d}{dt}g(u(t),v(t))=u'(t)^TBv(t)+u(t)^TBv'(t).\] Award one mark for the differential, one for both gradients, and one for the two-term path derivative.
+
+\textit{Marking: use the displayed subpart allocations; award credit for the logical or numerical intermediate steps.}\par
+{\footnotesize\textit{Source: PDF pp.16-18; supplementary derivation.}}
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{27. Orthogonal eigenspaces and quadratic-form bounds}\hfill\textbf{[10 marks]}\par\medskip
+\textbf{(a) [3 marks]} Symmetry yields \[\alpha u^Tv=(Au)^Tv=u^TA^Tv=u^TAv=\beta u^Tv.\] Hence \((\alpha-\beta)u^Tv=0\), and distinct eigenvalues imply orthogonality. When the eigenvalues coincide, this equation imposes no orthogonality condition; for A=I any nonzero vector is an eigenvector. One can choose an orthonormal basis within each repeated eigenspace, producing the orthogonal Q in the spectral theorem. Award two marks for the equality and conclusion, and one for the repeated-eigenvalue qualification.
+
+\textbf{(b) [4 marks]} Write \(A=Q\Lambda Q^T\) with Q orthogonal, and put \(z=Q^Tx\). Then \[x^TAx=z^T\Lambda z=\sum_i\lambda_i z_i^2.\] If all eigenvalues are nonnegative this is nonnegative, proving PSD; if all are positive and x is nonzero then z is nonzero, so the sum is strictly positive, proving PD. Conversely, using a unit eigenvector \(q_i\) gives \(q_i^TAq_i=\lambda_i\), forcing nonnegative or strictly positive eigenvalues under PSD or PD respectively. Multiplication by invertible Q and Q transpose preserves rank, so rank A=rank Lambda, the number of nonzero diagonal eigenvalues counted with multiplicity. Award one mark for the diagonal quadratic form, one for sufficiency, one for necessity, and one for rank.
+
+\textbf{(c) [3 marks]} Orthogonality gives \(x^Tx=z^Tz\), so \[\frac{x^TAx}{x^Tx}=\sum_i\lambda_i\frac{z_i^2}{\sum_j z_j^2}.\] The weights are nonnegative and sum to one, making this a weighted average of the eigenvalues and proving the bounds. Equality with the smallest eigenvalue holds exactly when all nonzero z coordinates belong to that eigenspace; equivalently x lies in the minimum-eigenvalue eigenspace. The analogous statement holds at the maximum. These conditions also cover repeated extremes and scalar multiples of the identity. Award one mark for the weighted average, one for the bounds, and one for the endpoint characterization.
+
+\textit{Marking: use the displayed subpart allocations; award credit for the logical or numerical intermediate steps.}\par
+{\footnotesize\textit{Source: PDF pp.12,14-15; supplementary proof.}}
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{28. Build an orthogonal projector from an orthonormal basis}\hfill\textbf{[10 marks]}\par\medskip
+\textbf{(a) [3 marks]} Transposition gives \(P^T=(QQ^T)^T=QQ^T=P\). Orthonormality means \(Q^TQ=I_r\), so \(P^2=Q(Q^TQ)Q^T=QQ^T=P\). If \(z=Qc\), then \(Pz=QQ^TQc=Qc=z\). Each identity follows from the stated shapes and does not require the rectangular Q to have a two-sided inverse. Award one mark for each identity.
+
+\textbf{(b) [4 marks]} The sum equals y by direct cancellation, and \(Py=Q(Q^Ty)\) is in the column space. Let \(r_y=(I-P)y\). Then \[Q^Tr_y=Q^Ty-Q^TQQ^Ty=0,\] so the residual is orthogonal to every vector Qc in the space, including Py. Expanding the squared norm and using the zero cross term yields \[\|y\|_2^2=\|Py\|_2^2+\|(I-P)y\|_2^2.\] Award one mark each for the sum/membership, residual orthogonality, the zero cross term, and the norm identity.
+
+\textbf{(c) [3 marks]} For any z in the column space, write \(y-z=(I-P)y+(Py-z)\). The summands are orthogonal, hence \[\|y-z\|_2^2=\|(I-P)y\|_2^2+\|Py-z\|_2^2.\] The minimum is attained exactly at z=Py, so the nearest vector is unique. The Pythagorean identity from the previous part gives \(\|Py\|_2\leq\|y\|_2\), with equality exactly when \((I-P)y=0\), equivalently y lies in the column space. Award one mark for the distance identity, one for uniqueness, and one for the norm bound and equality condition.
+
+\textit{Marking: use the displayed subpart allocations; award credit for the logical or numerical intermediate steps.}\par
+{\footnotesize\textit{Source: Supplementary derivation from PDF pp.4,6,10-11.}}
+\newpage\section*{Section D. Applications}
+\textbf{29. A rectangular sensor map: rank, Cholesky, and residual geometry}\hfill\textbf{[12 marks]}\par\medskip
+\textbf{(a) [3 marks]} Direct multiplication gives \[G=\begin{pmatrix}2&1\\1&2\end{pmatrix},\qquad A^Tb=\begin{pmatrix}2\\1\end{pmatrix}.\] The two columns (1,1,0) and (0,1,1) are independent: their first and third coordinates force both coefficients of a zero linear combination to vanish. Thus rank A=2, its full column rank. G is PD by the Gram result; directly its quadratic form is \((z_1+z_2)^2+z_1^2+z_2^2>0\) for nonzero z. Award one mark for both products, one for column independence, and one for PD.
+
+\textbf{(b) [3 marks]} Write \(T=\begin{pmatrix}a&c\\0&d\end{pmatrix}\). Matching entries requires \(a^2=2\), \(ac=1\), and \(c^2+d^2=2\). Positive diagonal entries give \[T=\begin{pmatrix}\sqrt2&1/\sqrt2\\0&\sqrt{3/2}\end{pmatrix}.\] The resulting product has entries 2,1,1, and \(1/2+3/2=2\), matching G. Award one mark for the matching equations, one for T, and one for verification.
+
+\textbf{(c) [4 marks]} The equations are \(2z_1+z_2=2\) and \(z_1+2z_2=1\), yielding \(z_*=(1,0)^T\). Its fitted vector is \((1,1,0)^T\), and \(r=(1,-1,1)^T\). Then \(A^Tr=(1-1,-1+1)^T=0\). For any perturbation d, \[\|b-A(z_*+d)\|_2^2=\|r-Ad\|_2^2=3+\|Ad\|_2^2,\] because the cross term vanishes. Full column rank means \(Ad=0\) only when d=0, establishing the unique minimizer and minimum squared error 3. Award one mark each for z, residual/orthogonality, the expansion, and uniqueness.
+
+\textbf{(d) [2 marks]} The normalized vectors \(q_+=(1,1)^T/\sqrt2\) and \(q_-=(1,-1)^T/\sqrt2\) have eigenvalues 3 and 1. If \(d=\alpha q_++\beta q_-\), then \(\|Ad\|_2^2=d^TGd=3\alpha^2+\beta^2\). Thus equal-sized coefficient changes along the first direction create three times the squared sensor-output change. Award one mark for the eigenpairs and one for the expression.
+
+\textit{Marking: use the displayed subpart allocations; award credit for the logical or numerical intermediate steps.}\par
+{\footnotesize\textit{Source: PDF pp.4,8-9,11-15; supplementary least-squares application.}}
+\newpage\section*{Section D. Applications}
+\textbf{30. A nonsymmetric representation of a quadratic objective}\hfill\textbf{[12 marks]}\par\medskip
+\textbf{(a) [3 marks]} Its symmetric part is \[S=(B+B^T)/2=\begin{pmatrix}4&2\\2&6\end{pmatrix}.\] Because the skew part contributes zero to a quadratic form, \(f(x)=\tfrac12x^TSx-c^Tx\). Differentiating gives \(\nabla f(x)=Sx-c\) and \(\nabla^2f(x)=S\). Using Bx-c would be incorrect because B is not symmetric. Award one mark each for S, the gradient, and the Hessian.
+
+\textbf{(b) [3 marks]} The characteristic polynomial is \[(4-\lambda)(6-\lambda)-4=\lambda^2-10\lambda+20,\] with roots \(5-\sqrt5\) and \(5+\sqrt5\), both positive. The Hessian is PD. Independently, for \(u=(u_1,u_2)^T\), \[u^TSu=4u_1^2+4u_1u_2+6u_2^2=4(u_1+u_2/2)^2+5u_2^2,\] which is strictly positive for every nonzero u. Award one mark for the eigenvalues, one for the classification, and one for the completed-square check.
+
+\textbf{(c) [3 marks]} Solving \(Sx=c\) gives \(4x_1+2x_2=6\) and \(2x_1+6x_2=8\), hence \(x_*=(1,1)^T\). Its value is \(f(x_*)=7-14=-7\). Using \(Sx_*=c\), an exact expansion gives \[f(x)-f(x_*)=\tfrac12(x-x_*)^TS(x-x_*).\] Positive definiteness makes this quantity positive for every \(x\ne x_*\), proving the unique global minimum. Award one mark for the point, one for its value, and one for the expansion and uniqueness.
+
+\textbf{(d) [3 marks]} At zero the gradient is -c, so \(x_1=\eta c=(6\eta,8\eta)^T\). Since \(c^Tc=100\) and \(c^TSc=720\), \[f(x_1)=360\eta^2-100\eta.\] As f(0)=0, strict decrease holds exactly when \(0<\eta<100/360=5/18\). Differentiating this scalar quadratic gives the best step \(\eta=100/720=5/36\), giving \(x_1=(5/6,10/9)^T\) and value \(-125/18\). This is a one-step calculation along the specified direction. Award one mark for the quadratic expression, one for the strict interval, and one for the optimal step.
+
+\textit{Marking: use the displayed subpart allocations; award credit for the logical or numerical intermediate steps.}\par
+{\footnotesize\textit{Source: PDF pp.12,14-18; supplementary quadratic-optimization application.}}
+\newpage\section*{Lecture Alignment and Coverage}
+Primary source: \texttt{Linear\_Algebra.pdf} in \texttt{E:\textbackslash CS182\textbackslash 2026fall\textbackslash lecture}. All PDF pages count the cover as page 1. Additional arguments are marked as supplementary derivations when appropriate. These are original practice questions, not copied homework questions.
+
+\textbf{T/F}
+\begin{description}[leftmargin=12mm,itemsep=1pt]
+\item[1] PDF p.16.
+\item[2] PDF p.18; regularity clarification.
+\item[3] PDF p.15; clarification of repeated eigenvalues.
+\item[4] PDF pp.7,9.
+\item[5] PDF p.6.
+\item[6] PDF pp.12,14.
+\item[7] PDF p.4.
+\item[8] PDF p.11.
+\item[9] PDF pp.12,14-15.
+\item[10] PDF p.11.
+\item[11] PDF p.8; supplementary consequence from PDF pp.4,8.
+\item[12] PDF p.5.
+\end{description}
+\textbf{Multiple response}
+\begin{description}[leftmargin=12mm,itemsep=1pt]
+\item[13] PDF pp.7,9.
+\item[14] PDF p.10.
+\item[15] PDF pp.7,13; supplementary determinant and column consequences.
+\item[16] PDF pp.14-15.
+\item[17] PDF pp.16-18.
+\item[18] PDF pp.6,10-11; supplementary consequence.
+\item[19] Supplementary derivation from PDF pp.2,5-6.
+\item[20] PDF pp.7,12,17; supplementary differential interpretation.
+\item[21] PDF pp.4-6.
+\item[22] PDF pp.12,16-18; supplementary worked example.
+\item[23] PDF pp.6,12; supplementary consequences.
+\item[24] PDF pp.2,8,11-12; supplementary consequences.
+\end{description}
+\textbf{Proofs and applications}
+\begin{description}[leftmargin=12mm,itemsep=1pt]
+\item[25] PDF pp.8,12-13; supplementary full proof.
+\item[26] PDF pp.16-18; supplementary derivation.
+\item[27] PDF pp.12,14-15; supplementary proof.
+\item[28] Supplementary derivation from PDF pp.4,6,10-11.
+\item[29] PDF pp.4,8-9,11-15; supplementary least-squares application.
+\item[30] PDF pp.12,14-18; supplementary quadratic-optimization application.
+\end{description}
+\end{document}

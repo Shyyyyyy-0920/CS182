@@ -1,0 +1,459 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,array,amsmath,amssymb,booktabs,enumitem,fancyhdr,lastpage,needspace,microtype}
+\usepackage[margin=19mm,headheight=14pt,footskip=11mm]{geometry}
+\usepackage[hidelinks]{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\setlength{\emergencystretch}{2em}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small CS182 --- Lecture 06}
+\fancyhead[R]{\small Personal answer copy}
+\fancyfoot[L]{\small Independent practice quiz}
+\fancyfoot[R]{\small Page \thepage\ of \pageref{LastPage}}
+\newcommand{\SetAnswer}[2]{\expandafter\gdef\csname QuizAnswer#1\endcsname{#2}}
+\newcommand{\GetAnswer}[1]{\csname QuizAnswer#1\endcsname}
+\newlength{\BlankAnswerHeight}\setlength{\BlankAnswerHeight}{16mm}
+\newcommand{\AnswerBlank}{\leavevmode\par\vspace{\BlankAnswerHeight}}
+% 本文件为独立可填写答题卷；用 pdfLaTeX 编译两次。
+% 在 BEGIN TF ANSWERS 和 BEGIN MC ANSWERS 中填写短答案。
+% 大题请搜索 BEGIN ANSWER Q25(a) 等注释；每个小问都有独立区域。
+% 写完小问后删除该处的 \AnswerBlank，或将 BlankAnswerHeight 改为 0mm。
+% 所有打印内容及你填写的回答请使用英文。中文只出现在源文件注释中。
+% build_per_lecture.py 不会覆盖已经存在的 Quiz.tex，以保留你的作答。
+% BEGIN STUDENT INFO / 个人信息
+\newcommand{\StudentName}{}
+\newcommand{\StudentID}{}
+% END STUDENT INFO
+% BEGIN TF ANSWERS / 判断题答题区（第二组花括号填 T 或 F）
+\SetAnswer{TF01}{} % Question 1
+\SetAnswer{TF02}{} % Question 2
+\SetAnswer{TF03}{} % Question 3
+\SetAnswer{TF04}{} % Question 4
+\SetAnswer{TF05}{} % Question 5
+\SetAnswer{TF06}{} % Question 6
+\SetAnswer{TF07}{} % Question 7
+\SetAnswer{TF08}{} % Question 8
+\SetAnswer{TF09}{} % Question 9
+\SetAnswer{TF10}{} % Question 10
+\SetAnswer{TF11}{} % Question 11
+\SetAnswer{TF12}{} % Question 12
+% END TF ANSWERS
+% BEGIN MC ANSWERS / 不定项选择答题区（填选项字母，如 BD；仅格式示例）
+\SetAnswer{MC13}{} % Question 13
+\SetAnswer{MC14}{} % Question 14
+\SetAnswer{MC15}{} % Question 15
+\SetAnswer{MC16}{} % Question 16
+\SetAnswer{MC17}{} % Question 17
+\SetAnswer{MC18}{} % Question 18
+\SetAnswer{MC19}{} % Question 19
+\SetAnswer{MC20}{} % Question 20
+\SetAnswer{MC21}{} % Question 21
+\SetAnswer{MC22}{} % Question 22
+\SetAnswer{MC23}{} % Question 23
+\SetAnswer{MC24}{} % Question 24
+% END MC ANSWERS
+
+\begin{document}
+\begin{center}{\Large\bfseries CS182: Introduction to Machine Learning}\par{\Large\bfseries Lecture 06: Parameter Estimation}\par{\large Lecture Quiz and Answer Copy}\end{center}
+\textbf{Scope:} Parameter\_Estimation.pdf. Independent practice material based on the official 2026 Fall lecture.\par\textbf{Total:} 100 marks. \quad \textbf{Suggested time:} 120 minutes.
+\par\textbf{Name:} \underline{\makebox[60mm][l]{\StudentName}}\hfill\textbf{Student ID:} \underline{\makebox[45mm][l]{\StudentID}}
+\begin{center}\begin{tabular}{lrrr}\toprule
+Section & Questions & Each & Marks\\\midrule
+A. Misconceptions: True/False & 12 & 1 & 12\\
+B. Multiple response & 12 & 2 & 24\\
+C. Proofs and formula derivations & 4 & 10 & 40\\
+D. Applications & 2 & 12 & 24\\\midrule
+Total & 30 & & 100\\\bottomrule\end{tabular}\end{center}
+\textbf{Scoring.} In Section B each item has exactly four options, of which one,
+two, or three are correct. The complete correct set earns 2 marks; a nonempty
+proper subset earns 1 mark; any incorrect option or no selection earns 0.
+T/F answers earn 1 mark only when correct. Show reasoning in Sections C and D;
+part marks are available for valid intermediate work. Equivalent correct methods receive credit.
+\par\medskip\textbf{Instructions.} Answer in English. Use natural logarithms.
+Exact values and justified approximations are accepted. All vectors are columns
+unless stated otherwise. Use local assumptions, label conventions, and tie rules.
+\par\medskip\textbf{Answer sheet --- Section A}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+1 & 2 & 3 & 4 & 5 & 6\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF01}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF02}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF03}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF04}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF05}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF06}}\\\hline
+\end{tabular}\end{center}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+7 & 8 & 9 & 10 & 11 & 12\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF07}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF08}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF09}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF10}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF11}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF12}}\\\hline
+\end{tabular}\end{center}
+\par\medskip\textbf{Answer sheet --- Section B}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+13 & 14 & 15 & 16 & 17 & 18\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC13}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC14}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC15}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC16}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC17}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC18}}\\\hline
+\end{tabular}\end{center}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+19 & 20 & 21 & 22 & 23 & 24\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC19}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC20}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC21}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC22}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC23}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC24}}\\\hline
+\end{tabular}\end{center}
+\newpage\section*{Section A. True/False \hfill 12 marks}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{1.} A full \(d\times d\) empirical covariance estimated within a class from exactly \(d\) observations is necessarily invertible if all feature sample variances are positive.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{2.} The posterior mean minimizes posterior expected loss for every possible loss function.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{3.} Zero covariance between two variables guarantees their independence without any assumption about their joint distribution.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{4.} With positive class priors and a shared positive-definite covariance, Gaussian log-discriminant differences are affine, even when the class priors are unequal.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{5.} If the posterior for an unknown Gaussian mean is normal, substituting its mean into the likelihood reproduces the full Bayesian posterior predictive variance.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{6.} Filling missing values of one feature with its observed sample mean leaves that feature's maximum-likelihood sample variance unchanged.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{7.} An unbiased estimator necessarily has smaller mean squared error than every biased estimator of the same parameter.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{8.} For an unrestricted categorical model on a closed probability simplex, a category observed zero times has maximum-likelihood probability zero.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{9.} For observed data \(D\), the likelihood \(L(\theta;D)\) is generally a probability density over \(\theta\) and must integrate to 1 with respect to \(\theta\).
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{10.} If every Gaussian class has a diagonal covariance matrix, the classifier must have linear decision boundaries even when the diagonal variances differ across classes.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{11.} When the Gaussian mean is estimated from the same \(N\) observations, the maximum-likelihood variance with denominator \(N\) is unbiased for the population variance.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{12.} A regression model using fixed features \(1,x,x^2,\sin x\) can still be linear in its unknown parameters.
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section B. Multiple Response \hfill 24 marks}
+\textit{Select all correct options. Each question has 1--3 correct options.}\par
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q13 / 题目与选项区
+\textbf{13.} A categorical variable has counts \((3,0,7)\) in a sample of size 10. The parameter space is the closed simplex. Select every correct statement.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item At the MLE, the zero-count term in the log-likelihood is interpreted as zero.
+\item The MLE is \((0.3,0,0.7)\).
+\item The simplex constraint can be discarded because the category likelihoods are independent functions of the parameters.
+\item A Lagrange-multiplier calculation that assumes every \(p_i>0\) needs a separate boundary argument for the unseen category.
+\end{enumerate}
+% END QUESTION Q13
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q14 / 题目与选项区
+\textbf{14.} Select every correct statement about the regression likelihood and design matrix.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item Independent Gaussian errors with known unequal variances lead to weighting each squared residual by the inverse of its variance.
+\item In a joint likelihood, an input-density term \(p(x\mid\theta)\) may always be dropped when fitting \(\theta\).
+\item Independent Gaussian errors with one fixed, known common positive variance make maximum likelihood in the mean parameters equivalent to ordinary least squares.
+\item Fixed nonlinear basis functions of the inputs can be used while retaining a model linear in its coefficients.
+\end{enumerate}
+% END QUESTION Q14
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q15 / 题目与选项区
+\textbf{15.} A nonconstant Gaussian sample has \(N=5\), sample mean \(m=2\), and \(\sum_t(x^t-m)^2=20\). Both the mean and variance are unknown. Select every correct statement.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item The usual unbiased variance estimate is 5.
+\item The denominator \(N-1\) is required to maximize the Gaussian likelihood.
+\item The maximum-likelihood standard deviation is \(\sqrt5\).
+\item The variance MLE is 4.
+\end{enumerate}
+% END QUESTION Q15
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q16 / 题目与选项区
+\textbf{16.} Assume a bivariate Gaussian with positive-definite covariance. Select every correct statement.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item For \(\Sigma=\operatorname{diag}(9,1)\), the squared Mahalanobis distance from \(\mu\) to \(\mu+(3,1)^\mathsf T\) is 2.
+\item A zero off-diagonal covariance makes these two jointly Gaussian coordinates independent.
+\item For the same covariance and displacement, the squared Euclidean distance is also 2.
+\item A positive correlation tilts the long axis of the Gaussian contour ellipse toward positive slope.
+\end{enumerate}
+% END QUESTION Q16
+
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section B. Multiple Response \hfill 24 marks}
+\textit{Select all correct options. Each question has 1--3 correct options.}\par
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q17 / 题目与选项区
+\textbf{17.} A Gaussian mean has prior \(\theta\sim N(1,4)\). Three conditionally independent observations have distribution \(N(\theta,9)\) and sample mean 4. Select every correct statement.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item The posterior variance is \(12/7\).
+\item The posterior mean is \(19/7\).
+\item The posterior MAP estimate equals the sample mean 4.
+\item The full posterior predictive variance of a new observation is 9.
+\end{enumerate}
+% END QUESTION Q17
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q18 / 题目与选项区
+\textbf{18.} For two independent Bernoulli features conditional on class, use priors \(0.6,0.4\), class \(C_1\) feature probabilities \((0.5,0.8)\), and class \(C_2\) probabilities \((0.9,0.3)\). Observe \(x=(0,1)\). Select every correct statement.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item For probabilities strictly between 0 and 1, the log discriminant is affine in the binary coordinates.
+\item The zero-valued first feature contributes no likelihood factor.
+\item The joint class-feature scores are \(0.24\) and \(0.012\).
+\item The posterior probability of \(C_1\) is \(0.24\).
+\end{enumerate}
+% END QUESTION Q18
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q19 / 题目与选项区
+\textbf{19.} Select every correct statement about model selection.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item The model evidence is generally just the largest likelihood over that model's parameters.
+\item A validation fold should be included in fitting the very predictor whose error it is intended to assess.
+\item In a regularized objective, the penalty weight controls the strength of the preference for the penalized notion of simplicity.
+\item Bayesian model posterior probabilities are proportional to model evidence times model prior probabilities.
+\end{enumerate}
+% END QUESTION Q19
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q20 / 题目与选项区
+\textbf{20.} Five i.i.d. Bernoulli observations are all equal to 1. Select every correct statement about maximum likelihood.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item The absence of an interior stationary point proves that no MLE exists on the closed interval.
+\item On the closed parameter interval \(0\le p\le1\), the MLE is \(p=1\).
+\item The log-likelihood has a stationary point in \(0<p<1\).
+\item On the open parameter interval \(0<p<1\), the maximum occurs at \(p=1-1/N=4/5\).
+\end{enumerate}
+% END QUESTION Q20
+
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section B. Multiple Response \hfill 24 marks}
+\textit{Select all correct options. Each question has 1--3 correct options.}\par
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q21 / 题目与选项区
+\textbf{21.} A Gaussian classifier has \(K=3\) classes and \(d=4\) features. Count independent covariance parameters only, unless stated otherwise. Select every correct statement.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item The three class priors add three independent parameters.
+\item One shared spherical covariance \(s^2I\) requires 4 covariance parameters.
+\item Separate full covariance matrices require 30 parameters.
+\item One shared full covariance matrix requires 16 independent covariance parameters.
+\end{enumerate}
+% END QUESTION Q21
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q22 / 题目与选项区
+\textbf{22.} At a fixed test input, assume a new test response is independent of the training set and has conditional mean \(f(x)\) and variance \(\sigma^2(x)\). Select every correct statement.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item Increasing model complexity is a theorem that strictly increases estimator variance for every learning algorithm and distribution.
+\item The expected test error is noise variance plus squared prediction bias plus the variance over training sets of the predictor.
+\item If every trained predictor equals \(f(x)\), the expected squared test error still equals \(\sigma^2(x)\).
+\item The smallest error on a finite validation set identifies the population-optimal model with certainty.
+\end{enumerate}
+% END QUESTION Q22
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q23 / 题目与选项区
+\textbf{23.} For \(N=4\) i.i.d. normal observations with true variance 1, let \(Q=\sum_t(X_t-\bar X)^2\). You may use \(E[Q]=3\) and \(\operatorname{Var}(Q)=6\). Compare \(V_{\mathrm{ML}}=Q/4\) and \(V_{\mathrm U}=Q/3\). Select every correct statement.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item This example shows that the unbiased estimate must have the smaller MSE.
+\item Under i.i.d. sampling with finite variance, the sample mean is consistent even though an arbitrary single observation need not be close to the mean.
+\item The MSE of \(V_{\mathrm{ML}}\) is \(7/16\).
+\item The MSE of \(V_{\mathrm U}\) is \(2/3\).
+\end{enumerate}
+% END QUESTION Q23
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q24 / 题目与选项区
+\textbf{24.} There are \(d=5\) features, \(K=3\) classes, and four observations in each class. Covariances are computed by centering within class. Select every correct statement.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item Increasing a class to six observations is by itself sufficient to guarantee a nonsingular full covariance.
+\item The shared pooled full covariance must also be singular.
+\item Every separate full class covariance estimate is singular.
+\item A diagonal covariance approximation can be invertible even when every separate full covariance is singular.
+\end{enumerate}
+% END QUESTION Q24
+
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{25. Discrete likelihoods, constraints, and naive Bayes}\hfill\textbf{[10 marks]}\par\medskip
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item For \(N\ge1\) i.i.d. Bernoulli observations, let \(s=\sum_t x^t\). Derive the MLE on the closed interval \([0,1]\), treating \(0<s<N\), \(s=0\), and \(s=N\) separately. Establish that your candidates are global maxima.\hfill\textbf{[3 marks]}
+\item For a categorical distribution with counts \(n_1,\ldots,n_K\), \(\sum_kn_k=N>0\), derive the constrained MLE. Include a justification for categories having zero counts rather than assuming an interior solution.\hfill\textbf{[4 marks]}
+\item For binary features conditionally independent given class, derive the class-conditional likelihood, the count-based class-specific MLEs, and an affine log discriminant in the binary input coordinates. State the condition for finite log coefficients.\hfill\textbf{[3 marks]}
+\end{enumerate}\par\medskip\hrule\medskip\textbf{Student response}\par
+% BEGIN ANSWER Q25 / 第25题答题区
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item
+% >>> BEGIN ANSWER Q25(a)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q25(a)
+\item
+% >>> BEGIN ANSWER Q25(b)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q25(b)
+\item
+% >>> BEGIN ANSWER Q25(c)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q25(c)
+\end{enumerate}
+% END ANSWER Q25
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{26. Gaussian variance and two kinds of bias-variance decomposition}\hfill\textbf{[10 marks]}\par\medskip
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item Let \(X_1,\ldots,X_N\) be i.i.d. \(N(\mu,v)\), with unknown \(\mu\), \(v>0\), and \(N\ge2\). Use \(\sum_t(X_t-\mu)^2=\sum_t(X_t-\bar X)^2+N(\bar X-\mu)^2\) to profile out \(\mu\), then derive the variance MLE when \(T=\sum_t(X_t-\bar X)^2>0\). What happens if \(T=0\)?\hfill\textbf{[3 marks]}
+\item Assuming only i.i.d. observations with mean \(\mu\) and finite variance \(v\), prove \(E[T]=(N-1)v\). Deduce the bias of \(T/N\) and an unbiased correction.\hfill\textbf{[2 marks]}
+\item For a scalar estimator \(d(D)\) of a fixed parameter \(\theta\), derive \(\operatorname{MSE}(d)=\operatorname{Var}(d)+[E(d)-\theta]^2\), and explain why unbiasedness alone does not rank estimators by MSE.\hfill\textbf{[2 marks]}
+\item At a fixed input \(x\), let an independent future response \(Y\) have conditional mean \(f(x)\) and variance \(\sigma^2(x)\). A predictor \(g_D(x)\) is fitted to a random training set \(D\). Derive the expected squared test-error decomposition over both \(Y\) and \(D\). Distinguish its bias from parameter-estimator bias.\hfill\textbf{[3 marks]}
+\end{enumerate}\par\medskip\hrule\medskip\textbf{Student response}\par
+% BEGIN ANSWER Q26 / 第26题答题区
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item
+% >>> BEGIN ANSWER Q26(a)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q26(a)
+\item
+% >>> BEGIN ANSWER Q26(b)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q26(b)
+\item
+% >>> BEGIN ANSWER Q26(c)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q26(c)
+\item
+% >>> BEGIN ANSWER Q26(d)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q26(d)
+\end{enumerate}
+% END ANSWER Q26
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{27. A Gaussian prior is more than a point estimate}\hfill\textbf{[10 marks]}\par\medskip
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item Suppose \(X_t\mid\theta\) are conditionally i.i.d. \(N(\theta,\sigma^2)\), with known \(\sigma^2>0\), and \(\theta\sim N(m_0,\tau^2)\), \(\tau^2>0\). Complete the square in the likelihood times prior to derive the posterior mean and variance, including their precision form.\hfill\textbf{[4 marks]}
+\item For a new conditionally independent observation \(X_*\mid\theta\sim N(\theta,\sigma^2)\), derive the posterior predictive distribution. Compare its variance with the distribution obtained by substituting the posterior mean into the observation model.\hfill\textbf{[3 marks]}
+\item Derive the minimum-posterior-MSE point estimator of \(\theta\), identify its relationship to MAP in this model, and find the limits of \(m_N,v_N\) as the prior becomes diffuse with \(N\) fixed. Does that limit make the finite-sample plug-in predictive distribution exact?\hfill\textbf{[3 marks]}
+\end{enumerate}\par\medskip\hrule\medskip\textbf{Student response}\par
+% BEGIN ANSWER Q27 / 第27题答题区
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item
+% >>> BEGIN ANSWER Q27(a)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q27(a)
+\item
+% >>> BEGIN ANSWER Q27(b)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q27(b)
+\item
+% >>> BEGIN ANSWER Q27(c)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q27(c)
+\end{enumerate}
+% END ANSWER Q27
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{28. Gaussian discriminants and when covariance estimates can be used}\hfill\textbf{[10 marks]}\par\medskip
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item For Gaussian class models \(N_d(m_i,S_i)\) with positive-definite \(S_i\) and positive class priors \(\pi_i\), derive the quadratic log discriminant from the density. Express it as \(x^\mathsf TW_ix+w_i^\mathsf Tx+b_i\).\hfill\textbf{[3 marks]}
+\item Assume all classes share \(S\). Derive the affine LDA scores, the pairwise boundary equation, and the nearest-mean interpretation for equal priors. State when this becomes ordinary Euclidean nearest mean.\hfill\textbf{[3 marks]}
+\item Let all \(K\) classes be represented, with \(N_i\) observations each and total \(N\). Count free covariance parameters for separate full versus shared full covariances. Then prove the rank bounds for a class covariance and for \(S=\sum_i(N_i/N)S_i\). Give necessary sample-size conditions for invertibility and explain why they are not sufficient.\hfill\textbf{[4 marks]}
+\end{enumerate}\par\medskip\hrule\medskip\textbf{Student response}\par
+% BEGIN ANSWER Q28 / 第28题答题区
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item
+% >>> BEGIN ANSWER Q28(a)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q28(a)
+\item
+% >>> BEGIN ANSWER Q28(b)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q28(b)
+\item
+% >>> BEGIN ANSWER Q28(c)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q28(c)
+\end{enumerate}
+% END ANSWER Q28
+\newpage\section*{Section D. Applications}
+\textbf{29. Estimating a Gaussian classifier from rectangular samples}\hfill\textbf{[12 marks]}\par\medskip
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item Class \(C_1\) contains the four observations \((-1,-2),(-1,2),(1,-2),(1,2)\). Class \(C_2\) contains \((1,0),(1,4),(3,0),(3,4)\). Fit maximum-likelihood class priors, means, separate covariance matrices, and the pooled covariance used by LDA. Use the likelihood denominator rather than an unbiased denominator.\hfill\textbf{[4 marks]}
+\item Derive a simplified expression for \(g_2(x)-g_1(x)\) and the decision boundary. State which side is assigned to \(C_2\), and explain whether fitting QDA to these particular estimates changes the classifier.\hfill\textbf{[3 marks]}
+\item Classify \(x_*=(0.5,2)^\mathsf T\). Compare its squared Mahalanobis distances and squared Euclidean distances to the two means, and explain any disagreement between the resulting nearest-mean decisions.\hfill\textbf{[2 marks]}
+\item For two classes in two dimensions, count covariance parameters in separate full, shared full, shared diagonal, and shared spherical models. Which of these covariance assumptions exactly matches the estimates above? Check the necessary class and pooled sample-size inequalities, and say whether those inequalities alone establish invertibility.\hfill\textbf{[3 marks]}
+\end{enumerate}\par\medskip\hrule\medskip\textbf{Student response}\par
+% BEGIN ANSWER Q29 / 第29题答题区
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item
+% >>> BEGIN ANSWER Q29(a)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q29(a)
+\item
+% >>> BEGIN ANSWER Q29(b)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q29(b)
+\item
+% >>> BEGIN ANSWER Q29(c)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q29(c)
+\item
+% >>> BEGIN ANSWER Q29(d)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q29(d)
+\end{enumerate}
+% END ANSWER Q29
+\newpage\section*{Section D. Applications}
+\textbf{30. Gaussian regression, prediction error, and model selection}\hfill\textbf{[12 marks]}\par\medskip
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item A regression model is \(Y=w_0+w_1x+\varepsilon\), with independent \(\varepsilon\sim N(0,\sigma^2)\), \(\sigma^2>0\), and an input distribution independent of the fitted parameters. Starting from the joint likelihood, derive the least-squares objective and its normal equations for the coefficient vector \(w=(w_0,w_1)^\mathsf T\).\hfill\textbf{[3 marks]}
+\item For observations \((x,y)=(-1,0),(0,1),(1,2),(2,5)\), compute the fitted line, its residual sum of squares, and the Gaussian observation-variance MLE when variance is estimated jointly with the line.\hfill\textbf{[3 marks]}
+\item In a separate repeated-training study at a fixed input, the true conditional mean is 2 and test-noise variance is \(0.25\). Degree-1, degree-2, and degree-3 polynomial learners have training-set-averaged predictions \(1.7,1.9,2.0\), and prediction variances \(0.09,0.12,0.50\), respectively. Compute each expected squared test error and choose the best learner at this input.\hfill\textbf{[3 marks]}
+\item Three equally sized validation folds give mean squared errors \((1.0,1.4,1.2)\) for degree 1, \((0.6,0.9,0.9)\) for degree 2, and \((0.4,1.5,1.7)\) for degree 3. Choose a degree by cross-validation, describe the fitting/validation separation required, and explain why a smaller training error for degree 3 would not settle the choice.\hfill\textbf{[3 marks]}
+\end{enumerate}\par\medskip\hrule\medskip\textbf{Student response}\par
+% BEGIN ANSWER Q30 / 第30题答题区
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item
+% >>> BEGIN ANSWER Q30(a)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q30(a)
+\item
+% >>> BEGIN ANSWER Q30(b)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q30(b)
+\item
+% >>> BEGIN ANSWER Q30(c)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q30(c)
+\item
+% >>> BEGIN ANSWER Q30(d)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q30(d)
+\end{enumerate}
+% END ANSWER Q30
+\end{document}

@@ -1,0 +1,44 @@
+{
+  "lecture": "05",
+  "total_marks": 100,
+  "question_count": 30,
+  "tf_key": [
+    "F",
+    "T",
+    "F",
+    "T",
+    "T",
+    "F",
+    "F",
+    "F",
+    "F",
+    "T",
+    "T",
+    "F"
+  ],
+  "mc_key": [
+    "BCD",
+    "ACD",
+    "BCD",
+    "CD",
+    "ABC",
+    "ABD",
+    "A",
+    "AD",
+    "AC",
+    "ABC",
+    "BC",
+    "ABC"
+  ],
+  "letter_frequency": {
+    "A": 8,
+    "B": 7,
+    "C": 9,
+    "D": 6
+  },
+  "correct_option_counts": {
+    "3": 7,
+    "2": 4,
+    "1": 1
+  }
+}

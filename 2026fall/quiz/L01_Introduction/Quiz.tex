@@ -1,0 +1,447 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,array,amsmath,amssymb,booktabs,enumitem,fancyhdr,lastpage,needspace,microtype}
+\usepackage[margin=19mm,headheight=14pt,footskip=11mm]{geometry}
+\usepackage[hidelinks]{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\setlength{\emergencystretch}{2em}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small CS182 --- Lecture 01}
+\fancyhead[R]{\small Personal answer copy}
+\fancyfoot[L]{\small Independent practice quiz}
+\fancyfoot[R]{\small Page \thepage\ of \pageref{LastPage}}
+\newcommand{\SetAnswer}[2]{\expandafter\gdef\csname QuizAnswer#1\endcsname{#2}}
+\newcommand{\GetAnswer}[1]{\csname QuizAnswer#1\endcsname}
+\newlength{\BlankAnswerHeight}\setlength{\BlankAnswerHeight}{16mm}
+\newcommand{\AnswerBlank}{\leavevmode\par\vspace{\BlankAnswerHeight}}
+% 本文件为独立可填写答题卷；用 pdfLaTeX 编译两次。
+% 在 BEGIN TF ANSWERS 和 BEGIN MC ANSWERS 中填写短答案。
+% 大题请搜索 BEGIN ANSWER Q25(a) 等注释；每个小问都有独立区域。
+% 写完小问后删除该处的 \AnswerBlank，或将 BlankAnswerHeight 改为 0mm。
+% 所有打印内容及你填写的回答请使用英文。中文只出现在源文件注释中。
+% build_per_lecture.py 不会覆盖已经存在的 Quiz.tex，以保留你的作答。
+% BEGIN STUDENT INFO / 个人信息
+\newcommand{\StudentName}{}
+\newcommand{\StudentID}{}
+% END STUDENT INFO
+% BEGIN TF ANSWERS / 判断题答题区（第二组花括号填 T 或 F）
+\SetAnswer{TF01}{} % Question 1
+\SetAnswer{TF02}{} % Question 2
+\SetAnswer{TF03}{} % Question 3
+\SetAnswer{TF04}{} % Question 4
+\SetAnswer{TF05}{} % Question 5
+\SetAnswer{TF06}{} % Question 6
+\SetAnswer{TF07}{} % Question 7
+\SetAnswer{TF08}{} % Question 8
+\SetAnswer{TF09}{} % Question 9
+\SetAnswer{TF10}{} % Question 10
+\SetAnswer{TF11}{} % Question 11
+\SetAnswer{TF12}{} % Question 12
+% END TF ANSWERS
+% BEGIN MC ANSWERS / 不定项选择答题区（填选项字母，如 BD；仅格式示例）
+\SetAnswer{MC13}{} % Question 13
+\SetAnswer{MC14}{} % Question 14
+\SetAnswer{MC15}{} % Question 15
+\SetAnswer{MC16}{} % Question 16
+\SetAnswer{MC17}{} % Question 17
+\SetAnswer{MC18}{} % Question 18
+\SetAnswer{MC19}{} % Question 19
+\SetAnswer{MC20}{} % Question 20
+\SetAnswer{MC21}{} % Question 21
+\SetAnswer{MC22}{} % Question 22
+\SetAnswer{MC23}{} % Question 23
+\SetAnswer{MC24}{} % Question 24
+% END MC ANSWERS
+
+\begin{document}
+\begin{center}{\Large\bfseries CS182: Introduction to Machine Learning}\par{\Large\bfseries Lecture 01: Introduction}\par{\large Lecture Quiz and Answer Copy}\end{center}
+\textbf{Scope:} Introduction.pdf. Independent practice material based on the official 2026 Fall lecture.\par\textbf{Total:} 100 marks. \quad \textbf{Suggested time:} 120 minutes.
+\par\textbf{Name:} \underline{\makebox[60mm][l]{\StudentName}}\hfill\textbf{Student ID:} \underline{\makebox[45mm][l]{\StudentID}}
+\begin{center}\begin{tabular}{lrrr}\toprule
+Section & Questions & Each & Marks\\\midrule
+A. Misconceptions: True/False & 12 & 1 & 12\\
+B. Multiple response & 12 & 2 & 24\\
+C. Proofs and formula derivations & 4 & 10 & 40\\
+D. Applications & 2 & 12 & 24\\\midrule
+Total & 30 & & 100\\\bottomrule\end{tabular}\end{center}
+\textbf{Scoring.} In Section B each item has exactly four options, of which one,
+two, or three are correct. The complete correct set earns 2 marks; a nonempty
+proper subset earns 1 mark; any incorrect option or no selection earns 0.
+T/F answers earn 1 mark only when correct. Show reasoning in Sections C and D;
+part marks are available for valid intermediate work. Equivalent correct methods receive credit.
+\par\medskip\textbf{Instructions.} Answer in English. Use natural logarithms.
+Exact values and justified approximations are accepted. All vectors are columns
+unless stated otherwise. Use local assumptions, label conventions, and tie rules.
+\par\medskip\textbf{Answer sheet --- Section A}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+1 & 2 & 3 & 4 & 5 & 6\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF01}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF02}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF03}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF04}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF05}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF06}}\\\hline
+\end{tabular}\end{center}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+7 & 8 & 9 & 10 & 11 & 12\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF07}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF08}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF09}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF10}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF11}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{TF12}}\\\hline
+\end{tabular}\end{center}
+\par\medskip\textbf{Answer sheet --- Section B}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+13 & 14 & 15 & 16 & 17 & 18\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC13}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC14}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC15}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC16}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC17}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC18}}\\\hline
+\end{tabular}\end{center}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+19 & 20 & 21 & 22 & 23 & 24\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC19}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC20}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC21}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC22}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC23}} & \makebox[20mm]{\rule{0pt}{5mm}\GetAnswer{MC24}}\\\hline
+\end{tabular}\end{center}
+\newpage\section*{Section A. True/False \hfill 12 marks}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{1.} In reinforcement learning, an action can be assessed through a reward received later rather than through an immediate correct-action label.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{2.} Unsupervised learning can discover structure even when no target output is supplied for each example.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{3.} Data science, as described in the lecture, includes machine learning and also activities such as visualization.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{4.} A useful learned model must exactly reproduce the complete process that generated the data.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{5.} Zero empirical classification error guarantees that all consistent hypotheses agree on every future input.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{6.} The fact that a stored target is a number is sufficient to classify the learning task as regression.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{7.} The model \(h(x,w)=w_0+w_1x+w_2x^2\) is linear in its parameters even though it is nonlinear in \(x\).
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{8.} Once a hypothesis class and loss have been fixed, every possible optimization procedure must return the same predictor.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{9.} If axis-aligned rectangles have VC dimension four, every configuration of four planar points must be shattered.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{10.} Choosing squared loss rather than another loss can express an inductive bias, even after the model family has been fixed.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{11.} Increasing the sample size guarantees a strictly smaller error on every particular realized test set.
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{12.} For a fixed dataset and hypothesis class, replacing a squared-error objective by twice that objective leaves its set of global minimizers unchanged.
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section B. Multiple Response \hfill 24 marks}
+\textit{Select all correct options. Each question has 1--3 correct options.}\par
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q13 / 题目与选项区
+\textbf{13.} Suppose \(N\) training inputs are pairwise distinct real numbers. Select every valid statement about unregularized polynomial fitting.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item Exact interpolation removes the random noise from each target.
+\item A polynomial of degree at most \(N-1\) can interpolate any assigned real targets.
+\item An interpolating polynomial is guaranteed to have the smallest expected test error among all candidate models.
+\item Allowing degree above \(N-1\) can give different interpolating polynomials with identical training predictions.
+\end{enumerate}
+% END QUESTION Q13
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q14 / 题目与选项区
+\textbf{14.} A classifier mislabels exactly 3 of 12 training examples. Use the classification empirical-error definition on slide 39. Select every correct statement.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item Its empirical error under that definition is \(1/4\).
+\item Its empirical error \(E(h\mid X)\) is \(3\).
+\item Nonzero empirical error proves that the learning code contains an arithmetic bug.
+\item Hidden attributes can never contribute to apparent noise because they are absent from the feature vector.
+\end{enumerate}
+% END QUESTION Q14
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q15 / 题目与选项区
+\textbf{15.} For a nonnegative integer \(M\), let \(\mathcal H_M=\{\sum_{j=0}^M w_jx^j:w_j\in\mathbb R\}\). Select every correct statement.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \(\mathcal H_M\subseteq\mathcal H_{M+1}\).
+\item The coefficient vector has \(M+1\) entries.
+\item Different coefficient vectors always give different predictions on a fixed finite training set.
+\item A member of \(\mathcal H_M\) must have degree exactly \(M\).
+\end{enumerate}
+% END QUESTION Q15
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q16 / 题目与选项区
+\textbf{16.} Select every statement supported by the discussion of when machine learning is useful and how it is evaluated.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item A descriptive model is useless unless it also predicts a future target.
+\item An application is suitable for machine learning only if its data generation mechanism is already fully known.
+\item Computation time and storage requirements can matter alongside prediction accuracy.
+\item Machine learning can be useful when humans possess expertise but cannot explain it as explicit rules.
+\end{enumerate}
+% END QUESTION Q16
+
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section B. Multiple Response \hfill 24 marks}
+\textit{Select all correct options. Each question has 1--3 correct options.}\par
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q17 / 题目与选项区
+\textbf{17.} Two fixed candidate coefficient vectors have \((E(w_A),\|w_A\|_2^2)=(2,18)\) and \((E(w_B),\|w_B\|_2^2)=(5,2)\). Compare only these two candidates under \(E(w)+\lambda\|w\|_2^2/2\), with \(\lambda\geq0\). Select every correct statement.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item For every \(\lambda>3/8\), candidate \(B\) has the smaller objective.
+\item At \(\lambda=0\), candidate \(A\) has the smaller objective.
+\item These comparisons prove that one of these two candidates is the global minimizer over every coefficient vector.
+\item The candidates tie at \(\lambda=3/8\).
+\end{enumerate}
+% END QUESTION Q17
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q18 / 题目与选项区
+\textbf{18.} Select every task that matches the learning role stated in the lecture.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item Grouping unlabeled customers by similarity is an unsupervised task.
+\item Assigning an email to spam or non-spam must be unsupervised learning because the email is text.
+\item Predicting a steering wheel angle from a camera image can be a regression task.
+\item Learning a policy to maximize delayed game rewards is a reinforcement learning task.
+\end{enumerate}
+% END QUESTION Q18
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q19 / 题目与选项区
+\textbf{19.} In a transaction sample, 80 customers buy tea, 50 buy biscuits, and 30 buy both. Select every correct statement about the sample conditional probabilities.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item Conditioning additionally on customer attributes must leave both conditional probabilities unchanged.
+\item The two conditional probabilities must be equal because the intersection event is the same.
+\item \(P(\text{tea}\mid\text{biscuits})=3/5\).
+\item \(P(\text{biscuits}\mid\text{tea})=3/8\).
+\end{enumerate}
+% END QUESTION Q19
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q20 / 题目与选项区
+\textbf{20.} Consider closed axis-aligned rectangles as positive-class regions. Assume at least one positive training example. Select every correct statement.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item If a negative example lies inside that smallest rectangle, the version space is empty.
+\item The smallest rectangle containing all positive examples must be contained in every consistent rectangle.
+\item Every rectangle consistent with the training sample must have the same area.
+\item There is always a unique largest consistent rectangle.
+\end{enumerate}
+% END QUESTION Q20
+
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section B. Multiple Response \hfill 24 marks}
+\textit{Select all correct options. Each question has 1--3 correct options.}\par
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q21 / 题目与选项区
+\textbf{21.} The lecture uses \(E(w)=\tfrac12\sum_{n=1}^N(h(x_n,w)-y_n)^2\). Suppose \(E(w)=18\) for \(N=9\). Select every correct statement.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item The mean squared error is \(4\).
+\item The RMS error has the same physical units as the target.
+\item Doubling every residual doubles the mean squared error.
+\item The RMS error is \(2\).
+\end{enumerate}
+% END QUESTION Q21
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q22 / 题目与选项区
+\textbf{22.} Consider the fixed family \(h(x;w)=w_0+w_1x\). Select every change that alters one of the three dimensions of a supervised learning algorithm.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item Replacing squared loss by absolute loss changes the error-function dimension.
+\item Renaming the coefficient vector without changing any formula necessarily changes the hypothesis class.
+\item Adding a feature \(x^2\) with its own coefficient changes only the loss function while leaving the model family fixed.
+\item Keeping the objective but replacing exact minimization by a finite number of gradient steps necessarily changes the hypothesis class.
+\end{enumerate}
+% END QUESTION Q22
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q23 / 题目与选项区
+\textbf{23.} A team chooses polynomial degree by comparing validation errors. Select every sound statement about evaluation.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item A separate test set can assess the final selected procedure after model selection.
+\item The validation set helps compare candidate model choices.
+\item Repeatedly choosing hyperparameters to reduce the reported test error preserves the test set as an untouched final evaluation.
+\item The example 50/25/25 training/validation/test split is a compulsory ratio for every problem.
+\end{enumerate}
+% END QUESTION Q23
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q24 / 题目与选项区
+\textbf{24.} A four-class classifier is implemented through four one-versus-rest binary classifiers. Select every correct statement.
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item The reduction implies that one learning algorithm is universally best for every dataset.
+\item Every binary classifier is guaranteed to have zero empirical error merely because the task was decomposed.
+\item Several binary classifiers may predict positive on the same new example, so a final decision rule can be necessary.
+\item Each binary target indicates whether an example belongs to its associated class.
+\end{enumerate}
+% END QUESTION Q24
+
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{25. Least squares as orthogonality, including redundant features}\hfill\textbf{[10 marks]}\par\medskip
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item Let \(\Phi\in\mathbb R^{N\times d}\), \(y\in\mathbb R^N\), and \(E(w)=\tfrac12\|\Phi w-y\|_2^2\). Show that a minimizer \(w_*\) must satisfy \(\Phi^T(\Phi w_*-y)=0\), by examining perturbations rather than quoting an inverse formula.\hfill\textbf{[3 marks]}
+\item Prove that these normal equations are sufficient for global optimality. Interpret them geometrically and justify that a minimizer exists even if \(\Phi\) has dependent columns.\hfill\textbf{[4 marks]}
+\item If \(u\) and \(v\) are both minimizers, prove that \(\Phi u=\Phi v\). State exactly when their coefficient vectors can differ.\hfill\textbf{[3 marks]}
+\end{enumerate}\par\medskip\hrule\medskip\textbf{Student response}\par
+% BEGIN ANSWER Q25 / 第25题答题区
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item
+% >>> BEGIN ANSWER Q25(a)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q25(a)
+\item
+% >>> BEGIN ANSWER Q25(b)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q25(b)
+\item
+% >>> BEGIN ANSWER Q25(c)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q25(c)
+\end{enumerate}
+% END ANSWER Q25
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{26. Why a larger polynomial class cannot worsen optimal training RMS}\hfill\textbf{[10 marks]}\par\medskip
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item For a fixed nonempty training set, define \(E_M^*=\min_{h\in\mathcal H_M}\tfrac12\sum_n(h(x_n)-y_n)^2\), with \(\mathcal H_M\) as in the multiple-response section. Prove \(E_{M+1}^*\leq E_M^*\) and the corresponding inequality for optimal training RMS.\hfill\textbf{[3 marks]}
+\item Let \(\Phi_M\) be the degree-\(M\) design matrix, \(\phi=(x_1^{M+1},\ldots,x_N^{M+1})^T\), and \(r=\Phi_M w_*-y\) at a smaller-class minimizer. Prove that the two optimal errors are equal if and only if \(\phi^Tr=0\). Explain why an added feature already in \(\operatorname{col}(\Phi_M)\) cannot improve training error.\hfill\textbf{[4 marks]}
+\item For the three observations \((-1,1),(0,0),(1,1)\), find the optimal constant, show that adding a linear term does not improve its error, and exhibit a quadratic with zero training error. Why does the monotonicity proof say nothing comparable about test RMS?\hfill\textbf{[3 marks]}
+\end{enumerate}\par\medskip\hrule\medskip\textbf{Student response}\par
+% BEGIN ANSWER Q26 / 第26题答题区
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item
+% >>> BEGIN ANSWER Q26(a)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q26(a)
+\item
+% >>> BEGIN ANSWER Q26(b)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q26(b)
+\item
+% >>> BEGIN ANSWER Q26(c)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q26(c)
+\end{enumerate}
+% END ANSWER Q26
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{27. Regularization: prove the tradeoff without an inverse formula}\hfill\textbf{[10 marks]}\par\medskip
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item Let \(F(w)=\tfrac12\|\Phi w-y\|_2^2\), \(R(w)=\tfrac12\|w\|_2^2\), and \(w_i\) be a global minimizer of \(F(w)+\lambda_iR(w)\), where \(0\leq\lambda_1<\lambda_2\). Prove \(R(w_2)\leq R(w_1)\). Do not use a closed-form minimizer.\hfill\textbf{[4 marks]}
+\item Prove \(F(w_1)\leq F(w_2)\). Does either result imply a monotone test error or a strictly changing coefficient norm?\hfill\textbf{[3 marks]}
+\item For \(\lambda>0\), prove that the penalized squared-error objective has a unique minimizer even if \(\Phi\) has dependent columns. Use a strict-convexity or midpoint argument.\hfill\textbf{[3 marks]}
+\end{enumerate}\par\medskip\hrule\medskip\textbf{Student response}\par
+% BEGIN ANSWER Q27 / 第27题答题区
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item
+% >>> BEGIN ANSWER Q27(a)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q27(a)
+\item
+% >>> BEGIN ANSWER Q27(b)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q27(b)
+\item
+% >>> BEGIN ANSWER Q27(c)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q27(c)
+\end{enumerate}
+% END ANSWER Q27
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{28. The VC dimension of axis-aligned rectangles}\hfill\textbf{[10 marks]}\par\medskip
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item Let \(\mathcal R\) contain all closed axis-aligned rectangles in \(\mathbb R^2\), with label 1 inside and 0 outside. Prove that \(\mathcal R\) shatters \(\{(-1,0),(1,0),(0,-1),(0,1)\}\). Cover all possible subsets, including the empty subset.\hfill\textbf{[5 marks]}
+\item Prove that no set of five distinct planar points is shattered, allowing ties in coordinate extremes. Deduce the exact VC dimension.\hfill\textbf{[5 marks]}
+\end{enumerate}\par\medskip\hrule\medskip\textbf{Student response}\par
+% BEGIN ANSWER Q28 / 第28题答题区
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item
+% >>> BEGIN ANSWER Q28(a)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q28(a)
+\item
+% >>> BEGIN ANSWER Q28(b)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q28(b)
+\end{enumerate}
+% END ANSWER Q28
+\newpage\section*{Section D. Applications}
+\textbf{29. Compare candidate polynomials, regularization, and validation}\hfill\textbf{[12 marks]}\par\medskip
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item Two supplied candidate models are \(h_A(x)=\tfrac12+\tfrac12x\) and \(h_B(x)=x^2\). The training sample is \((0,0),(1,1),(2,4)\). Compute each model\'s half-sum squared error and training RMS. You are comparing these two candidates only.\hfill\textbf{[3 marks]}
+\item The validation sample is \((1/2,1),(3/2,3/2)\). Compute validation RMS for both candidates and choose the candidate using this criterion.\hfill\textbf{[3 marks]}
+\item Embed both models in the degree-two coefficient space ordered as \((1,x,x^2)\), and compare \(E+\lambda\|w\|_2^2/2\). Find the value of \(\lambda\) at which they tie, and identify the better candidate at \(\lambda=14\). Does this comparison establish a global ridge solution?\hfill\textbf{[4 marks]}
+\item Describe a valid use of an additional test set after choosing the candidate. Explain why the validation RMS of the selected candidate is not automatically an unbiased final assessment of the entire selection process.\hfill\textbf{[2 marks]}
+\end{enumerate}\par\medskip\hrule\medskip\textbf{Student response}\par
+% BEGIN ANSWER Q29 / 第29题答题区
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item
+% >>> BEGIN ANSWER Q29(a)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q29(a)
+\item
+% >>> BEGIN ANSWER Q29(b)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q29(b)
+\item
+% >>> BEGIN ANSWER Q29(c)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q29(c)
+\item
+% >>> BEGIN ANSWER Q29(d)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q29(d)
+\end{enumerate}
+% END ANSWER Q29
+\newpage\section*{Section D. Applications}
+\textbf{30. Consistent rectangles and predictions that data do not determine}\hfill\textbf{[12 marks]}\par\medskip
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item The positive examples are \((2,3),(4,5)\); the negative examples are \((1,4),(5,4),(3,6)\). Find the smallest closed axis-aligned rectangle containing the positives and verify its training error.\hfill\textbf{[3 marks]}
+\item Construct a second consistent rectangle that disagrees with \(S\) at \(q=(1.7,4)\). State what this proves about predicting \(q\) from consistency alone.\hfill\textbf{[4 marks]}
+\item Which label is forced by all consistent rectangles at \(a=(3,4)\)? Which label is forced at the already observed negative point \(b=(1,4)\)? Explain using the geometry and the definition of consistency.\hfill\textbf{[3 marks]}
+\item An additional training record gives \((3,4)\) a negative label while keeping all previous labels. Determine the new version space and explain why optimizing rectangle boundaries cannot obtain zero training error.\hfill\textbf{[2 marks]}
+\end{enumerate}\par\medskip\hrule\medskip\textbf{Student response}\par
+% BEGIN ANSWER Q30 / 第30题答题区
+\begin{enumerate}[label=(\alph*),leftmargin=8mm,itemsep=3pt]
+\item
+% >>> BEGIN ANSWER Q30(a)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q30(a)
+\item
+% >>> BEGIN ANSWER Q30(b)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q30(b)
+\item
+% >>> BEGIN ANSWER Q30(c)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q30(c)
+\item
+% >>> BEGIN ANSWER Q30(d)
+% 在这里写英文推导或证明；完成后可删除下方空白占位命令。
+\AnswerBlank
+% <<< END ANSWER Q30(d)
+\end{enumerate}
+% END ANSWER Q30
+\end{document}

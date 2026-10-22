@@ -1,0 +1,385 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,array,amsmath,amssymb,booktabs,enumitem,fancyhdr,lastpage,needspace,microtype}
+\usepackage[margin=19mm,headheight=14pt,footskip=11mm]{geometry}
+\usepackage[hidelinks]{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\setlength{\emergencystretch}{2em}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small CS182 --- Lecture 07}
+\fancyhead[R]{\small Solutions}
+\fancyfoot[L]{\small Independent practice quiz}
+\fancyfoot[R]{\small Page \thepage\ of \pageref{LastPage}}
+\newcommand{\SetAnswer}[2]{\expandafter\gdef\csname QuizAnswer#1\endcsname{#2}}
+\newcommand{\GetAnswer}[1]{\csname QuizAnswer#1\endcsname}
+\newlength{\BlankAnswerHeight}\setlength{\BlankAnswerHeight}{16mm}
+\newcommand{\AnswerBlank}{\leavevmode\par\vspace{\BlankAnswerHeight}}
+
+\begin{document}
+\begin{center}{\Large\bfseries CS182: Introduction to Machine Learning}\par{\Large\bfseries Lecture 07: Linear Discrimination}\par{\large Worked Solutions and Marking Guide}\end{center}
+\textbf{Scope:} Linear\_Discrimination.pdf. Independent practice material based on the official 2026 Fall lecture.\par\textbf{Total:} 100 marks. \quad \textbf{Suggested time:} 120 minutes.
+\begin{center}\begin{tabular}{lrrr}\toprule
+Section & Questions & Each & Marks\\\midrule
+A. Misconceptions: True/False & 12 & 1 & 12\\
+B. Multiple response & 12 & 2 & 24\\
+C. Proofs and formula derivations & 4 & 10 & 40\\
+D. Applications & 2 & 12 & 24\\\midrule
+Total & 30 & & 100\\\bottomrule\end{tabular}\end{center}
+\textbf{Scoring.} In Section B each item has exactly four options, of which one,
+two, or three are correct. The complete correct set earns 2 marks; a nonempty
+proper subset earns 1 mark; any incorrect option or no selection earns 0.
+T/F answers earn 1 mark only when correct. Show reasoning in Sections C and D;
+part marks are available for valid intermediate work. Equivalent correct methods receive credit.
+\par\medskip\textbf{Instructions.} Answer in English. Use natural logarithms.
+Exact values and justified approximations are accepted. All vectors are columns
+unless stated otherwise. Use local assumptions, label conventions, and tie rules.
+\par\medskip\textbf{Quick key --- Section A}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+1 & 2 & 3 & 4 & 5 & 6\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}F} & \makebox[20mm]{\rule{0pt}{5mm}F} & \makebox[20mm]{\rule{0pt}{5mm}T} & \makebox[20mm]{\rule{0pt}{5mm}T} & \makebox[20mm]{\rule{0pt}{5mm}T} & \makebox[20mm]{\rule{0pt}{5mm}T}\\\hline
+\end{tabular}\end{center}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+7 & 8 & 9 & 10 & 11 & 12\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}F} & \makebox[20mm]{\rule{0pt}{5mm}T} & \makebox[20mm]{\rule{0pt}{5mm}F} & \makebox[20mm]{\rule{0pt}{5mm}T} & \makebox[20mm]{\rule{0pt}{5mm}F} & \makebox[20mm]{\rule{0pt}{5mm}F}\\\hline
+\end{tabular}\end{center}
+\par\medskip\textbf{Quick key --- Section B}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+13 & 14 & 15 & 16 & 17 & 18\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}AB} & \makebox[20mm]{\rule{0pt}{5mm}D} & \makebox[20mm]{\rule{0pt}{5mm}C} & \makebox[20mm]{\rule{0pt}{5mm}ABD} & \makebox[20mm]{\rule{0pt}{5mm}BD} & \makebox[20mm]{\rule{0pt}{5mm}AD}\\\hline
+\end{tabular}\end{center}
+\begin{center}\renewcommand{\arraystretch}{1.15}\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+19 & 20 & 21 & 22 & 23 & 24\\\hline
+\makebox[20mm]{\rule{0pt}{5mm}BC} & \makebox[20mm]{\rule{0pt}{5mm}A} & \makebox[20mm]{\rule{0pt}{5mm}AC} & \makebox[20mm]{\rule{0pt}{5mm}CD} & \makebox[20mm]{\rule{0pt}{5mm}ABD} & \makebox[20mm]{\rule{0pt}{5mm}BCD}\\\hline
+\end{tabular}\end{center}
+\newpage\section*{Section A. True/False --- Explanations}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{1.} \textbf{False.} Each class region is an intersection of score-comparison half-spaces and is convex. This statement concerns affine-score argmax, not arbitrary voting combinations.
+
+{\footnotesize\textit{Source: PDF p.18.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{2.} \textbf{False.} This requires \(w\ne0\). If \(w=0\), the zero set is either the whole space or empty, depending on the intercept.
+
+{\footnotesize\textit{Source: PDF pp.11-15; supplementary degenerate case.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{3.} \textbf{True.} The score sign is unchanged; sigmoid is strictly monotone but not invariant to multiplication of its argument. Classification geometry and probability calibration have different scale behavior.
+
+{\footnotesize\textit{Source: PDF pp.11,26,36; supplementary scale argument.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{4.} \textbf{True.} The parameter update is outside the full sample loop. Updating after each sample would be a different, sequential optimization procedure.
+
+{\footnotesize\textit{Source: PDF pp.35,44.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{5.} \textbf{True.} For finite real \(a\), both the exponential and the denominator are positive, and \(0<1/(1+e^{-a})<1\). Values zero or one are limits rather than finite-logit outputs.
+
+{\footnotesize\textit{Source: PDF pp.26,36-37.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{6.} \textbf{True.} For a nontrue class \(j\), the error is \(y_j-0\), generally nonzero because its score competes in the shared normalization.
+
+{\footnotesize\textit{Source: PDF p.43.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{7.} \textbf{False.} Independent sigmoids do not share a denominator. Softmax imposes a joint normalization across all classes; independent binary probabilities need not sum to one.
+
+{\footnotesize\textit{Source: PDF pp.17-18,38-41; supplementary comparison.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{8.} \textbf{True.} The common exponential factor cancels from numerator and denominator at each input. This also creates parameter non-identifiability in the symmetric parameterization.
+
+{\footnotesize\textit{Source: PDF pp.40-41; supplementary identifiability argument.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{9.} \textbf{False.} Gaussian LDA estimates class-conditional distributions and priors, whereas logistic regression optimizes a conditional Bernoulli likelihood. The same form of boundary does not identify the training objective.
+
+{\footnotesize\textit{Source: PDF pp.4-6,22-31.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{10.} \textbf{True.} The pairwise score constrains the relative classes only; samples from a third class have no required sign for this subproblem.
+
+{\footnotesize\textit{Source: PDF pp.19-20.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{11.} \textbf{False.} The assumed affine quantity is the conditional log-odds. Gaussian shared-covariance distributions imply such a model, but they are not necessary to fit it; discrete features are allowed.
+
+{\footnotesize\textit{Source: PDF pp.29-31,47.}}
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+\textbf{12.} \textbf{False.} Along a separating direction the parameter norm can diverge while cross-entropy decreases toward zero without attaining zero at any finite vector. Convexity does not ensure attainment.
+
+{\footnotesize\textit{Source: PDF pp.32,36-37; supplementary existence analysis.}}
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section B. Multiple Response --- Explanations}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q13 / 题目与选项区
+\textbf{13.} \textbf{Correct set: A, B.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Correct.} Averaging divides the full gradient by four.
+\item \textbf{Correct.} Then the scale factor in the learning rate cancels the factor \(1/4\) in the gradient.
+\item \textbf{Incorrect.} Initial predictions are \(1/2\), but the weighted label residuals generally do not cancel.
+\item \textbf{Incorrect.} Sequential updates evaluate later gradients at changed weights.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.32-35; supplementary sum/mean comparison.}}
+% END QUESTION Q13
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q14 / 题目与选项区
+\textbf{14.} \textbf{Correct set: D.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Incorrect.} A common shift preserves all pairwise score differences.
+\item \textbf{Incorrect.} The specified rule chooses the largest score and includes no reject action.
+\item \textbf{Incorrect.} Argmax on the raw scores is already a fully specified classification rule.
+\item \textbf{Correct.} Minus one is the largest of the three scores. Scores need not be positive to win an argmax.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.17-18.}}
+% END QUESTION Q14
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q15 / 题目与选项区
+\textbf{15.} \textbf{Correct set: C.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Incorrect.} The risk is \(2(0.55)=1.10\).
+\item \textbf{Incorrect.} The cost-sensitive threshold is \(0.6\); at this point \(C_2\) has lower risk.
+\item \textbf{Correct.} Compare \(3(1-y)\) against \(2y\).
+\item \textbf{Incorrect.} The threshold is \(\log((3/5)/(2/5))=\log(3/2)\).
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.24,30; supplementary application of lecture 05 loss rule.}}
+% END QUESTION Q15
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q16 / 题目与选项区
+\textbf{16.} \textbf{Correct set: A, B, D.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Correct.} The gradient of the full quadratic penalty is \(\lambda\theta\).
+\item \textbf{Correct.} This is a model-selection choice; the final test set should remain independent.
+\item \textbf{Incorrect.} L2 shrinkage does not in general produce exact sparsity.
+\item \textbf{Correct.} The positive quadratic penalty is coercive and makes the convex loss strongly convex.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF p.37; supplementary connection to regularization.}}
+% END QUESTION Q16
+
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section B. Multiple Response --- Explanations}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q17 / 题目与选项区
+\textbf{17.} \textbf{Correct set: B, D.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Incorrect.} The derivative is strictly positive for every finite logit.
+\item \textbf{Correct.} \(\sigma'(a)=\sigma(a)(1-\sigma(a))\) is maximized at probability \(1/2\).
+\item \textbf{Incorrect.} For example, take both arguments zero: the two sides are \(1/2\) and one.
+\item \textbf{Correct.} The odds are nine, so the probability is \(9/(1+9)\).
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.26,33; supplementary maximum calculation.}}
+% END QUESTION Q17
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q18 / 题目与选项区
+\textbf{18.} \textbf{Correct set: A, D.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Correct.} It equals \(y-r=1/4-1\).
+\item \textbf{Incorrect.} The gradient is negative, so a descent step increases the intercept.
+\item \textbf{Incorrect.} Multiply the error \(-3/4\) by each feature; the second entry is \(+3/2\).
+\item \textbf{Correct.} For a positive label, the loss is \(-\log y\).
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.31-34.}}
+% END QUESTION Q18
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q19 / 题目与选项区
+\textbf{19.} \textbf{Correct set: B, C.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Incorrect.} It shows sufficiency of a shared-covariance Gaussian model, not necessity.
+\item \textbf{Correct.} The logit slope is \((1-(-1))/2=1\), and the intercept is zero.
+\item \textbf{Correct.} The prior contribution is the additive log prior ratio.
+\item \textbf{Incorrect.} An unequal-variance log density ratio generally retains a quadratic term.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.22-30,48.}}
+% END QUESTION Q19
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q20 / 题目与选项区
+\textbf{20.} \textbf{Correct set: A.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Correct.} For different indices the derivative is \(-y_2y_1\).
+\item \textbf{Incorrect.} Every column sums to zero, since the total probability is the constant one.
+\item \textbf{Incorrect.} The derivative is \(0.5(1-0.5)=0.25\).
+\item \textbf{Incorrect.} The common denominator gives off-diagonal derivatives \(-y_i y_j\).
+\end{enumerate}
+{\footnotesize\textit{Source: PDF p.43.}}
+% END QUESTION Q20
+
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section B. Multiple Response --- Explanations}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q21 / 题目与选项区
+\textbf{21.} \textbf{Correct set: A, C.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Correct.} It becomes \(g=z-1\), an affine function of the new feature.
+\item \textbf{Incorrect.} Linearity in coefficients does not force a linear boundary in the original input.
+\item \textbf{Correct.} The zero set is \(x_1^2+x_2^2=1\).
+\item \textbf{Incorrect.} A fixed basis-function discriminant does not itself impose Gaussian input densities.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.8-9,48; supplementary example.}}
+% END QUESTION Q21
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q22 / 题目与选项区
+\textbf{22.} \textbf{Correct set: C, D.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Incorrect.} Ordinary distance is nonnegative; its value is \(|-5|/5=1\).
+\item \textbf{Incorrect.} The score must be divided by \(\|w\|=5\), giving distance \(3/5\).
+\item \textbf{Correct.} \(w^{\mathsf T}x+w_0=8-5=3\).
+\item \textbf{Correct.} Subtract \((3/25)(4,-3)^{\mathsf T}\) from \((2,0)^{\mathsf T}\).
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.13-15; supplementary numerical example.}}
+% END QUESTION Q22
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q23 / 题目与选项区
+\textbf{23.} \textbf{Correct set: A, B, D.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Correct.} The exponentials are \((1,3,2)\), whose sum is six.
+\item \textbf{Correct.} The same exponential factor cancels from the softmax.
+\item \textbf{Incorrect.} Multiclass argmax needs no universal \(1/2\) threshold; rejection requires a separately specified rule.
+\item \textbf{Correct.} The common denominator cancels in the probability ratio.
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.38-41.}}
+% END QUESTION Q23
+
+\end{minipage}\par\vspace{3mm}
+\par\noindent\begin{minipage}{\linewidth}
+% BEGIN QUESTION Q24 / 题目与选项区
+\textbf{24.} \textbf{Correct set: B, C, D.}
+\begin{enumerate}[label=(\Alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item \textbf{Incorrect.} It adds a common affine score, which cancels.
+\item \textbf{Correct.} Three remaining classes each need two weights and one intercept.
+\item \textbf{Correct.} There are four rows, each with three coefficients.
+\item \textbf{Correct.} With sample rows, it is \((Y-R)^{\mathsf T}\widetilde X\).
+\end{enumerate}
+{\footnotesize\textit{Source: PDF pp.38-44; supplementary matrix and identifiability notation.}}
+% END QUESTION Q24
+
+\end{minipage}\par\vspace{3mm}
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{25. Derive the geometry rather than treating the score as a distance}\hfill\textbf{[10 marks]}\par\medskip
+\textbf{(a) [2 marks]} For boundary points \(u,v\), subtract \(w^{\mathsf T}u+b=0\) and \(w^{\mathsf T}v+b=0\). This gives \(w^{\mathsf T}(u-v)=0\). Every displacement within the affine hyperplane is of this form, so \(w\) is perpendicular to it.
+
+\textbf{(b) [4 marks]} Substitution gives \(g(x)=g(x_p)+r w^{\mathsf T}w/\|w\|_2=r\|w\|_2\). Hence \(r=g(x)/\|w\|_2\), and rearranging the decomposition gives \[x_p=x-\frac{w^{\mathsf T}x+b}{\|w\|_2^2}w.\] The ordinary distance is \(|r|\), not \(r\). Substituting the projection in the boundary equation yields zero and verifies the formula.
+
+\textbf{(c) [4 marks]} The new score is \(cg(x)\), so its zero set and sign are unchanged. Its norm is \(c\|w\|\), so \(cg(x)/(c\|w\|)=g(x)/\|w\|\). The probability becomes \(\sigma(cg(x))\), generally different when \(c\ne1\) and \(g(x)\ne0\). If \(w=0\), the score is constant and the zero set is all of space when \(b=0\), or empty otherwise; the distance formula is undefined.
+
+\textit{Marking: use the displayed subpart allocations; award credit for the logical or numerical intermediate steps.}\par
+{\footnotesize\textit{Source: PDF pp.11-15; supplementary projection and scale proof.}}
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{26. Derive the LDA-to-logistic bridge with its assumptions}\hfill\textbf{[10 marks]}\par\medskip
+\textbf{(a) [5 marks]} Bayes rule cancels the common evidence. The Gaussian normalizers also cancel because covariance is shared. Expanding both quadratic exponents gives \[\log\frac{P(C_1\mid x)}{P(C_2\mid x)}=(\mu_1-\mu_2)^{\mathsf T}\Sigma^{-1}x-\frac12(\mu_1^{\mathsf T}\Sigma^{-1}\mu_1-\mu_2^{\mathsf T}\Sigma^{-1}\mu_2)+\log\frac{\pi_1}{\pi_2}.\] The common \(x^{\mathsf T}\Sigma^{-1}x\) cancels and symmetry combines the cross terms. Thus \(w=\Sigma^{-1}(\mu_1-\mu_2)\) and \(b=-\tfrac12(\mu_1^{\mathsf T}\Sigma^{-1}\mu_1-\mu_2^{\mathsf T}\Sigma^{-1}\mu_2)+\log(\pi_1/\pi_2)\).
+
+\textbf{(b) [2 marks]} Exponentiating gives \(e^a(1-y)=y\), so \(y=e^a/(1+e^a)=\sigma(a)\). Since sigmoid is increasing and \(\sigma(0)=1/2\), \(y>1/2\) is equivalent to \(a>0\).
+
+\textbf{(c) [3 marks]} With unequal covariances, the difference contains \(-\tfrac12 x^{\mathsf T}(\Sigma_1^{-1}-\Sigma_2^{-1})x\), generally quadratic. Shared Gaussian covariances are a sufficient generative explanation of affine posterior log-odds. Logistic regression instead assumes that conditional log-odds are affine and fits the conditional label likelihood directly, without requiring Gaussian class densities.
+
+\textit{Marking: use the displayed subpart allocations; award credit for the logical or numerical intermediate steps.}\par
+{\footnotesize\textit{Source: PDF pp.22-30.}}
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{27. Derive Bernoulli cross-entropy, its gradient, and its limits}\hfill\textbf{[10 marks]}\par\medskip
+\textbf{(a) [3 marks]} Each label has probability \((y^t)^{r^t}(1-y^t)^{1-r^t}\). Conditional independence gives \[L(\theta)=\prod_t(y^t)^{r^t}(1-y^t)^{1-r^t},\quad E(\theta)=-\sum_t[r^t\log y^t+(1-r^t)\log(1-y^t)].\] This is binary cross-entropy; the inputs are held fixed during conditional fitting.
+
+\textbf{(b) [5 marks]} For one sample, \(dy/da=y(1-y)\) and \(\partial\ell/\partial y=-r/y+(1-r)/(1-y)\). Their product is \(-r(1-y)+(1-r)y=y-r\). Because \(\partial a/\partial\theta=\widetilde x\), summation gives the gradient. Differentiating again yields \[H=\sum_t y^t(1-y^t)\widetilde x^t(\widetilde x^t)^{\mathsf T}.\] For any \(v\), \(v^{\mathsf T}Hv=\sum_t y^t(1-y^t)(v^{\mathsf T}\widetilde x^t)^2\ge0\), establishing convexity. The descent increment is minus this gradient.
+
+\textbf{(c) [2 marks]} Both samples have correct-label probability \(\sigma(2c)\), so \(E(c)=2\log(1+e^{-2c})\). This is positive for finite \(c\) and tends to zero as \(c\to\infty\). For every \(c>0\) both labels are correct. Thus the infimum is zero, with no finite minimizing slope along this perfectly separating dataset.
+
+\textit{Marking: use the displayed subpart allocations; award credit for the logical or numerical intermediate steps.}\par
+{\footnotesize\textit{Source: PDF pp.31-37; supplementary Hessian and nonattainment proof.}}
+\newpage\section*{Section C. Proofs and Formula Derivations}
+\textbf{28. Derive softmax normalization and the coupled learning rule}\hfill\textbf{[10 marks]}\par\medskip
+\textbf{(a) [3 marks]} Exponentiating yields \(P_i=e^{a_i}P_K\). Summing probabilities gives \(1=P_K[1+\sum_{i<K}e^{a_i}]\). Therefore \(P_K=[1+\sum_{i<K}e^{a_i}]^{-1}\) and \(P_i=e^{a_i}/[1+\sum_{j<K}e^{a_j}]\). This is softmax with reference score zero. Adding a common score to every class yields the symmetric form \(y_i=e^{a_i}/\sum_j e^{a_j}\).
+
+\textbf{(b) [4 marks]} Let \(Z=\sum_k e^{a_k}\). The quotient rule gives \(\partial y_i/\partial a_j=(\delta_{ij}e^{a_i}Z-e^{a_i}e^{a_j})/Z^2=y_i(\delta_{ij}-y_j)\). Then \[\frac{\partial\ell}{\partial a_j}=-\sum_i\frac{r_i}{y_i}y_i(\delta_{ij}-y_j)=-r_j+y_j\sum_i r_i=y_j-r_j.\] This uses \(\sum_i r_i=1\). Thus \(\partial\ell/\partial w_{j0}=y_j-r_j\) and \(\nabla_{w_j}\ell=(y_j-r_j)x\), with sums over samples for the full loss.
+
+\textbf{(c) [3 marks]} Adding \(c(x)\) multiplies every numerator and the denominator by \(e^{c(x)}\), which cancels. For \(K\) classes with \(d\) features and intercepts, fixing one class score to zero leaves \((K-1)(d+1)\) free coefficients instead of the redundant \(K(d+1)\). A nontrue class has \(r_j=0\) but generally \(y_j>0\), so its error \(y_j-r_j\) remains nonzero through the common probability normalization.
+
+\textit{Marking: use the displayed subpart allocations; award credit for the logical or numerical intermediate steps.}\par
+{\footnotesize\textit{Source: PDF pp.38-44; supplementary parameter-identifiability proof.}}
+\newpage\section*{Section D. Applications}
+\textbf{29. Audit one binary batch update and the resulting decision}\hfill\textbf{[12 marks]}\par\medskip
+\textbf{(a) [4 marks]} All probabilities are \(1/2\). The intercept gradient is \(1/2-1/2-1/2=-1/2\). The slope gradient is \((1/2)(-2)+(-1/2)(1)+(-1/2)(3)=-3\). Hence \(b_{\rm new}=0.05\) and \(w_{\rm new}=0.3\).
+
+\textbf{(b) [4 marks]} New logits are \((-0.55,0.35,0.95)\), with probabilities approximately \((0.3659,0.5866,0.7211)\). The loss is \[\log(1+e^{-0.55})+\log(1+e^{-0.35})+\log(1+e^{-0.95})\approx1.3158,\] below the initial \(3\log2\approx2.0794\). The first term uses label zero and a negative score; the other two use positive labels.
+
+\textbf{(c) [2 marks]} The first probability is below \(1/2\), and the other two are above it, so all three labels are correct. Positive correct-side logits can still increase in magnitude, raising correct-class probabilities and reducing cross-entropy; zero label error is not zero cross-entropy.
+
+\textbf{(d) [2 marks]} Compare \(4(1-y)\) with \(y\): choose \(C_1\) only if \(y>4/5\). None of the three fitted probabilities exceeds \(0.8\), so all are assigned to \(C_2\). This changes the decision rule while retaining the same fitted probabilities.
+
+\textit{Marking: use the displayed subpart allocations; award credit for the logical or numerical intermediate steps.}\par
+{\footnotesize\textit{Source: PDF pp.31-37; new numerical application and cost-sensitive extension.}}
+\newpage\section*{Section D. Applications}
+\textbf{30. Train a three-class model and check the normalization}\hfill\textbf{[12 marks]}\par\medskip
+\textbf{(a) [3 marks]} The target is \(r=(0,0,1)^{\mathsf T}\), all logits are zero, probabilities are \((1/3,1/3,1/3)\), and cross-entropy is \(\log3\).
+
+\textbf{(b) [5 marks]} Each row is \((y_i-r_i)\widetilde x^{\mathsf T}\), so \[\nabla_B\ell=\begin{bmatrix}1/3&2/3&-1/3\\1/3&2/3&-1/3\\-2/3&-4/3&2/3\end{bmatrix},\qquad B_{\rm new}=\begin{bmatrix}-1/6&-1/3&1/6\\-1/6&-1/3&1/6\\1/3&2/3&-1/3\end{bmatrix}.\] Both are \(3\times3\). The signs are from subtracting one half of the gradient.
+
+\textbf{(c) [2 marks]} Multiplying each row by \(\widetilde x\) gives logits \((-1,-1,2)\). Thus \(y_3=e^3/(2+e^3)\approx0.9094\), each other probability is \(1/(2+e^3)\), and loss is \(\log(1+2e^{-3})\approx0.0949\). Class \(C_3\) wins.
+
+\textbf{(d) [2 marks]} The shared row adds ten to every logit, so all probabilities remain identical after cancellation. For stable evaluation, subtract the largest original logit, two, obtaining \((-3,-3,0)\), and normalize the exponentials \((e^{-3},e^{-3},1)\).
+
+\textit{Marking: use the displayed subpart allocations; award credit for the logical or numerical intermediate steps.}\par
+{\footnotesize\textit{Source: PDF pp.41-44; new numerical application.}}
+\newpage\section*{Lecture Alignment and Coverage}
+Primary source: \texttt{Linear\_Discrimination.pdf} in \texttt{E:\textbackslash CS182\textbackslash 2026fall\textbackslash lecture}. All PDF pages count the cover as page 1. Additional arguments are marked as supplementary derivations when appropriate. These are original practice questions, not copied homework questions.
+
+\textbf{T/F}
+\begin{description}[leftmargin=12mm,itemsep=1pt]
+\item[1] PDF p.18.
+\item[2] PDF pp.11-15; supplementary degenerate case.
+\item[3] PDF pp.11,26,36; supplementary scale argument.
+\item[4] PDF pp.35,44.
+\item[5] PDF pp.26,36-37.
+\item[6] PDF p.43.
+\item[7] PDF pp.17-18,38-41; supplementary comparison.
+\item[8] PDF pp.40-41; supplementary identifiability argument.
+\item[9] PDF pp.4-6,22-31.
+\item[10] PDF pp.19-20.
+\item[11] PDF pp.29-31,47.
+\item[12] PDF pp.32,36-37; supplementary existence analysis.
+\end{description}
+\textbf{Multiple response}
+\begin{description}[leftmargin=12mm,itemsep=1pt]
+\item[13] PDF pp.32-35; supplementary sum/mean comparison.
+\item[14] PDF pp.17-18.
+\item[15] PDF pp.24,30; supplementary application of lecture 05 loss rule.
+\item[16] PDF p.37; supplementary connection to regularization.
+\item[17] PDF pp.26,33; supplementary maximum calculation.
+\item[18] PDF pp.31-34.
+\item[19] PDF pp.22-30,48.
+\item[20] PDF p.43.
+\item[21] PDF pp.8-9,48; supplementary example.
+\item[22] PDF pp.13-15; supplementary numerical example.
+\item[23] PDF pp.38-41.
+\item[24] PDF pp.38-44; supplementary matrix and identifiability notation.
+\end{description}
+\textbf{Proofs and applications}
+\begin{description}[leftmargin=12mm,itemsep=1pt]
+\item[25] PDF pp.11-15; supplementary projection and scale proof.
+\item[26] PDF pp.22-30.
+\item[27] PDF pp.31-37; supplementary Hessian and nonattainment proof.
+\item[28] PDF pp.38-44; supplementary parameter-identifiability proof.
+\item[29] PDF pp.31-37; new numerical application and cost-sensitive extension.
+\item[30] PDF pp.41-44; new numerical application.
+\end{description}
+\end{document}

@@ -1,0 +1,534 @@
+{
+  "id": "05",
+  "slug": "Bayesian_Decision_Theory",
+  "title": "Bayesian Decision Theory",
+  "pdf": "Bayesian_Decision_Theory.pdf",
+  "tf": [
+    {
+      "statement": "Under 0-1 loss, if no features are observed, always predicting a class with the largest prior probability minimizes the probability of error.",
+      "answer": true,
+      "explanation": "The error of choosing \\(C_i\\) is \\(1-P(C_i)\\); minimizing it is equivalent to maximizing the prior. Ties allow several optimal constant decisions.",
+      "source": "PDF pp.6-7,16"
+    },
+    {
+      "statement": "A class-conditional density \\(p(x\\mid C_i)\\) must lie between 0 and 1 at every \\(x\\).",
+      "answer": false,
+      "explanation": "A continuous density can exceed 1; its integral, rather than its height, is normalized. Class posterior probabilities \\(P(C_i\\mid x)\\) do lie in \\([0,1]\\).",
+      "source": "PDF pp.11-12"
+    },
+    {
+      "statement": "Because the evidence \\(p(x)\\) cancels when comparing classes, it can also be omitted when reporting normalized posterior probabilities.",
+      "answer": false,
+      "explanation": "For a fixed \\(x\\), the same positive denominator does not change the maximizing class. It is still required to make \\(\\sum_iP(C_i\\mid x)=1\\).",
+      "source": "PDF pp.11-12,21"
+    },
+    {
+      "statement": "Under 0-1 loss, choosing the largest class likelihood always gives the Bayes decision, even with unequal class priors.",
+      "answer": false,
+      "explanation": "The relevant scores are \\(p(x\\mid C_i)P(C_i)\\). Maximum likelihood classification agrees automatically with MAP when the priors are equal; unequal priors can reverse the ordering.",
+      "source": "PDF pp.11-12,16"
+    },
+    {
+      "statement": "Naive Bayes requires the features to be independent in the unconditional feature distribution.",
+      "answer": false,
+      "explanation": "The required factorization is \\(p(x\\mid C_i)=\\prod_jp(x_j\\mid C_i)\\), separately within each class. Mixing classes can produce dependent features even if this conditional factorization holds.",
+      "source": "PDF p.13"
+    },
+    {
+      "statement": "If two classes tie for the largest posterior probability, choosing either one has the same conditional 0-1 risk.",
+      "answer": true,
+      "explanation": "Their risks are both \\(1-\\max_kP(C_k\\mid x)\\). A tie-breaking convention determines the output label without changing this minimum risk.",
+      "source": "PDF pp.12,16"
+    },
+    {
+      "statement": "With unequal misclassification costs, a class whose posterior is below one half can still be the minimum-risk classification action.",
+      "answer": true,
+      "explanation": "For example, if \\(P(C_1\\mid x)=0.3\\), the loss of predicting \\(C_1\\) when \\(C_2\\) is true is 1, and the opposite error costs 4, then \\(R(\\alpha_1\\mid x)=0.7<1.2=R(\\alpha_2\\mid x)\\).",
+      "source": "PDF p.15; supplementary numerical illustration"
+    },
+    {
+      "statement": "Randomly mixing classification actions at a fixed \\(x\\) can give conditional risk strictly below the smallest risk of those actions.",
+      "answer": false,
+      "explanation": "The mixed risk is a weighted average of the action risks and cannot be below their minimum. Randomization among minimizers can tie that minimum.",
+      "source": "PDF p.15; supplementary randomization argument"
+    },
+    {
+      "statement": "With unit error cost and rejection cost \\(\\lambda\\), classification is strictly preferred to rejection exactly when the largest posterior exceeds \\(1-\\lambda\\).",
+      "answer": true,
+      "explanation": "The best classification risk is \\(1-\\max_iP(C_i\\mid x)\\), while rejection has risk \\(\\lambda\\). The strict comparison gives the stated threshold; equality is a risk tie.",
+      "source": "PDF pp.17-18"
+    },
+    {
+      "statement": "Replacing every discriminant by \\(a(x)g_i(x)+b(x)\\), using the same \\(a(x)>0\\) and \\(b(x)\\) for all classes, preserves the entire set of maximizing classes.",
+      "answer": true,
+      "explanation": "Every pairwise difference is multiplied by the same positive number \\(a(x)\\). Its sign and any zero difference are preserved pointwise.",
+      "source": "PDF p.21; supplementary pointwise extension"
+    },
+    {
+      "statement": "Applying a different strictly increasing function to each class discriminant always preserves the classifier.",
+      "answer": false,
+      "explanation": "Within-class monotonicity does not preserve comparisons across classes. Scores \\(g_1=2,g_2=1\\) choose \\(C_1\\), whereas \\(f_1(t)=t\\) and \\(f_2(t)=t+10\\) choose \\(C_2\\). The same increasing function must be used for all classes.",
+      "source": "PDF p.21"
+    },
+    {
+      "statement": "Every point satisfying \\(g_i(x)=g_j(x)\\) belongs to a decision boundary between \\(C_i\\) and \\(C_j\\).",
+      "answer": false,
+      "explanation": "The tied scores must also be largest. If another class has a strictly larger score, the equality is hidden inside that class's decision region.",
+      "source": "PDF p.23"
+    }
+  ],
+  "mc": [
+    {
+      "stem": "For three classes, let the priors be \\((0.2,0.3,0.5)\\) and the class likelihoods at one observed \\(x\\) be \\((0.9,0.4,0.2)\\). Under 0-1 loss, select every correct statement.",
+      "options": [
+        {
+          "text": "The evidence is \\(p(x)=0.40\\).",
+          "correct": true,
+          "why": "Summing the joint scores gives \\(0.18+0.12+0.10=0.40\\)."
+        },
+        {
+          "text": "The posterior probability of \\(C_1\\) is \\(0.60\\).",
+          "correct": false,
+          "why": "It is \\(0.18/0.40=0.45\\); the likelihood alone is not the posterior."
+        },
+        {
+          "text": "The Bayes action predicts \\(C_1\\).",
+          "correct": true,
+          "why": "The posterior vector is \\((0.45,0.30,0.25)\\), so \\(C_1\\) has the largest posterior."
+        },
+        {
+          "text": "The minimum conditional probability of error is \\(0.45\\).",
+          "correct": false,
+          "why": "The maximum posterior is \\(0.45\\); the error is its complement, \\(0.55\\)."
+        }
+      ],
+      "source": "PDF pp.11-12,16"
+    },
+    {
+      "stem": "Write \\(q=P(C_1\\mid x)=0.55\\). Correct decisions cost 0; predicting \\(C_1\\) when \\(C_2\\) is true costs 8, and predicting \\(C_2\\) when \\(C_1\\) is true costs 2. Select every correct statement.",
+      "options": [
+        {
+          "text": "Predicting \\(C_1\\) has risk \\(3.6\\).",
+          "correct": true,
+          "why": "This error occurs when \\(C_2\\) is true, giving \\(8(1-0.55)=3.6\\)."
+        },
+        {
+          "text": "Predicting \\(C_2\\) minimizes conditional risk.",
+          "correct": true,
+          "why": "Its risk is \\(2(0.55)=1.1<3.6\\)."
+        },
+        {
+          "text": "Without rejection, predicting \\(C_1\\) is strictly optimal when \\(q>0.8\\).",
+          "correct": true,
+          "why": "The inequality \\(8(1-q)<2q\\) is equivalent to \\(q>0.8\\)."
+        },
+        {
+          "text": "The larger posterior must determine the minimum-risk action.",
+          "correct": false,
+          "why": "Posterior maximization minimizes unit error loss; these asymmetric costs produce a different threshold."
+        }
+      ],
+      "source": "PDF pp.15-16; supplementary asymmetric-loss specialization"
+    },
+    {
+      "stem": "A three-class posterior is \\((0.46,0.34,0.20)\\). Correct classifications cost 0 and mistakes cost 1. Select every correct statement about a constant rejection cost.",
+      "options": [
+        {
+          "text": "At rejection cost \\(0.55\\), predicting \\(C_1\\) is strictly preferable to rejection.",
+          "correct": true,
+          "why": "The best classification risk is \\(1-0.46=0.54<0.55\\)."
+        },
+        {
+          "text": "At rejection cost \\(0.50\\), rejection is strictly preferable to every class action.",
+          "correct": true,
+          "why": "The best class risk \\(0.54\\) already exceeds \\(0.50\\)."
+        },
+        {
+          "text": "At rejection cost \\(0.55\\), acceptance requires the largest posterior to exceed \\(0.55\\).",
+          "correct": false,
+          "why": "The acceptance threshold is \\(1-0.55=0.45\\), not \\(0.55\\)."
+        },
+        {
+          "text": "Increasing the rejection cost cannot enlarge the set where rejection is strictly optimal.",
+          "correct": true,
+          "why": "Rejection is strictly optimal when \\(1-\\max_iP(C_i\\mid x)>\\lambda\\); increasing \\(\\lambda\\) makes this condition harder to satisfy."
+        }
+      ],
+      "source": "PDF pp.17-18"
+    },
+    {
+      "stem": "Assume all discriminants are finite. Which transformations preserve the full maximizing-class set at every \\(x\\), for arbitrary original scores?",
+      "options": [
+        {
+          "text": "Apply one common strictly increasing function \\(f\\) to every score.",
+          "correct": true,
+          "why": "Strict monotonicity preserves both strict order and ties across all classes."
+        },
+        {
+          "text": "Replace every \\(g_i(x)\\) by \\(a(x)g_i(x)+b(x)\\), with common \\(a(x)>0\\) and \\(b(x)\\).",
+          "correct": true,
+          "why": "The pairwise differences become \\(a(x)[g_i(x)-g_j(x)]\\), preserving their signs."
+        },
+        {
+          "text": "Add a different constant \\(b_i\\) to each class score.",
+          "correct": false,
+          "why": "Class-dependent offsets can reverse cross-class comparisons."
+        },
+        {
+          "text": "Multiply every score by the same negative constant.",
+          "correct": false,
+          "why": "A negative multiplier reverses strict order, making maximizers into minimizers."
+        }
+      ],
+      "source": "PDF p.21; supplementary pointwise extension"
+    },
+    {
+      "stem": "Which statements about the naive Bayes assumption are correct?",
+      "options": [
+        {
+          "text": "It is sufficient that the features be mutually independent conditional on each class.",
+          "correct": true,
+          "why": "This is exactly the factorization \\(p(x\\mid C_i)=\\prod_jp(x_j\\mid C_i)\\)."
+        },
+        {
+          "text": "Unconditional independence alone guarantees the required class-conditional factorization.",
+          "correct": false,
+          "why": "Conditioning can introduce dependence; independence in the mixture does not establish independence within each class."
+        },
+        {
+          "text": "The class prior is unnecessary once the likelihood is factorized.",
+          "correct": false,
+          "why": "Bayes scores remain \\(P(C_i)\\prod_jp(x_j\\mid C_i)\\), so unequal priors still matter."
+        },
+        {
+          "text": "The factorization makes \\(P(C_i\\mid x)\\) equal to \\(\\prod_jP(C_i\\mid x_j)\\) without any normalization or prior correction.",
+          "correct": false,
+          "why": "Naive Bayes factors feature likelihoods, not posteriors of the class. Repeated posterior factors also repeatedly include the prior."
+        }
+      ],
+      "source": "PDF pp.11-13"
+    },
+    {
+      "stem": "For \\(x\\in\\mathbb R\\), define \\(g_1(x)=1-x^2\\), \\(g_2(x)=0\\), and \\(g_3(x)=1/2\\). Use the largest score and allow ties on boundaries. Select every correct statement.",
+      "options": [
+        {
+          "text": "The equation \\(g_1=g_2\\) produces \\(x=\\pm1\\), but neither point is a decision boundary.",
+          "correct": true,
+          "why": "At both points \\(g_3=1/2\\) exceeds the tied value 0."
+        },
+        {
+          "text": "The actual class changes occur at \\(x=\\pm1/\\sqrt2\\).",
+          "correct": true,
+          "why": "These solve \\(g_1=g_3=1/2\\), and those tied scores exceed \\(g_2=0\\)."
+        },
+        {
+          "text": "Class \\(C_2\\) has a nonempty decision region.",
+          "correct": false,
+          "why": "Its score is always strictly smaller than \\(g_3\\)."
+        },
+        {
+          "text": "The region where \\(C_3\\) is the unique winner has two disconnected components.",
+          "correct": true,
+          "why": "It is \\(x<-1/\\sqrt2\\) or \\(x>1/\\sqrt2\\)."
+        }
+      ],
+      "source": "PDF p.23; supplementary algebraic example"
+    },
+    {
+      "stem": "For two classes with positive priors and positive likelihoods, let \\(P(C_1)=1/4\\), \\(P(C_2)=3/4\\), and \\(L(x)=p(x\\mid C_1)/p(x\\mid C_2)\\). Under 0-1 loss, select every correct statement.",
+      "options": [
+        {
+          "text": "Predicting \\(C_1\\) is strictly optimal when \\(L(x)>3\\).",
+          "correct": true,
+          "why": "The joint-score comparison is \\(L(x)>P(C_2)/P(C_1)=3\\)."
+        },
+        {
+          "text": "The evidence is needed to determine which posterior is larger.",
+          "correct": false,
+          "why": "It is the same positive denominator for both posteriors and cancels."
+        },
+        {
+          "text": "Replacing the priors by \\(0.1\\) and \\(0.9\\) changes the likelihood-ratio threshold to 9.",
+          "correct": true,
+          "why": "The threshold is the prior odds \\(0.9/0.1\\)."
+        },
+        {
+          "text": "For the given priors, a log discriminant is \\(\\log L(x)-\\log3\\).",
+          "correct": true,
+          "why": "The log posterior odds equal \\(\\log L(x)+\\log(1/3)\\)."
+        }
+      ],
+      "source": "PDF pp.11-12,21-22"
+    },
+    {
+      "stem": "Consider any finite loss matrix \\(\\lambda_{ik}\\). Which modifications preserve all minimum-risk actions for every posterior?",
+      "options": [
+        {
+          "text": "Add one state-dependent number \\(b_k\\) to every entry in column \\(k\\).",
+          "correct": true,
+          "why": "Every action risk gains the same \\(\\sum_kb_kP(C_k\\mid x)\\)."
+        },
+        {
+          "text": "Multiply the entire loss matrix by one positive constant.",
+          "correct": true,
+          "why": "All action risks are multiplied by that constant, preserving order and ties."
+        },
+        {
+          "text": "Add a different arbitrary constant to every row.",
+          "correct": false,
+          "why": "Each action then gains a different offset, which can change the minimizing action."
+        },
+        {
+          "text": "Replace risks by their negatives and choose the largest resulting score.",
+          "correct": true,
+          "why": "Maximizing \\(-R(\\alpha_i\\mid x)\\) is equivalent to minimizing \\(R(\\alpha_i\\mid x)\\)."
+        }
+      ],
+      "source": "PDF pp.15,20; supplementary loss transformations"
+    },
+    {
+      "stem": "A posterior is \\((0.4,0.4,0.2)\\), unit error loss is used, and rejection costs \\(0.6\\). Select every correct statement.",
+      "options": [
+        {
+          "text": "The minimum conditional risk is \\(0.6\\).",
+          "correct": true,
+          "why": "Predicting either of the first two classes costs \\(0.6\\), as does rejection."
+        },
+        {
+          "text": "Rejection is the unique risk-minimizing action.",
+          "correct": false,
+          "why": "The two largest-posterior class actions tie with rejection. A reject-on-equality convention selects one of several minimizers."
+        },
+        {
+          "text": "Any random mixture of rejection and predictions of \\(C_1\\) or \\(C_2\\) also has risk \\(0.6\\).",
+          "correct": true,
+          "why": "A convex combination of their equal risks remains \\(0.6\\)."
+        },
+        {
+          "text": "Predicting \\(C_3\\) is also optimal because all posterior values are below \\(0.6\\).",
+          "correct": false,
+          "why": "Its risk is \\(1-0.2=0.8\\). The rejection threshold is \\(1-0.6=0.4\\), not \\(0.6\\)."
+        }
+      ],
+      "source": "PDF pp.15-18; supplementary tie/randomization interpretation"
+    },
+    {
+      "stem": "At an observed point, two continuous class densities have values \\(4\\) and \\(1\\), and their priors are \\(0.1\\) and \\(0.9\\). Under 0-1 loss, select every correct statement.",
+      "options": [
+        {
+          "text": "The evidence density is \\(1.3\\).",
+          "correct": true,
+          "why": "It is \\(4(0.1)+1(0.9)=1.3\\); a density value may exceed 1."
+        },
+        {
+          "text": "The posterior of \\(C_1\\) is \\(4/13\\).",
+          "correct": true,
+          "why": "It is \\(0.4/1.3=4/13\\)."
+        },
+        {
+          "text": "The Bayes action predicts \\(C_2\\).",
+          "correct": true,
+          "why": "Its joint score \\(0.9\\) exceeds \\(0.4\\), so its posterior is \\(9/13\\)."
+        },
+        {
+          "text": "The larger likelihood proves that \\(C_1\\) is the Bayes choice.",
+          "correct": false,
+          "why": "The prior-weighted likelihoods determine the posterior ordering."
+        }
+      ],
+      "source": "PDF pp.11-12,16"
+    },
+    {
+      "stem": "At a fixed input, suppose the risks of three available actions are \\(0.2,0.5,0.2\\). Select every correct statement about randomized actions.",
+      "options": [
+        {
+          "text": "A half-and-half mixture of the first and third actions has risk \\(0.2\\).",
+          "correct": true,
+          "why": "Its expected risk is \\((0.2+0.2)/2=0.2\\)."
+        },
+        {
+          "text": "Assigning positive probability to the second action can still yield risk below \\(0.2\\).",
+          "correct": false,
+          "why": "The mixed risk is \\(0.2+0.3w_2\\), which is at least \\(0.2\\)."
+        },
+        {
+          "text": "Every minimum-risk randomization must put zero probability on the second action.",
+          "correct": true,
+          "why": "Equality at the minimum requires \\(w_2=0\\), because its risk is strictly larger."
+        },
+        {
+          "text": "The existence of two minimizing actions forces a unique optimal randomization.",
+          "correct": false,
+          "why": "Any mixture supported on the first and third actions is optimal."
+        }
+      ],
+      "source": "PDF p.15; supplementary randomization derivation"
+    },
+    {
+      "stem": "Let the true joint distribution be known, and use 0-1 loss. Select every correct statement about using features.",
+      "options": [
+        {
+          "text": "The Bayes error using \\(X\\) is no larger than the error of always predicting a class with largest prior.",
+          "correct": true,
+          "why": "The constant rule is available among all rules using \\(X\\), so optimization cannot have a larger risk."
+        },
+        {
+          "text": "If the posterior equals the prior almost surely, observing \\(X\\) cannot improve the minimum error.",
+          "correct": true,
+          "why": "Then \\(E[1-\\max_iP(C_i\\mid X)]=1-\\max_iP(C_i)\\)."
+        },
+        {
+          "text": "If each observed input identifies its class with posterior probability 1 almost surely, the Bayes error is zero.",
+          "correct": true,
+          "why": "The pointwise minimum error \\(1-\\max_iP(C_i\\mid X)\\) is zero almost surely."
+        },
+        {
+          "text": "Any rule that depends on \\(X\\) must outperform every constant rule.",
+          "correct": false,
+          "why": "A feature-dependent rule may ignore useful posterior information or deliberately choose a low-posterior class."
+        }
+      ],
+      "source": "PDF pp.7,9-12,15-16; supplementary comparison of rule classes"
+    }
+  ],
+  "long": [
+    {
+      "title": "Why pointwise decisions minimize total risk",
+      "kind": "proof",
+      "marks": 10,
+      "source": "PDF pp.15-16; supplementary integration and information comparison",
+      "parts": [
+        {
+          "marks": 4,
+          "question": "Let \\(A\\) be a finite action set, let \\(\\lambda_{ak}\\) be finite nonnegative losses, and let \\(X\\) have density or mass function \\(p(x)\\). Define a deterministic rule \\(\\delta(x)\\). Starting from \\(E[\\lambda_{\\delta(X),C}]\\), derive the total-risk formula and prove that choosing a minimum-conditional-risk action at each \\(x\\) minimizes total risk. State the almost-sure qualification.",
+          "solution": "Conditioning first on \\(X\\) gives\n\\[\n\\mathcal R(\\delta)=E_X\\!\\left[\\sum_k\\lambda_{\\delta(X),k}P(C_k\\mid X)\\right]\n=\\int R(\\delta(x)\\mid x)p(x)\\,dx.\n\\]\nUse a sum instead of an integral for discrete \\(X\\). For a measurable minimizing selector \\(\\delta^*\\), \\(R(\\delta^*(x)\\mid x)\\le R(\\delta(x)\\mid x)\\) wherever posteriors are defined. Multiplication by \\(p(x)\\ge0\\) and integration prove \\(\\mathcal R(\\delta^*)\\le\\mathcal R(\\delta)\\). Choices on sets of \\(X\\)-probability zero do not affect total risk; ties can be resolved arbitrarily. Marking: conditional expectation (2), pointwise inequality and integration (1), ties/null sets (1)."
+        },
+        {
+          "marks": 3,
+          "question": "Specialize to \\(K\\) classification actions and 0-1 loss. Derive the MAP rule and the Bayes error expression in terms of the largest posterior.",
+          "solution": "For action \\(\\alpha_i\\),\n\\[\nR(\\alpha_i\\mid x)=\\sum_{k\\ne i}P(C_k\\mid x)=1-P(C_i\\mid x).\n\\]\nThus any largest-posterior class is a conditional-risk minimizer. Substitution into the total-risk formula yields\n\\[\n\\mathcal R^*=E_X[1-\\max_iP(C_i\\mid X)].\n\\]\nMarking: risk simplification (1), MAP minimizer (1), expected minimum error (1)."
+        },
+        {
+          "marks": 3,
+          "question": "Prove that this Bayes error is at most \\(1-\\max_iP(C_i)\\), the best constant-rule error. Explain why this does not guarantee that every fitted classifier improves on the constant rule.",
+          "solution": "Choose \\(j\\in\\arg\\max_iP(C_i)\\). Pointwise \\(\\max_iP(C_i\\mid X)\\ge P(C_j\\mid X)\\). Taking expectations and using the law of total probability gives \\(E[\\max_iP(C_i\\mid X)]\\ge E[P(C_j\\mid X)]=P(C_j)\\). Subtracting from 1 proves the bound. The result concerns the true Bayes rule; an estimated or poorly chosen classifier need not minimize true risk. Marking: pointwise bound (1), expectation and final inequality (1), scope of guarantee (1)."
+        }
+      ]
+    },
+    {
+      "title": "Asymmetric errors and rejection thresholds",
+      "kind": "proof",
+      "marks": 10,
+      "source": "PDF pp.15-18; supplementary asymmetric-cost extension",
+      "parts": [
+        {
+          "marks": 4,
+          "question": "For two classes, write \\(q=P(C_1\\mid x)\\). Correct decisions cost 0, predicting \\(C_1\\) when \\(C_2\\) is true costs \\(a>0\\), and predicting \\(C_2\\) when \\(C_1\\) is true costs \\(b>0\\). Derive the optimal posterior threshold without rejection and the equivalent likelihood-ratio threshold when priors and likelihoods are positive.",
+          "solution": "The risks are \\(R_1=a(1-q)\\) and \\(R_2=bq\\). Therefore \\(R_1<R_2\\) exactly when \\(q>a/(a+b)\\); reverse the inequality for \\(C_2\\), with a tie at equality. Equivalently \\(q/(1-q)>a/b\\). Bayes' rule gives\n\\[\n\\frac{q}{1-q}=\\frac{p(x\\mid C_1)P(C_1)}{p(x\\mid C_2)P(C_2)},\n\\]\nso predict \\(C_1\\) when\n\\[\n\\frac{p(x\\mid C_1)}{p(x\\mid C_2)}>\n\\frac{aP(C_2)}{bP(C_1)}.\n\\]\nMarking: risks (1), posterior threshold and tie (1), posterior odds (1), likelihood-ratio threshold (1)."
+        },
+        {
+          "marks": 3,
+          "question": "Add a reject action with constant loss \\(r>0\\) for either true class. Derive the interval where rejection is strictly optimal and determine when that interval has positive width.",
+          "solution": "Rejection is strictly optimal precisely when both \\(r<a(1-q)\\) and \\(r<bq\\), hence\n\\[\n\\frac rb<q<1-\\frac ra.\n\\]\nThis interval has positive width exactly when \\(r/b<1-r/a\\), or \\(r<ab/(a+b)\\). At either endpoint rejection ties a class action; at \\(r=ab/(a+b)\\) it only ties at the original class threshold. For larger \\(r\\), rejection is never strictly optimal. Marking: two risk comparisons (1), interval (1), width condition and ties (1)."
+        },
+        {
+          "marks": 3,
+          "question": "Return to \\(K\\) classes, unit cost for any error, and reject cost \\(\\lambda\\). Derive the acceptance rule. Then show that if \\(\\lambda>1-1/K\\), rejection cannot be strictly optimal at any input.",
+          "solution": "The best class risk is \\(1-M(x)\\), where \\(M(x)=\\max_iP(C_i\\mid x)\\), and reject risk is \\(\\lambda\\). Classification is strictly preferable exactly when \\(M(x)>1-\\lambda\\); rejection is strictly preferable when \\(M(x)<1-\\lambda\\). Since the \\(K\\) posteriors sum to 1, \\(M(x)\\ge1/K\\). If \\(\\lambda>1-1/K\\), then \\(1-\\lambda<1/K\\le M(x)\\), so a class action strictly beats rejection everywhere. At equality of the costs, the uniform posterior can produce a tie. Marking: risks (1), threshold/tie distinction (1), \\(1/K\\) bound and consequence (1)."
+        }
+      ]
+    },
+    {
+      "title": "Equivalent discriminants and the role of strict monotonicity",
+      "kind": "proof",
+      "marks": 10,
+      "source": "PDF pp.20-22; supplementary tie-preserving conditions",
+      "parts": [
+        {
+          "marks": 4,
+          "question": "Prove that applying one common strictly increasing function to all finite discriminants preserves their full argmax set. Explain why merely nondecreasing is insufficient for preserving the argmax set, using a concrete counterexample.",
+          "solution": "For any two scores \\(u,v\\), strict monotonicity gives \\(u>v\\iff f(u)>f(v)\\), and injectivity gives \\(u=v\\iff f(u)=f(v)\\). Thus a class is at least as large as every competitor before transformation exactly when it is afterward. The full argmax set is unchanged. If \\(f\\) is merely nondecreasing, it can merge different scores: take \\(g_1=2,g_2=1\\) and \\(f(t)=0\\) for all \\(t\\). The original argmax is only \\(C_1\\), whereas both classes maximize transformed scores. Marking: order/tie argument (2), argmax conclusion (1), counterexample (1)."
+        },
+        {
+          "marks": 3,
+          "question": "For \\(p(x)>0\\) and positive class joint scores, derive the equivalence of posterior, prior-weighted likelihood, and log prior-weighted likelihood discriminants. Identify the qualification needed for zero joint scores.",
+          "solution": "Bayes' rule gives \\(P(C_i\\mid x)=p(x\\mid C_i)P(C_i)/p(x)\\). Multiplying all scores by common \\(p(x)>0\\) preserves their ordering and ties, so the posterior and joint scores have identical argmax sets. Applying the common strictly increasing logarithm yields \\(\\log p(x\\mid C_i)+\\log P(C_i)\\), with the same maximizers. If a joint score is zero, the finite logarithm is undefined; one may compare the original scores or use the extended value \\(\\log0=-\\infty\\). At least one score is positive when \\(p(x)>0\\). Marking: common denominator (1), log decomposition (1), zero-score qualification (1)."
+        },
+        {
+          "marks": 3,
+          "question": "For two classes with positive priors and likelihoods, derive a single scalar log discriminant. Show how its sign determines the 0-1 decision, and explain why a negative-risk discriminant rather than posterior probability is needed for arbitrary losses.",
+          "solution": "Subtract the two log joint scores:\n\\[\ng(x)=\\log\\frac{p(x\\mid C_1)}{p(x\\mid C_2)}\n+\\log\\frac{P(C_1)}{P(C_2)}.\n\\]\nIf \\(g>0\\), the posterior of \\(C_1\\) is larger; if \\(g<0\\), that of \\(C_2\\) is larger; \\(g=0\\) is a tie. For arbitrary losses, the optimal action minimizes \\(\\sum_k\\lambda_{ik}P(C_k\\mid x)\\), which need not be the maximum-posterior class. Scores \\(h_i(x)=-R(\\alpha_i\\mid x)\\) give the correct maximizing action. Marking: log-ratio derivation (1), sign/tie rule (1), general-loss argument (1)."
+        }
+      ]
+    },
+    {
+      "title": "What a decision boundary actually represents",
+      "kind": "proof",
+      "marks": 10,
+      "source": "PDF p.23; supplementary affine and quadratic examples",
+      "parts": [
+        {
+          "marks": 4,
+          "question": "Suppose \\(g_i(x)=w_i^\\mathsf Tx+b_i\\) on \\(\\mathbb R^d\\). Show that the weak decision region \\(\\mathcal R_i=\\{x:g_i(x)\\ge g_j(x)\\text{ for all }j\\}\\) is convex. Describe the supporting equality between two competing classes.",
+          "solution": "Each comparison is\n\\[\n(w_i-w_j)^\\mathsf Tx+(b_i-b_j)\\ge0,\n\\]\na closed half-space (possibly the whole space or empty). Thus \\(\\mathcal R_i\\) is an intersection of half-spaces. If \\(u,v\\) satisfy every inequality, then for \\(0\\le t\\le1\\) each left side at \\(tu+(1-t)v\\) is the corresponding convex combination of nonnegative values, so the segment also lies in \\(\\mathcal R_i\\). Equality \\(g_i=g_j\\) is a hyperplane when \\(w_i\\ne w_j\\), but only its portions where these scores are maximal can be decision boundaries. Marking: inequalities (1), intersection/segment proof (2), equality and maximality condition (1)."
+        },
+        {
+          "marks": 3,
+          "question": "Give an explicit two-class example on \\(\\mathbb R\\) with a disconnected decision region, and derive the regions and boundaries. Use \\(g_1(x)=x^2-4\\) and \\(g_2(x)=0\\).",
+          "solution": "Class \\(C_1\\) wins strictly when \\(x^2>4\\), that is, \\(x<-2\\) or \\(x>2\\). These are two disconnected components. Class \\(C_2\\) wins strictly when \\(-2<x<2\\). At \\(x=\\pm2\\), the two scores tie for the maximum and form the boundaries. The weak regions include the endpoints, and any tie convention assigns them without affecting the disconnected strict regions. Marking: exterior region (1), interior and boundaries (1), disconnectedness/ties (1)."
+        },
+        {
+          "marks": 3,
+          "question": "For \\(g_1(x)=2-x^2\\), \\(g_2(x)=0\\), and \\(g_3(x)=1\\), identify all pairwise equality points and determine which are actual decision boundaries. Use the result to disprove the claim that every discriminant equality is a boundary.",
+          "solution": "The equality \\(g_1=g_2\\) gives \\(x=\\pm\\sqrt2\\), while \\(g_1=g_3\\) gives \\(x=\\pm1\\); \\(g_2=g_3\\) has no solution. At \\(\\pm\\sqrt2\\), the tied first two scores are 0 but \\(g_3=1\\), so these points lie strictly in \\(C_3\\)'s region. At \\(\\pm1\\), \\(g_1=g_3=1>0=g_2\\), and the winner changes between \\(C_1\\) and \\(C_3\\). The only boundaries are \\(\\pm1\\). Marking: pairwise equalities (1), largest-score check (1), actual boundaries and counterexample conclusion (1)."
+        }
+      ]
+    },
+    {
+      "title": "A sensor with asymmetric mistakes and a review action",
+      "kind": "application",
+      "marks": 12,
+      "source": "PDF pp.11-12,15-18; supplementary asymmetric review-cost application",
+      "parts": [
+        {
+          "marks": 4,
+          "question": "A sensor reports \\(A,B,\\) or \\(C\\). The class priors are \\(P(C_1)=0.35\\), \\(P(C_2)=0.65\\), and the class-conditional probabilities for \\((A,B,C)\\) are \\((0.50,0.30,0.20)\\) in \\(C_1\\) and \\((0.10,0.40,0.50)\\) in \\(C_2\\). Compute each report probability and each posterior \\(q_s=P(C_1\\mid s)\\).",
+          "solution": "The two joint probabilities at \\(A\\) are \\(0.175,0.065\\); at \\(B\\), \\(0.105,0.260\\); at \\(C\\), \\(0.070,0.325\\). Therefore\n\\[\nP(A)=0.240,\\quad P(B)=0.365,\\quad P(C)=0.395,\n\\]\nwhich sum to 1. The posteriors are\n\\[\nq_A=\\frac{35}{48}\\approx0.729167,\\quad\nq_B=\\frac{21}{73}\\approx0.287671,\\quad\nq_C=\\frac{14}{79}\\approx0.177215.\n\\]\nMarking: joint scores (1), report probabilities (1), posterior values (2)."
+        },
+        {
+          "marks": 4,
+          "question": "Correct classifications cost 0. Predicting \\(C_1\\) when \\(C_2\\) is true costs 3; predicting \\(C_2\\) when \\(C_1\\) is true costs 9. A human review action costs 1.7 regardless of class. Compute all three conditional risks for each report and choose the optimal action.",
+          "solution": "For posterior \\(q\\), the risks are \\(3(1-q)\\), \\(9q\\), and \\(1.7\\). At \\(A\\), these are \\(13/16=0.8125\\), \\(105/16=6.5625\\), and \\(1.7\\), so predict \\(C_1\\). At \\(B\\), they are \\(156/73\\approx2.136986\\), \\(189/73\\approx2.589041\\), and \\(1.7\\), so review. At \\(C\\), they are \\(195/79\\approx2.468354\\), \\(126/79\\approx1.594937\\), and \\(1.7\\), so predict \\(C_2\\). Equivalently, review is preferred for \\(17/90<q<13/30\\). Marking: risk formulas (1), three risk triples with correct actions (3)."
+        },
+        {
+          "marks": 4,
+          "question": "Compute the expected loss of your review-enabled rule. Compare it with the best rule forced to classify every report and with the MAP rule that ignores the asymmetric costs.",
+          "solution": "The review-enabled expected loss is\n\\[\n0.240(0.8125)+0.365(1.7)+0.395\\left(\\frac{126}{79}\\right)\n=0.195+0.6205+0.630=1.4455.\n\\]\nWithout review, the posterior threshold is \\(3/(3+9)=0.25\\), giving \\(C_1\\) at \\(A,B\\) and \\(C_2\\) at \\(C\\). Its loss is \\(3(0.065)+3(0.260)+9(0.070)=1.605\\). MAP uses threshold \\(0.5\\), giving \\(C_1\\) only at \\(A\\); its loss is \\(3(0.065)+9(0.105)+9(0.070)=1.770\\). Review reduces the forced minimum loss by \\(0.1595\\). Marking: review expectation (2), forced-cost rule/loss (1), MAP rule/loss and comparison (1)."
+        }
+      ]
+    },
+    {
+      "title": "Conditional independence, posterior decisions, and rejection",
+      "kind": "application",
+      "marks": 12,
+      "source": "PDF pp.11-13,16-18; supplementary marginal-dependence calculation",
+      "parts": [
+        {
+          "marks": 4,
+          "question": "Two binary features are independent conditional on class. Let \\(P(C_1)=0.4\\), \\(P(C_2)=0.6\\); within \\(C_1\\), the probabilities \\(P(X_1=1\\mid C_1)\\), \\(P(X_2=1\\mid C_1)\\) are \\(0.8,0.3\\); within \\(C_2\\), they are \\(0.25,0.7\\). For every binary pair \\((00,01,10,11)\\), compute the two joint class-feature scores, give the MAP class, and find the overall 0-1 Bayes error.",
+          "solution": "The joint-score pairs \\((P(x,C_1),P(x,C_2))\\) are\n\\[\n00:(0.056,0.135),\\quad01:(0.024,0.315),\\quad\n10:(0.224,0.045),\\quad11:(0.096,0.105).\n\\]\nFor example, the \\(C_1\\) score at \\(10\\) is \\(0.4(0.8)(0.7)=0.224\\). The winning classes are \\(C_2,C_2,C_1,C_2\\), respectively. Summing each losing joint score gives the error\n\\[\n0.056+0.024+0.045+0.096=0.221.\n\\]\nMarking: four joint-score pairs (2), decisions (1), error sum (1)."
+        },
+        {
+          "marks": 4,
+          "question": "Add a rejection action costing \\(0.30\\), with unit misclassification costs. Determine which feature pairs are accepted and compute the total expected risk including rejected inputs.",
+          "solution": "The feature-pair probabilities are \\(0.191,0.339,0.269,0.201\\). Their maximum posteriors are\n\\[\n\\frac{0.135}{0.191}\\approx0.706806,\\quad\n\\frac{0.315}{0.339}\\approx0.929204,\\quad\n\\frac{0.224}{0.269}\\approx0.832714,\\quad\n\\frac{0.105}{0.201}\\approx0.522388.\n\\]\nThe acceptance threshold is \\(1-0.30=0.70\\). Accept \\(00,01,10\\) with the previous MAP labels; reject \\(11\\). Total risk is\n\\[\n0.056+0.024+0.045+0.30(0.201)=0.1853.\n\\]\nThis includes review cost on all rejected inputs rather than treating them as free. Marking: posterior maxima/threshold (2), accepted/rejected pairs (1), expected risk (1)."
+        },
+        {
+          "marks": 4,
+          "question": "Are \\(X_1\\) and \\(X_2\\) independent without conditioning on class? Establish your answer by computing the necessary marginal and joint probabilities.",
+          "solution": "The marginal probabilities are\n\\[\nP(X_1=1)=0.4(0.8)+0.6(0.25)=0.47,\\quad\nP(X_2=1)=0.4(0.3)+0.6(0.7)=0.54.\n\\]\nTheir joint probability is \\(P(11)=0.096+0.105=0.201\\), whereas \\(0.47(0.54)=0.2538\\). Since these differ, the features are dependent marginally. This is compatible with the stated conditional independence: both features respond to the shared, unobserved class variable. Marking: marginals (2), joint-versus-product comparison (1), conditional/marginal distinction (1)."
+        }
+      ]
+    }
+  ]
+}
